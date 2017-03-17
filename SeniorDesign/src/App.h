@@ -1,6 +1,6 @@
 #ifndef __APP__
 #define __APP__
-#define APP_COUNT 2
+#define APP_COUNT 3
 typedef void voidFunc(void);
 
 struct App {

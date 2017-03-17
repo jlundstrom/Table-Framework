@@ -14,6 +14,7 @@
 #include "src/App_Basic.h"
 #include "src/App_Snake.h"
 #include "src/App_Menu.h"
+#include "src/App_Conway.h"
 
 int main() {
     Display_init();
@@ -22,6 +23,7 @@ int main() {
     App_Menu_New(&homeApp);
     App_Basic_New(&apps[0]);
     App_Snake_New(&apps[1]);
+	App_Conway_New(&apps[2]);
 
     currentApp = &homeApp;
     currentApp->App_Init();

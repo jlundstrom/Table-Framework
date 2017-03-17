@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\SeniorDesign\src\App.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Basic.h" />
+    <ClInclude Include="..\..\SeniorDesign\src\App_Conway.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Menu.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Snake.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Display.h" />
@@ -152,6 +153,7 @@
     <ClCompile Include="..\..\SeniorDesign\main.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Basic.c" />
+    <ClCompile Include="..\..\SeniorDesign\src\App_Conway.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Menu.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Snake.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Draw.c" />
