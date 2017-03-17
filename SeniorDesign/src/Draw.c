@@ -5,6 +5,10 @@ Pixel getPixel(int x, int y) {
 	if (x > WIDTH || y > HEIGHT || x < 0 || y < 0) {
 		return Pixels[0];
 	}
+	if(y % 2 == 1)
+	{
+	    return Pixels[y * WIDTH + WIDTH - x - 1];
+	}
 	return Pixels[y * WIDTH + x];
 }
 
@@ -21,7 +25,14 @@ void setPixel(int x, int y, Pixel pixel) {
 	if (y < 0) {
 		return;
 	}
-	Pixels[y * WIDTH + x] = pixel;
+    if(y % 2 == 1)
+    {
+        Pixels[y * WIDTH + WIDTH - x - 1] = pixel;
+    }
+    else
+    {
+        Pixels[y * WIDTH + x] = pixel;
+    }
 }
 
 void drawRect(int x, int y, int x2, int y2, Pixel pixel) {
