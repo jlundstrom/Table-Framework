@@ -1,8 +1,11 @@
 #ifndef __APP__
 #define __APP__
-#define APP_COUNT 3
-typedef void voidFunc(void);
 
+// Count of applicaions in menu
+#define APP_COUNT 3
+
+// Structs for critical application functions and
+typedef void voidFunc(void);
 struct App {
 	voidFunc* Demo_Init;
 	voidFunc* Demo_Tick;
@@ -12,9 +15,13 @@ struct App {
 	voidFunc* App_Deinit;
 }typedef App;
 
+// Shared data for applications
 extern char AppStorage[];
 
+// Array of applications for menu
 extern App apps[];
+// Currently loaded applications
 extern App* currentApp;
+// Home/Menu application
 extern App homeApp;
 #endif

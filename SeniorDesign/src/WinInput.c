@@ -4,6 +4,7 @@
 
 unsigned char Input_Status;
 
+// Get character status from Windows
 int check_Char(char c) {
 	return (GetKeyState(c)>>16) & 0x1;
 }
@@ -12,6 +13,8 @@ void Input_init(void) {
 	Input_Status = 0;
 }
 
+// Check if user is pressing an input key
+// If one is pressed set the bit high else low
 void Input_Poll(void) {
 	if (check_Char('W')) {
 		Input_Status |= UP_INPUT;

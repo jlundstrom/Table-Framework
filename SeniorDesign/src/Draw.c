@@ -1,6 +1,8 @@
 #include "Draw.h"
 Pixel Pixels[WIDTH * HEIGHT];
+// Pixels are stored to be optimal for sending to ws2812b leds from the microprocess
 
+// Retrieve pixel, and return first pixel for invalid inputs
 Pixel getPixel(int x, int y) {
 	if (x > WIDTH || y > HEIGHT || x < 0 || y < 0) {
 		return Pixels[0];
@@ -12,6 +14,7 @@ Pixel getPixel(int x, int y) {
 	return Pixels[y * WIDTH + x];
 }
 
+// Only update pixel if a valid position is given
 void setPixel(int x, int y, Pixel pixel) {
 	if (x > WIDTH) {
 		return;
