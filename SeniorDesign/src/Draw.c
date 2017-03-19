@@ -7,7 +7,7 @@ Pixel getPixel(int x, int y) {
 	if (x > WIDTH || y > HEIGHT || x < 0 || y < 0) {
 		return Pixels[0];
 	}
-	if(y % 2 == 1)
+	if(y % 2 == 0)
 	{
 	    return Pixels[y * WIDTH + WIDTH - x - 1];
 	}
@@ -28,7 +28,7 @@ void setPixel(int x, int y, Pixel pixel) {
 	if (y < 0) {
 		return;
 	}
-    if(y % 2 == 1)
+    if(y % 2 == 0)
     {
         Pixels[y * WIDTH + WIDTH - x - 1] = pixel;
     }
