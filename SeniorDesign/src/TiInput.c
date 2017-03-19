@@ -77,11 +77,104 @@ void Input_init(void) {
 // Input_Status to represent current key presses.
 void Input_Poll(void) {
     Uint16 ReceivedChar;
+    Uint16 isLowercase;
     if(SciRegs->SCIFFRX.bit.RXFFST != 0)
     {
         ReceivedChar = SciRegs->SCIRXBUF.all;
         scia_xmit(ReceivedChar);
+        isLowercase = ReceivedChar & 0x20;
+        ReceivedChar |= 0x20; // Case to lowercase
         GPIO_WritePin(STATUS_LED, GPIO_ReadPin(STATUS_LED) ^ 0x01);
+
+        if(ReceivedChar == 'w')
+        {
+            if(!isLowercase)
+            {
+                Input_Status &= ~UP_INPUT;
+            }
+            else
+            {
+                Input_Status |= UP_INPUT;
+            }
+        }
+
+        if(ReceivedChar == 'a')
+        {
+            if(!isLowercase)
+            {
+                Input_Status &= ~LEFT_INPUT;
+            }
+            else
+            {
+                Input_Status |= LEFT_INPUT;
+            }
+        }
+        if(ReceivedChar == 's')
+        {
+            if(!isLowercase)
+            {
+                Input_Status &= ~DOWN_INPUT;
+            }
+            else
+            {
+                Input_Status |= DOWN_INPUT;
+            }
+        }
+        if(ReceivedChar == 'd')
+        {
+            if(!isLowercase)
+            {
+                Input_Status &= ~RIGHT_INPUT;
+            }
+            else
+            {
+                Input_Status |= RIGHT_INPUT;
+            }
+        }
+        if(ReceivedChar == 'q')
+        {
+            if(!isLowercase)
+            {
+                Input_Status &= ~A_INPUT;
+            }
+            else
+            {
+                Input_Status |= A_INPUT;
+            }
+        }
+        if(ReceivedChar == 'e')
+        {
+            if(!isLowercase)
+            {
+                Input_Status &= ~B_INPUT;
+            }
+            else
+            {
+                Input_Status |= B_INPUT;
+            }
+        }
+        if(ReceivedChar == 'h')
+        {
+            if(!isLowercase)
+            {
+                Input_Status &= ~START_INPUT;
+            }
+            else
+            {
+                Input_Status |= START_INPUT;
+            }
+        }
+        if(ReceivedChar == 'j')
+        {
+            if(!isLowercase)
+            {
+                Input_Status &= ~SELECT_INPUT;
+            }
+            else
+            {
+                Input_Status |= SELECT_INPUT;
+            }
+        }
     }
 }
 
