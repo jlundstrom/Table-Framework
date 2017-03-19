@@ -7,6 +7,12 @@
             <instance XML_version="1.2" href="drivers/tixds100v2c28x.xml" id="drivers" xml="tixds100v2c28x.xml" xmlpath="drivers"/>
             <instance XML_version="1.2" href="drivers/tixds100v2cla1.xml" id="drivers" xml="tixds100v2cla1.xml" xmlpath="drivers"/>
             <instance XML_version="1.2" href="drivers/tixds100v2cs_child.xml" id="drivers" xml="tixds100v2cs_child.xml" xmlpath="drivers"/>
+            <property Type="choicelist" Value="2" id="The JTAG TCLK Frequency (MHz)">
+                <choice Name="Fixed with user specified slower value" value="SPECIFIC">
+                    <property Type="stringfield" Value="500KHz" id="-- Enter a value from 488Hz to 1.0MHz"/>
+                </choice>
+            </property>
+            <property Type="choicelist" Value="0" id="dataFileRequired"/>
             <platform XML_version="1.2" id="platform_0">
                 <instance XML_version="1.2" desc="TMS320F28379D" href="devices/f28379d.xml" id="TMS320F28379D" xml="f28379d.xml" xmlpath="devices"/>
             </platform>

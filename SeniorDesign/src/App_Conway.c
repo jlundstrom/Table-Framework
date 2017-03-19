@@ -16,6 +16,7 @@ appData* Conway_Data;
 void App_Conway_Deinit(void);
 void setCell(unsigned char* table, int x, int y, unsigned char val);
 unsigned char getCell(unsigned char* table, int x, int y);
+Pixel WinColor;
 
 void setCell(unsigned char* table, int x, int y, unsigned char val)
 {
@@ -42,7 +43,7 @@ void setCell(unsigned char* table, int x, int y, unsigned char val)
 	table[x + y * WIDTH] = val;
 	if (val)
 	{
-		setPixel(x, y, getRandomPixel());
+		setPixel(x, y, WinColor);
 	}
 	else
 	{
@@ -98,6 +99,9 @@ void Demo_Conway_Init(void) {
 	Conway_Data->active = Conway_Data->cells1;
 	Conway_Data->temp = Conway_Data->cells2;
 
+	rand = 0;
+	x = 14;y = 6;
+
 	if (rand == 0)
 	{
 		setCell(Conway_Data->active, x, y, 1);
@@ -152,11 +156,12 @@ void Demo_Conway_Tick(void) {
 		Conway_Data->frame++;
 		return;
 	}
+	WinColor = getRandomPixel();
 	Conway_Data->frame = 0;
 	int x, y, neighbors;
 	unsigned char* temp;
 
-	for (x = 0; x < WIDTH; x++)
+	for (x = 1; x < WIDTH; x++)
 	{
 		for (y = 0; y < HEIGHT; y++)
 		{
