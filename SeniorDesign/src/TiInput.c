@@ -62,23 +62,22 @@ void Input_init(void)
 }
 
 // Check for input status updates and update
-// Input_Status to represent current key presses.
+// Input_Status to represent current key presses
 void Input_Poll(void)
 {
-   if (SciRegs->SCIFFRX.bit.RXFFST != 0)
+   if (SciaRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
    {
+      // flush(rcvBuf); 	 // needed if receive buffer is declared globally
       Uint16 ReceivedChar = 0;
       Uint16 isLowercase  = 0;
 
-      // variable length receive buffer for strings
-      char rcvBuf [8] = "";
-      sciRead(rcvBuf, 1);       // read the input
-      sciWrite(rcvBuf);         // echo the input
+      char rcvBuf [8] = "";	 // variable length receive buffer for strings
+      sciRead(rcvBuf, 1);        // read the input
+      sciWrite(rcvBuf);          // echo the input
 
-      ReceivedChar = rcvBuf[0]; // populate var with first byte
-      // flush(rcvBuf); // needed if buffer is global
-      isLowercase                       = ReceivedChar & 0x20;
-      ReceivedChar                     |= 0x20; // Case to lowercase
+      ReceivedChar  = rcvBuf[0]; // populate var with first byte
+      isLowercase   = ReceivedChar & 0x20;
+      ReceivedChar |= 0x20; 	 // Case to lowercase
       GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
 
       if (ReceivedChar == 'w')
@@ -205,7 +204,7 @@ void sciWrite(char buf[])
    }
 }
 
-// flush the receive buffer
+// flush global receive buffer
 void flush(char buf[], Uint16 length)
 {
    strncpy(buf, "", length);
@@ -214,7 +213,7 @@ void flush(char buf[], Uint16 length)
 // Check the receive buffer for matches.
 // Instead of:  if (ReceivedChar == 'w'),
 // Try this:    if (commandEquals("w",1))
-int commandEquals(char buf[], Uint16 length)
+int cmdEquals(char buf[], Uint16 length)
 {
    Uint16 returnVal = 0;
 
