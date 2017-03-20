@@ -1,203 +1,233 @@
 #ifdef CPU1
+#include <string.h> // string library
 #include "input.h"
 #include "F28x_Project.h"
 
-//#define Launchpad
+// string-compatible helper functions
+int cmdEquals(char buf[], Uint16 length);
+void flush(char buf[], Uint16 length);
+void sciRead(char buf[], Uint16 length);
+void sciWrite(char buf[]);
 
-#ifdef Launchpad
-    #define TX_GPIO_PIN 19
-    #define TX_MUX 2
-    #define RX_GPIO_PIN 18
-    #define RX_MUX 2
-    #define SCI_REG ScibRegs
-    #define STATUS_LED 34
-#else
-    #define TX_GPIO_PIN 8
-    #define TX_MUX 6
-    #define RX_GPIO_PIN 9
-    #define RX_MUX 6
-    #define SCI_REG SciaRegs
-    #define STATUS_LED 70
-#endif
-
-volatile struct SCI_REGS* SciRegs;
 unsigned char Input_Status;
 
-void scia_xmit(int a);
-void scia_msg(char *msg);
-
 // Initialize input device
-void Input_init(void) {
-    char *msg;
-    Input_Status = 0;
+void Input_init(void)
+{
+   Input_Status = 0;
 
-    SciRegs = &SCI_REG;
+   EALLOW;
 
-    GPIO_SetupPinMux(TX_GPIO_PIN, GPIO_MUX_CPU1, TX_MUX);
-    GPIO_SetupPinOptions(TX_GPIO_PIN, GPIO_INPUT, GPIO_PUSHPULL);
-    GPIO_SetupPinMux(RX_GPIO_PIN, GPIO_MUX_CPU1, RX_MUX);
-    GPIO_SetupPinOptions(RX_GPIO_PIN, GPIO_OUTPUT, GPIO_ASYNC);
+   // Set regs for proper pin behavior
+   // SCI-A transmit pin
+   GpioCtrlRegs.GPAGMUX1.bit.GPIO8 = 1; // Mux as SCI-A TX
+   GpioCtrlRegs.GPAMUX1.bit.GPIO8  = 2; // Mux as SCI-A TX (cont.)
+   GpioCtrlRegs.GPADIR.bit.GPIO8   = 1; // Set as output
+   GpioCtrlRegs.GPAPUD.bit.GPIO8   = 1; // Disable pull-up (since output)
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO8 = 0; // Synchronous (since output)
 
-    GPIO_SetupPinOptions(STATUS_LED, GPIO_OUTPUT, GPIO_ASYNC);
+   // SCI-A receive pin
+   GpioCtrlRegs.GPAGMUX1.bit.GPIO9 = 1; // Mux as SCI-A RX
+   GpioCtrlRegs.GPAMUX1.bit.GPIO9  = 2; // Mux as SCI-A RX (cont.)
+   GpioCtrlRegs.GPADIR.bit.GPIO9   = 0; // Set as input
+   GpioCtrlRegs.GPAPUD.bit.GPIO9   = 0; // Enable pull-up (since input)
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO9 = 3; // Asynchronous (since input)
 
-    // FIFO Init
-    SciRegs->SCIFFTX.all = 0xE040;
-    SciRegs->SCIFFRX.all = 0x2044;
-    SciRegs->SCIFFCT.all = 0x0;
+   // Status LED
+   GpioCtrlRegs.GPCDIR.bit.GPIO70 = 1;
+   GpioDataRegs.GPCDAT.bit.GPIO70 = 1;
 
-    //
-    // Note: Clocks were turned on to the SCIA peripheral
-    // in the InitSysCtrl() function
-    //
-    SciRegs->SCICCR.all = 0x0007;   // 1 stop bit,  No loopback
-                                    // No parity,8 char bits,
-                                    // async mode, idle-line protocol
-    SciRegs->SCICTL1.all = 0x0003;  // enable TX, RX, internal SCICLK,
-                                    // Disable RX ERR, SLEEP, TXWAKE
-    SciRegs->SCICTL2.all = 0x0003;
-    SciRegs->SCICTL2.bit.TXINTENA = 1;
-    SciRegs->SCICTL2.bit.RXBKINTENA = 1;
+   EDIS;
 
-    //
-    // SCIA at 9600 baud
-    // @LSPCLK = 50 MHz (200 MHz SYSCLK) HBAUD = 0x02 and LBAUD = 0x8B.
-    // @LSPCLK = 30 MHz (120 MHz SYSCLK) HBAUD = 0x01 and LBAUD = 0x86.
-    // @LSPCLK = 25 MHz (100 MHz SYSCLK) HBAUD = 0x01 and LBAUD = 0x45.
-    //
-    SciRegs->SCIHBAUD.all = 0x0001;
-    SciRegs->SCILBAUD.all = 0x0045;
+   // 1 stop bit,  no loopback,
+   // no parity, 8 data bits, no control flow
+   // async mode, idle-line protocol
+   SciaRegs.SCICCR.all = 0x07;
 
-    SciRegs->SCICTL1.all = 0x0023;  // Relinquish SCI from Reset
+   // Enable TX, RX, internal SCICLK
+   // Disable RX ERR, SLEEP, TXWAKE
+   SciaRegs.SCICTL1.all = 0x03;
 
-    msg = "\r\n\n\nSmart table Startup\0";
-    scia_msg(msg);
+   SciaRegs.SCICTL2.bit.TXINTENA   = 1;
+   SciaRegs.SCICTL2.bit.RXBKINTENA = 1;
+
+   // 9600 baud, 25 MHz LSPCLK, 100 MHz SYSCLK
+   SciaRegs.SCIHBAUD.all = 0x01;
+   SciaRegs.SCILBAUD.all = 0x45;
+
+   // Relinquish SCI from reset
+   SciaRegs.SCICTL1.all = 0x23;
+
+   sciWrite("\r\n\n\nSmart Table Startup\0");
 }
 
 // Check for input status updates and update
 // Input_Status to represent current key presses.
-void Input_Poll(void) {
-    Uint16 ReceivedChar;
-    Uint16 isLowercase;
-    if(SciRegs->SCIFFRX.bit.RXFFST != 0)
-    {
-        ReceivedChar = SciRegs->SCIRXBUF.all;
-        scia_xmit(ReceivedChar);
-        isLowercase = ReceivedChar & 0x20;
-        ReceivedChar |= 0x20; // Case to lowercase
-        GPIO_WritePin(STATUS_LED, GPIO_ReadPin(STATUS_LED) ^ 0x01);
-
-        if(ReceivedChar == 'w')
-        {
-            if(!isLowercase)
-            {
-                Input_Status &= ~UP_INPUT;
-            }
-            else
-            {
-                Input_Status |= UP_INPUT;
-            }
-        }
-
-        if(ReceivedChar == 'a')
-        {
-            if(!isLowercase)
-            {
-                Input_Status &= ~LEFT_INPUT;
-            }
-            else
-            {
-                Input_Status |= LEFT_INPUT;
-            }
-        }
-        if(ReceivedChar == 's')
-        {
-            if(!isLowercase)
-            {
-                Input_Status &= ~DOWN_INPUT;
-            }
-            else
-            {
-                Input_Status |= DOWN_INPUT;
-            }
-        }
-        if(ReceivedChar == 'd')
-        {
-            if(!isLowercase)
-            {
-                Input_Status &= ~RIGHT_INPUT;
-            }
-            else
-            {
-                Input_Status |= RIGHT_INPUT;
-            }
-        }
-        if(ReceivedChar == 'q')
-        {
-            if(!isLowercase)
-            {
-                Input_Status &= ~A_INPUT;
-            }
-            else
-            {
-                Input_Status |= A_INPUT;
-            }
-        }
-        if(ReceivedChar == 'e')
-        {
-            if(!isLowercase)
-            {
-                Input_Status &= ~B_INPUT;
-            }
-            else
-            {
-                Input_Status |= B_INPUT;
-            }
-        }
-        if(ReceivedChar == 'h')
-        {
-            if(!isLowercase)
-            {
-                Input_Status &= ~START_INPUT;
-            }
-            else
-            {
-                Input_Status |= START_INPUT;
-            }
-        }
-        if(ReceivedChar == 'j')
-        {
-            if(!isLowercase)
-            {
-                Input_Status &= ~SELECT_INPUT;
-            }
-            else
-            {
-                Input_Status |= SELECT_INPUT;
-            }
-        }
-    }
-}
-
-//
-// scia_xmit - Transmit a character from the SCI
-//
-void scia_xmit(int a)
+void Input_Poll(void)
 {
-    while (SciRegs->SCIFFTX.bit.TXFFST != 0) {}
-    SciRegs->SCITXBUF.all =a;
+   if (SciRegs->SCIFFRX.bit.RXFFST != 0)
+   {
+      Uint16 ReceivedChar = 0;
+      Uint16 isLowercase  = 0;
+
+      // variable length receive buffer for strings
+      char rcvBuf [8] = "";
+      sciRead(rcvBuf, 1);       // read the input
+      sciWrite(rcvBuf);         // echo the input
+
+      ReceivedChar = rcvBuf[0]; // populate var with first byte
+      // flush(rcvBuf); // needed if buffer is global
+      isLowercase                       = ReceivedChar & 0x20;
+      ReceivedChar                     |= 0x20; // Case to lowercase
+      GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+
+      if (ReceivedChar == 'w')
+      {
+         if (!isLowercase)
+         {
+            Input_Status &= ~UP_INPUT;
+         }
+         else
+         {
+            Input_Status |= UP_INPUT;
+         }
+      }
+
+      if (ReceivedChar == 'a')
+      {
+         if (!isLowercase)
+         {
+            Input_Status &= ~LEFT_INPUT;
+         }
+         else
+         {
+            Input_Status |= LEFT_INPUT;
+         }
+      }
+
+      if (ReceivedChar == 's')
+      {
+         if (!isLowercase)
+         {
+            Input_Status &= ~DOWN_INPUT;
+         }
+         else
+         {
+            Input_Status |= DOWN_INPUT;
+         }
+      }
+
+      if (ReceivedChar == 'd')
+      {
+         if (!isLowercase)
+         {
+            Input_Status &= ~RIGHT_INPUT;
+         }
+         else
+         {
+            Input_Status |= RIGHT_INPUT;
+         }
+      }
+
+      if (ReceivedChar == 'q')
+      {
+         if (!isLowercase)
+         {
+            Input_Status &= ~A_INPUT;
+         }
+         else
+         {
+            Input_Status |= A_INPUT;
+         }
+      }
+
+      if (ReceivedChar == 'e')
+      {
+         if (!isLowercase)
+         {
+            Input_Status &= ~B_INPUT;
+         }
+         else
+         {
+            Input_Status |= B_INPUT;
+         }
+      }
+
+      if (ReceivedChar == 'h')
+      {
+         if (!isLowercase)
+         {
+            Input_Status &= ~START_INPUT;
+         }
+         else
+         {
+            Input_Status |= START_INPUT;
+         }
+      }
+
+      if (ReceivedChar == 'j')
+      {
+         if (!isLowercase)
+         {
+            Input_Status &= ~SELECT_INPUT;
+         }
+         else
+         {
+            Input_Status |= SELECT_INPUT;
+         }
+      }
+   }
 }
 
-//
-// scia_msg - Transmit message via SCIA
-//
-void scia_msg(char * msg)
+void sciRead(char buf[], Uint16 length)
 {
-    int i;
-    i = 0;
-    while(msg[i] != '\0')
-    {
-        scia_xmit(msg[i]);
-        i++;
-    }
+   Uint16 bytesRead   = 0;
+   Uint16 bytesToRead = length;
+
+   while (bytesRead < bytesToRead)
+   {
+      while (!SciaRegs.SCIRXST.bit.RXRDY){}
+      buf[bytesRead] = SciaRegs.SCIRXBUF.all;
+      bytesRead++;
+   }
 }
+
+void sciWrite(char buf[])
+{
+   Uint16 bytesWritten = 0;
+   Uint16 bytesToWrite = strlen(buf);
+
+   while (bytesWritten < bytesToWrite)
+   {
+      while (!SciaRegs.SCICTL2.bit.TXRDY){}
+      SciaRegs.SCITXBUF.all = buf[bytesWritten];
+      bytesWritten++;
+   }
+}
+
+// flush the receive buffer
+void flush(char buf[], Uint16 length)
+{
+   strncpy(buf, "", length);
+}
+
+// Check the receive buffer for matches.
+// Instead of:  if (ReceivedChar == 'w'),
+// Try this:    if (commandEquals("w",1))
+int commandEquals(char buf[], Uint16 length)
+{
+   Uint16 returnVal = 0;
+
+   returnVal = strncmp(rcvBuf, buf, length);
+
+   if (!returnVal) // if they are equal
+   {
+      return(1);   // run the control statement
+   }
+   else
+   {
+      return(0); // don't run the control statement
+   }
+}
+
 #endif
