@@ -10,6 +10,7 @@ void sciRead(char buf[], Uint16 length);
 void sciWrite(char buf[]);
 
 unsigned char Input_Status;
+char          rcvBuf [8] = ""; // variable length receive buffer for strings
 
 // Initialize input device
 void Input_init(void)
@@ -67,20 +68,21 @@ void Input_Poll(void)
 {
    if (SciaRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
    {
-      // flush(rcvBuf); 	 // needed if receive buffer is declared globally
-      Uint16 ReceivedChar = 0;
-      Uint16 isLowercase  = 0;
+      flush(rcvBuf);               // needed if receive buffer is declared globally
+      // Uint16 ReceivedChar = 0;
+      Uint16 isLowercase = 0;
 
-      char rcvBuf [8] = "";	 // variable length receive buffer for strings
       sciRead(rcvBuf, 1);        // read the input
       sciWrite(rcvBuf);          // echo the input
 
-      ReceivedChar  = rcvBuf[0]; // populate var with first byte
-      isLowercase   = ReceivedChar & 0x20;
-      ReceivedChar |= 0x20; 	 // Case to lowercase
+      // isLowercase   = ReceivedChar & 0x20;
+      // ReceivedChar |= 0x20;    // Case to lowercase
+
+      isLowercase                       = rcvBuf[0] & 0x20;
+      rcvBuf[0]                        |= 0x20;
       GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
 
-      if (ReceivedChar == 'w')
+      if (rcvBuf[0] == 'w')
       {
          if (!isLowercase)
          {
@@ -92,7 +94,7 @@ void Input_Poll(void)
          }
       }
 
-      if (ReceivedChar == 'a')
+      if (rcvBuf[0] == 'a')
       {
          if (!isLowercase)
          {
@@ -104,7 +106,7 @@ void Input_Poll(void)
          }
       }
 
-      if (ReceivedChar == 's')
+      if (rcvBuf[0] == 's')
       {
          if (!isLowercase)
          {
@@ -128,7 +130,7 @@ void Input_Poll(void)
          }
       }
 
-      if (ReceivedChar == 'q')
+      if (rcvBuf[0] == 'q')
       {
          if (!isLowercase)
          {
@@ -140,7 +142,7 @@ void Input_Poll(void)
          }
       }
 
-      if (ReceivedChar == 'e')
+      if (rcvBuf[0] == 'e')
       {
          if (!isLowercase)
          {
@@ -152,7 +154,7 @@ void Input_Poll(void)
          }
       }
 
-      if (ReceivedChar == 'h')
+      if (rcvBuf[0] == 'h')
       {
          if (!isLowercase)
          {
@@ -164,7 +166,7 @@ void Input_Poll(void)
          }
       }
 
-      if (ReceivedChar == 'j')
+      if (rcvBuf[0] == 'j')
       {
          if (!isLowercase)
          {
@@ -185,7 +187,9 @@ void sciRead(char buf[], Uint16 length)
 
    while (bytesRead < bytesToRead)
    {
-      while (!SciaRegs.SCIRXST.bit.RXRDY){}
+      while (!SciaRegs.SCIRXST.bit.RXRDY)
+      {
+      }
       buf[bytesRead] = SciaRegs.SCIRXBUF.all;
       bytesRead++;
    }
@@ -198,7 +202,9 @@ void sciWrite(char buf[])
 
    while (bytesWritten < bytesToWrite)
    {
-      while (!SciaRegs.SCICTL2.bit.TXRDY){}
+      while (!SciaRegs.SCICTL2.bit.TXRDY)
+      {
+      }
       SciaRegs.SCITXBUF.all = buf[bytesWritten];
       bytesWritten++;
    }
