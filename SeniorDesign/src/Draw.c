@@ -60,7 +60,8 @@ void drawRect(int x, int y, int x2, int y2, Pixel pixel) {
 	}
 }
 
-void drawCircle(int x0, int y0, int radius, Pixel pixel) {
+void drawCircle(int x0, int y0, int radius, Pixel pixel)
+{
     int i;
     int r2 = radius * radius;
     int area = r2 << 2;
@@ -96,6 +97,50 @@ void fadeOut(int s)
                 }
 
         }
+    return;
+}
+
+void fadeOutExclude(int s, Pixel pixel)  //if outside threshold sets pixel to the exclude pixel
+{
+    int i;
+    for (i =0; i<(areaArray);i++)
+        {
+            if((Pixels[i].G!=pixel.G)&&(Pixels[i].G>(0+s)))
+                {
+                    Pixels[i].G= Pixels[i].G-s;
+                }
+            else
+                {
+                    Pixels[i].G= pixel.G;
+                }
+            if((Pixels[i].R!=pixel.R)&&(Pixels[i].R>(0+s)))
+                {
+                        Pixels[i].R= Pixels[i].R-s;
+                }
+            else
+                {
+                    Pixels[i].R= pixel.R;
+                }
+            if((Pixels[i].B!=pixel.B)&&(Pixels[i].B>(0+s)))
+                {
+                        Pixels[i].B= Pixels[i].B-s;
+                }
+            else
+                {
+                    Pixels[i].B= pixel.B;
+                }
+
+        }
+    return;
+}
+
+void drawBackground(Pixel pixel) //this will overwrite everything so call early
+{
+    int i;
+    for(i=0;i<areaArray;i++)
+    {
+        Pixels[i]=pixel;
+    }
     return;
 }
 

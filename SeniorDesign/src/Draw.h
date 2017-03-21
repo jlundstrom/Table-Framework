@@ -32,5 +32,9 @@ extern void drawCircle(int x0, int y0, int radius, Pixel pixel);
 // Draws a circle with radius R from centerpoint, filled
 extern void fadeOut(int s);
 // fades all pixels with speed s
+extern void fadeOutExclude(int s, Pixel pixel);
+// fades pixels with speed s, if below threshold ref pixel, sets to ref pixel
+extern void drawBackground(Pixel pixel);
+//this will overwrite everything so call early, forceful overwrite all pixels with ref
 extern void clearDisplay(void);
 #endif
