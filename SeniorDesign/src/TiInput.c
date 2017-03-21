@@ -4,13 +4,12 @@
 #include "F28x_Project.h"
 
 // string-compatible helper functions
-int cmdEquals(char buf[], Uint16 length);
+int cmdEquals(char buf1[], char buf2[], Uint16 length);
 void flush(char buf[], Uint16 length);
 void sciRead(char buf[], Uint16 length);
 void sciWrite(char buf[]);
 
 unsigned char Input_Status;
-char          rcvBuf [8] = ""; // variable length receive buffer for strings
 
 // Initialize input device
 void Input_init(void)
@@ -68,7 +67,8 @@ void Input_Poll(void)
 {
    if (SciaRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
    {
-      flush(rcvBuf);               // needed if receive buffer is declared globally
+      //flush(rcvBuf);               // needed if receive buffer is declared globally
+      char   rcvBuf [8] = "";        // variable length receive buffer for strings
       // Uint16 ReceivedChar = 0;
       Uint16 isLowercase = 0;
 
@@ -219,11 +219,11 @@ void flush(char buf[], Uint16 length)
 // Check the receive buffer for matches.
 // Instead of:  if (ReceivedChar == 'w'),
 // Try this:    if (commandEquals("w",1))
-int cmdEquals(char buf[], Uint16 length)
+int cmdEquals(char buf1[], char buf2[], Uint16 length)
 {
    Uint16 returnVal = 0;
 
-   returnVal = strncmp(rcvBuf, buf, length);
+   returnVal = strncmp(buf1, buf2, length);
 
    if (!returnVal) // if they are equal
    {
