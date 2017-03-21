@@ -28,5 +28,7 @@ extern void setPixel(int x, int y, Pixel pixel);
 // Draw a rectangle from x,y with a specified color, width and height
 extern void drawRect(int x, int y, int w, int h, Pixel pixel);
 // Draws a black rectangle to cover the entire display
+extern void drawCircle(int x0, int y0, int radius, Pixel pixel)
+// Draws a circle with radius R from centerpoint, filled
 extern void clearDisplay(void);
 #endif

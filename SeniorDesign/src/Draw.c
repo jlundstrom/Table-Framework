@@ -59,6 +59,23 @@ void drawRect(int x, int y, int x2, int y2, Pixel pixel) {
 	}
 }
 
+void drawCircle(int x0, int y0, int radius, Pixel pixel) {
+    int i;
+    int r2 = radius * radius;
+    int area = r2 << 2;
+    int rr = radius << 1;
+    int tx = 0;
+    int ty = 0;
+    for(i = 0; i < area; i++)
+    {
+        tx = (i % rr) - radius;
+        ty = (i / rr) - radius;
+
+        if (tx * tx + ty * ty <= r2)
+            setPixel(x0 + tx, y0 + ty, pixel);
+    }
+}
+
 void clearDisplay(void) {
 	Pixel blank = { 0,0,0 };
 	drawRect(0, 0, WIDTH, HEIGHT, blank);
