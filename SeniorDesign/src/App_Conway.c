@@ -99,9 +99,6 @@ void Demo_Conway_Init(void) {
 	Conway_Data->active = Conway_Data->cells1;
 	Conway_Data->temp = Conway_Data->cells2;
 
-	rand = 0;
-	x = 14;y = 6;
-
 	if (rand == 0)
 	{
 		setCell(Conway_Data->active, x, y, 1);
