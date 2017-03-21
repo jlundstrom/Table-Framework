@@ -1,5 +1,6 @@
 #include "Draw.h"
 Pixel Pixels[WIDTH * HEIGHT];
+int areaArray = WIDTH * HEIGHT;
 // Pixels are stored to be optimal for sending to ws2812b leds from the microprocess
 
 // Retrieve pixel, and return first pixel for invalid inputs
@@ -74,6 +75,28 @@ void drawCircle(int x0, int y0, int radius, Pixel pixel) {
         if (tx * tx + ty * ty <= r2)
             setPixel(x0 + tx, y0 + ty, pixel);
     }
+}
+
+void fadeOut(int s)
+{
+    int i;
+    for (i =0; i<(areaArray);i++)
+        {
+            if(Pixels[i].G>(0+s))
+                {
+                    Pixels[i].G= Pixels[i].G-s;
+                }
+            if(Pixels[i].R>(0+s))
+                {
+                        Pixels[i].R= Pixels[i].R-s;
+                }
+            if(Pixels[i].B>(0+s))
+                {
+                        Pixels[i].B= Pixels[i].B-s;
+                }
+
+        }
+    return;
 }
 
 void clearDisplay(void) {
