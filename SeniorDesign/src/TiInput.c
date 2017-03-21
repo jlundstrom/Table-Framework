@@ -67,16 +67,11 @@ void Input_Poll(void)
 {
    if (SciaRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
    {
-      //flush(rcvBuf);               // needed if receive buffer is declared globally
       char   rcvBuf [8] = "";        // variable length receive buffer for strings
-      // Uint16 ReceivedChar = 0;
       Uint16 isLowercase = 0;
 
       sciRead(rcvBuf, 1);        // read the input
       sciWrite(rcvBuf);          // echo the input
-
-      // isLowercase   = ReceivedChar & 0x20;
-      // ReceivedChar |= 0x20;    // Case to lowercase
 
       isLowercase                       = rcvBuf[0] & 0x20;
       rcvBuf[0]                        |= 0x20;
@@ -118,7 +113,7 @@ void Input_Poll(void)
          }
       }
 
-      if (ReceivedChar == 'd')
+      if (rcvBuf[0] == 'd')
       {
          if (!isLowercase)
          {
