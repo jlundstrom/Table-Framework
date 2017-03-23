@@ -56,37 +56,22 @@ double turbulence(double x, double y, double size) //size is zoom factor
 
 void drawCloud(int RGB) // send 1,2,3 for which color to not hold constant
 {
+    if(!(RGB<4&&RGB<0))
+    {
+        return;
+    }
     int x;
     int y;
     char color;
     Pixel pixel;
-    if(RGB==1)
-    {
-        pixel.R=0;
-        pixel.G=255;
-        pixel.B=255;
-    }
-    if(RGB==2)
-    {
-        pixel.R=255;
-        pixel.G=0;
-        pixel.B=255;
-    }
-    if(RGB==3)
-    {
-        pixel.R=255;
-        pixel.G=255;
-        pixel.B=0;
-    }
-    else
-    {
-        return;
-    }
+    pixel.R=0;
+    pixel.G=0;
+    pixel.B=0;
     for(x=0;x<noiseWidth;x++)
     {
         for(y=0;y<noiseHeight;y++)
         {
-            color = 192 + (char) turbulence(x,y,4);
+            color = 5 + (char) turbulence(x,y,3);
             if(RGB==1)
             {
                 pixel.R=color;
@@ -104,6 +89,5 @@ void drawCloud(int RGB) // send 1,2,3 for which color to not hold constant
             }
         }
     }
-
 }
 
