@@ -1,6 +1,6 @@
 #ifndef __DRAW__
 #define __DRAW__
-
+#include <stdint.h>
 // Dimensions of Display
 #define WIDTH 32
 #define HEIGHT 16
@@ -30,13 +30,15 @@ extern void drawRect(int x, int y, int w, int h, Pixel pixel);
 // Draws a black rectangle to cover the entire display
 extern void drawCircle(int x0, int y0, int radius, Pixel pixel);
 // Draws a circle with radius R from centerpoint, filled
+extern void drawCircleEmpty(int xc, int yc, int radius, Pixel pixel);
+//draw a circle at point xc,yc with radius and set color
 extern void fadeOut(int s);
 // fades all pixels with speed s
 extern void fadeOutExclude(int s, Pixel pixel);
 // fades pixels with speed s, if below threshold ref pixel, sets to ref pixel
 extern void drawBackground(Pixel pixel);
 //this will overwrite everything so call early, forceful overwrite all pixels with ref
-extern char comparePixel(Pixel pixel1, Pixel pixel2);
+extern uint_fast8_t comparePixel(Pixel pixel1, Pixel pixel2);
 //return 0 if not equal, 1 for equal
 extern void drawLine(int x1,int y1, int x2, int y2, Pixel pixel);
 //draws a line between two points, generalized bresenham

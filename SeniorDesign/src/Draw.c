@@ -1,8 +1,23 @@
 #include "Draw.h"
 #include <math.h>
+#include <stdint.h>
 Pixel Pixels[WIDTH * HEIGHT];
 int areaArray = WIDTH * HEIGHT;
 // Pixels are stored to be optimal for sending to ws2812b leds from the microprocess
+
+//prototypes
+Pixel getPixel(int x, int y);
+void setPixel(int x, int y, Pixel pixel);
+void drawRect(int x, int y, int x2, int y2, Pixel pixel) ;
+void drawCircle(int x0, int y0, int radius, Pixel pixel);
+void fadeOut(int s);
+void fadeOutExclude(int s, Pixel pixel);
+uint_fast8_t comparePixel(Pixel pixel1, Pixel pixel2);
+void drawBackground(Pixel pixel);
+void drawLine(int x1,int y1, int x2, int y2, Pixel pixel);
+void circlePlotPoint(int xc,int yc,int x,int y, Pixel pixel);
+void drawCircleEmpty(int xc, int yc, int radius, Pixel pixel);
+void clearDisplay(void);
 
 // Retrieve pixel, and return first pixel for invalid inputs
 Pixel getPixel(int x, int y) {
@@ -135,7 +150,7 @@ void fadeOutExclude(int s, Pixel pixel)  //if outside threshold sets pixel to th
     return;
 }
 
-char comparePixel(Pixel pixel1, Pixel pixel2) //return 0 if not equal, 1 for equal
+uint_fast8_t comparePixel(Pixel pixel1, Pixel pixel2) //return 0 if not equal, 1 for equal
 {
     if((pixel1.R==pixel2.R)&&(pixel1.G==pixel2.G)&&(pixel1.B==pixel2.B))
     {
@@ -205,6 +220,37 @@ void drawLine(int x1,int y1, int x2, int y2, Pixel pixel)
             x+=s1;
  }
 setPixel(x2,y2,pixel);
+}
+
+void drawCircleEmpty(int xc, int yc, int radius, Pixel pixel)
+{
+    int p,y,x;
+    x=0;
+    y=radius;
+    p=3-2*radius;
+    while(x<y)
+    {
+       x++;
+       if(p<0) p+=4*x+6;
+       else
+       {
+             y--;
+             p+=4*(x-y)+10;
+       }
+       circlePlotPoint(xc,yc,x,y,pixel);
+     }
+}
+
+void circlePlotPoint(int xc,int yc,int x,int y, Pixel pixel)
+{
+  setPixel(xc+x,yc+y,pixel);
+  setPixel(xc-x,yc+y,pixel);
+  setPixel(xc+x,yc-y,pixel);
+  setPixel(xc-x,yc-y,pixel);
+  setPixel(xc+y,yc+x,pixel);
+  setPixel(xc-y,yc+x,pixel);
+  setPixel(xc+y,yc-x,pixel);
+  setPixel(xc-y,yc-x,pixel);
 }
 
 void clearDisplay(void) {
