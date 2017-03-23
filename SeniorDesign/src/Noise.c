@@ -56,7 +56,7 @@ double turbulence(double x, double y, double size) //size is zoom factor
 
 void drawCloud(int RGB) // send 1,2,3 for which color to not hold constant
 {
-    if(!(RGB<4&&RGB<0))
+    if(!(RGB<4&&RGB>0))
     {
         return;
     }
