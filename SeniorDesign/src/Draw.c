@@ -1,4 +1,5 @@
 #include "Draw.h"
+#include <math.h>
 Pixel Pixels[WIDTH * HEIGHT];
 int areaArray = WIDTH * HEIGHT;
 // Pixels are stored to be optimal for sending to ws2812b leds from the microprocess
@@ -134,6 +135,18 @@ void fadeOutExclude(int s, Pixel pixel)  //if outside threshold sets pixel to th
     return;
 }
 
+char comparePixel(Pixel pixel1, Pixel pixel2) //return 0 if not equal, 1 for equal
+{
+    if((pixel1.R==pixel2.R)&&(pixel1.G==pixel2.G)&&(pixel1.B==pixel2.B))
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void drawBackground(Pixel pixel) //this will overwrite everything so call early
 {
     int i;
@@ -142,6 +155,56 @@ void drawBackground(Pixel pixel) //this will overwrite everything so call early
         Pixels[i]=pixel;
     }
     return;
+}
+
+int sign(x)
+{
+if(x>0)
+ return 1;
+else if(x<0)
+ return -1;
+else
+ return 0;
+}
+
+void drawLine(int x1,int y1, int x2, int y2, Pixel pixel)
+{
+    int x,y,dx,dy,swap,temp,s1,s2,p,i;
+
+    x=x1;
+    y=y1;
+    dx=abs(x2-x1);
+    dy=abs(y2-y1);
+    s1=sign(x2-x1);
+    s2=sign(y2-y1);
+    swap=0;
+    setPixel(x1,y1,pixel);
+    if(dy>dx)
+        {
+        temp=dx;
+        dx=dy;
+        dy=temp;
+        swap=1;
+        }
+    p=2*dy-dx;
+    for(i=0;i<dx;i++)
+        {
+        setPixel(x,y,pixel);
+        while(p>=0)
+        {
+            p=p-2*dx;
+            if(swap)
+                x+=s1;
+            else
+                y+=s2;
+        }
+        p=p+2*dy;
+        if(swap)
+            y+=s2;
+        else
+            x+=s1;
+ }
+setPixel(x2,y2,pixel);
 }
 
 void clearDisplay(void) {

@@ -36,5 +36,9 @@ extern void fadeOutExclude(int s, Pixel pixel);
 // fades pixels with speed s, if below threshold ref pixel, sets to ref pixel
 extern void drawBackground(Pixel pixel);
 //this will overwrite everything so call early, forceful overwrite all pixels with ref
+extern char comparePixel(Pixel pixel1, Pixel pixel2);
+//return 0 if not equal, 1 for equal
+extern void drawLine(int x1,int y1, int x2, int y2, Pixel pixel);
+//draws a line between two points, generalized bresenham
 extern void clearDisplay(void);
 #endif
