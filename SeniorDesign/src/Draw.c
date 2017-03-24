@@ -319,6 +319,7 @@ void floodFill(int xo, int yo, Pixel fill, Pixel wall)
                     stackMax[pointer].x=xMove[i]+x;
                     stackMax[pointer].y=yMove[i]+y;
                     refArray[xMove[i]+x][yMove[i]+y]=1;
+                    setPixel(xMove[i]+x,yMove[i]+y,fill);
                     pointer++;
                 }
                 else
