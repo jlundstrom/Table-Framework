@@ -2,7 +2,11 @@
 #include <math.h>
 #include <stdint.h>
 Pixel Pixels[WIDTH * HEIGHT];
-int areaArray = WIDTH * HEIGHT;
+int_fast8_t xMove[]={1,0,-1,0};
+int_fast8_t yMove[]={0,1,0,-1};
+uint_fast8_t refArray [WIDTH][HEIGHT];
+Point stackMax[WIDTH*HEIGHT];
+
 // Pixels are stored to be optimal for sending to ws2812b leds from the microprocess
 
 //prototypes
@@ -12,12 +16,16 @@ void drawRect(int x, int y, int x2, int y2, Pixel pixel) ;
 void drawCircle(int x0, int y0, int radius, Pixel pixel);
 void fadeOut(int s);
 void fadeOutExclude(int s, Pixel pixel);
-uint_fast8_t comparePixel(Pixel pixel1, Pixel pixel2);
+int comparePixel(Pixel pixel1, Pixel pixel2);
 void drawBackground(Pixel pixel);
 void drawLine(int x1,int y1, int x2, int y2, Pixel pixel);
 void circlePlotPoint(int xc,int yc,int x,int y, Pixel pixel);
 void drawCircleEmpty(int xc, int yc, int radius, Pixel pixel);
 void clearDisplay(void);
+void scanWall(Pixel pixel);
+int inBounds(int x, int y);
+int breakOut(Point point);
+void floodFill(int xo, int yo, Pixel fill, Pixel wall);
 
 // Retrieve pixel, and return first pixel for invalid inputs
 Pixel getPixel(int x, int y) {
@@ -150,7 +158,7 @@ void fadeOutExclude(int s, Pixel pixel)  //if outside threshold sets pixel to th
     return;
 }
 
-uint_fast8_t comparePixel(Pixel pixel1, Pixel pixel2) //return 0 if not equal, 1 for equal
+int comparePixel(Pixel pixel1, Pixel pixel2) //return 0 if not equal, 1 for equal
 {
     if((pixel1.R==pixel2.R)&&(pixel1.G==pixel2.G)&&(pixel1.B==pixel2.B))
     {
@@ -256,4 +264,91 @@ void circlePlotPoint(int xc,int yc,int x,int y, Pixel pixel)
 void clearDisplay(void) {
 	Pixel blank = { 0,0,0 };
 	drawRect(0, 0, WIDTH, HEIGHT, blank);
+}
+
+void scanWall(Pixel pixel) //sets ref array to 1 if wall
+{
+   int u,i;
+   for(u=0;u<WIDTH;u++)
+   {
+       for(i=0;i<HEIGHT;i++)
+       {
+           if(comparePixel(pixel,getPixel(u,i))==1)
+               {
+                   refArray[u][i]=1;
+               }
+           else
+               {
+                   refArray[u][i]=0;
+               }
+       }
+   }
+}
+
+int inBounds(int x, int y)
+{
+    if(x<WIDTH&&x>=0&&y<HEIGHT&&y>=0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int breakOut(Point point) //arb breakout condition, 1 breakout, 0 no breaky so cheeky
+{
+    if((point.x==600)&&(point.y==600))
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void floodFill(int xo, int yo, Pixel fill, Pixel wall) //600 denotes breakout
+{
+    int i,x,y,error=0,flag=0;
+    int pointer=1;
+    x=xo;
+    y=yo;
+    scanWall(wall);
+    refArray[x][y]=1;
+    stackMax[0].x=600;
+    stackMax[0].y=600;
+    while(breakOut(stackMax[pointer])!= 1 && error!= 2049) //arb error value
+    {
+        flag=0;
+        for(i=0;i<4;i++)
+        {
+            if(inBounds(xMove[i]+x,yMove[i]+y)==1)
+            {
+                if(refArray[xMove[i]+x][yMove[i]+y]==0)
+                {
+                    stackMax[pointer].x=xMove[i]+x;
+                    stackMax[pointer].y=yMove[i]+y;
+                    refArray[xMove[i]+x][yMove[i]+y]=1;
+                    pointer++;
+                }
+                else
+                {
+                    flag++;
+                }
+            }
+            else
+            {
+                flag++;
+            }
+        }
+        if(flag>=3)
+        {
+            pointer--;
+        }
+        error++;
+        x=stackMax[pointer].x;
+        y=stackMax[pointer].y;
+    }
 }

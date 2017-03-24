@@ -4,12 +4,18 @@
 // Dimensions of Display
 #define WIDTH 32
 #define HEIGHT 16
+#define areaArray (WIDTH * HEIGHT)
 
 struct pixel {
     unsigned char G;
 	unsigned char R;
 	unsigned char B;
 } typedef Pixel;
+
+struct point {
+    uint_least8_t x;
+    uint_least8_t y;
+} typedef Point;
 
 // Common colors
 static Pixel PIXEL_BLACK = { 0, 0, 0 };
@@ -38,9 +44,11 @@ extern void fadeOutExclude(int s, Pixel pixel);
 // fades pixels with speed s, if below threshold ref pixel, sets to ref pixel
 extern void drawBackground(Pixel pixel);
 //this will overwrite everything so call early, forceful overwrite all pixels with ref
-extern uint_fast8_t comparePixel(Pixel pixel1, Pixel pixel2);
+extern int comparePixel(Pixel pixel1, Pixel pixel2);
 //return 0 if not equal, 1 for equal
 extern void drawLine(int x1,int y1, int x2, int y2, Pixel pixel);
 //draws a line between two points, generalized bresenham
+extern void floodFill(int xo, int yo, Pixel fill, Pixel wall);
+//floodfill algo, fill == fill color, wall==color marked as the barrier
 extern void clearDisplay(void);
 #endif
