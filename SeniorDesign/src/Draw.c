@@ -299,15 +299,12 @@ int inBounds(int x, int y)
 
 void floodFill(int xo, int yo, Pixel fill, Pixel wall)
 {
-    int i,x,y,flag=0;
-    int pointer=1;
+    int i,x,y,flag=0,pointer=0;
     x=xo;
     y=yo;
     scanWall(wall);
     refArray[x][y]=1;
-    stackMax[0].x=600;
-    stackMax[0].y=600;
-    while(pointer!= 0)
+    while(pointer <= 0)
     {
         flag=0;
         for(i=0;i<4;i++)
