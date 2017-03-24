@@ -299,7 +299,7 @@ int inBounds(int x, int y)
 
 void floodFill(int xo, int yo, Pixel fill, Pixel wall)
 {
-    int i,x,y,flag=0,error=0;
+    int i,x,y,flag=0;
     int pointer=1;
     x=xo;
     y=yo;
