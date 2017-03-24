@@ -297,21 +297,9 @@ int inBounds(int x, int y)
     }
 }
 
-int breakOut(Point point) //arb breakout condition, 1 breakout, 0 no breaky so cheeky
+void floodFill(int xo, int yo, Pixel fill, Pixel wall)
 {
-    if((point.x==600)&&(point.y==600))
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-void floodFill(int xo, int yo, Pixel fill, Pixel wall) //600 denotes breakout
-{
-    int i,x,y,error=0,flag=0;
+    int i,x,y,flag=0,error=0;
     int pointer=1;
     x=xo;
     y=yo;
@@ -319,7 +307,7 @@ void floodFill(int xo, int yo, Pixel fill, Pixel wall) //600 denotes breakout
     refArray[x][y]=1;
     stackMax[0].x=600;
     stackMax[0].y=600;
-    while(breakOut(stackMax[pointer])!= 1 && error!= 2049) //arb error value
+    while(pointer!= 0)
     {
         flag=0;
         for(i=0;i<4;i++)
@@ -342,12 +330,11 @@ void floodFill(int xo, int yo, Pixel fill, Pixel wall) //600 denotes breakout
             {
                 flag++;
             }
+            if(flag==3)
+            {
+                pointer--;
+            }
         }
-        if(flag>=3)
-        {
-            pointer--;
-        }
-        error++;
         x=stackMax[pointer].x;
         y=stackMax[pointer].y;
     }
