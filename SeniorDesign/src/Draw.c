@@ -26,6 +26,8 @@ void scanWall(Pixel pixel);
 int inBounds(int x, int y);
 int breakOut(Point point);
 void floodFill(int xo, int yo, Pixel fill, Pixel wall);
+int sign(int x);
+
 
 // Retrieve pixel, and return first pixel for invalid inputs
 Pixel getPixel(int x, int y) {
@@ -182,12 +184,12 @@ void drawBackground(Pixel pixel) //this will overwrite everything so call early
 
 int sign(x)
 {
-if(x>0)
- return 1;
-else if(x<0)
- return -1;
-else
- return 0;
+    if(x>0)
+        return 1;
+    else if(x<0)
+        return -1;
+    else
+        return 0;
 }
 
 void drawLine(int x1,int y1, int x2, int y2, Pixel pixel)
@@ -304,7 +306,7 @@ void floodFill(int xo, int yo, Pixel fill, Pixel wall)
     y=yo;
     scanWall(wall);
     refArray[x][y]=1;
-    while(pointer <= 0)
+    while(pointer >= 0)
     {
         flag=0;
         for(i=0;i<4;i++)
