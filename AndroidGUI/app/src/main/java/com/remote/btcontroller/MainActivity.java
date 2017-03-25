@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity
 {
-
+    // Initialization
     Button btnFind;
     ListView listDevices;
 
@@ -32,22 +32,27 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mBluetooth = BluetoothAdapter.getDefaultAdapter();
+
+        // Call the buttons
         btnFind = (Button) findViewById(R.id.btnFind);
         listDevices = (ListView) findViewById(R.id.listDevices);
-        mBluetooth = BluetoothAdapter.getDefaultAdapter();
 
         if (mBluetooth == null)
         {
+            // Show a message that the device has no bluetooth adapter
             Toast.makeText(getApplicationContext(), "Bluetooth Adapter Not Available",
                     Toast.LENGTH_LONG).show();
             finish();
         }
         else if (!mBluetooth.isEnabled())
         {
+            // Ask the user to turn the bluetooth on
             Intent btIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(btIntent, 1);
         }
 
+        // Button to find devices
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         {
             for(BluetoothDevice bt : pairedDevices)
             {
+                // Get the device name and address
                 list.add(bt.getName() + "\n" + bt.getAddress());
             }
         }
@@ -85,11 +91,14 @@ public class MainActivity extends AppCompatActivity
         public void onItemClick (AdapterView<?> av, View v, int arg2, long arg3)
         {
 
+            // Get the device MAC address, the last 17 chars in the view
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
 
+            // Make an intent to start next activity
             Intent i = new Intent(MainActivity.this, Controller.class);
 
+            // Change the activity
             i.putExtra(EXTRA_ADDRESS, address);
             startActivity(i);
         }

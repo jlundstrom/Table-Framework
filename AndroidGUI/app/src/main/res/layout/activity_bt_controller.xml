@@ -21,17 +21,17 @@
         android:id="@+id/btn_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Select"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/btn_left"
-        android:text="Select" />
+        android:layout_toEndOf="@+id/btn_right" />
 
     <Button
         android:id="@+id/btn_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Start"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/btn_select"
-        android:text="Start" />
+        android:layout_toStartOf="@+id/btn_select" />
 
     <Button
         android:id="@+id/btn_up"
@@ -55,18 +55,18 @@
         android:id="@+id/btn_a"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="A"
         android:layout_alignBaseline="@+id/btn_right"
         android:layout_alignBottom="@+id/btn_right"
-        android:layout_alignParentEnd="true"
-        android:text="A" />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:id="@+id/btn_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/btn_disconnect"
+        android:text="B"
         android:layout_below="@+id/btn_a"
-        android:text="B" />
+        android:layout_alignStart="@+id/btn_disconnect" />
 
     <Button
         android:id="@+id/btn_left"

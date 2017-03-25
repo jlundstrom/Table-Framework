@@ -11,14 +11,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.remote.btcontroller.MainActivity">
+        <activity
+            android:name="com.remote.btcontroller.MainActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.remote.btcontroller.Controller"></activity>
+        <activity
+            android:name="com.remote.btcontroller.Controller"
+            android:configChanges="screenSize|keyboardHidden|orientation">
+        </activity>
     </application>
 
 </manifest>
