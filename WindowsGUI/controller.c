@@ -16,8 +16,12 @@ void disconnect(void);
 void transmit(char buf[]);
 
 int        		   panelHandle;
+
 enum 			   commandEnum { start, select, a, b, up, down, left, right };
 const char * const command[] = { "h", "j", "q", "e", "w", "s", "a", "d" };
+
+enum 			   CommandEnum { Start, Select, A, B, Up, Down, Left, Right };
+const char * const Command[] = { "H", "J", "Q", "E", "W", "S", "A", "D" };
 
 int               puttyFlag      = 0;
 char              TargetName[]   = "SmartTable"; // COM3
@@ -86,7 +90,8 @@ int CVICALLBACK CmdUp(int panel, int control, int event,
       transmit(command[up]);
 
       break;
-   }
+	 
+   }	  
    return 0;
 }
 
@@ -100,6 +105,7 @@ int CVICALLBACK CmdLeft(int panel, int control, int event,
       transmit(command[left]);
 
       break;
+
    }
    return 0;
 }
@@ -114,6 +120,7 @@ int CVICALLBACK CmdDown(int panel, int control, int event,
       transmit(command[down]);
 
       break;
+
    }
    return 0;
 }
@@ -128,6 +135,7 @@ int CVICALLBACK CmdSelect(int panel, int control, int event,
       transmit(command[select]);
 
       break;
+
    }
    return 0;
 }
@@ -142,6 +150,7 @@ int CVICALLBACK CmdStart(int panel, int control, int event,
       transmit(command[start]);
 
       break;
+	  
    }
    return 0;
 }
@@ -156,6 +165,7 @@ int CVICALLBACK CmdB(int panel, int control, int event,
       transmit(command[b]);
 
       break;
+	  
    }
    return 0;
 }
@@ -170,6 +180,7 @@ int CVICALLBACK CmdA(int panel, int control, int event,
       transmit(command[a]);
 
       break;
+
    }
    return 0;
 }

@@ -1,6 +1,6 @@
 [Workspace Header]
 Version = 1501
-Pathname = "/c/Users/chris/Desktop/EEL 4915L - Senior Design II/WindowsGUI/controller.cws"
+Pathname = "/c/workspace/git/Table-Framework/WindowsGUI/controller.cws"
 CVI Dir = "/c/program files (x86)/national instruments/cvi2015"
 CVI Shared Dir = "/C/Program Files (x86)/National Instruments/Shared/CVI"
 CVI Pub Local Dir = "/C/ProgramData/National Instruments/CVI2015"
@@ -13,10 +13,10 @@ Number of Projects = 1
 Active Project = 1
 Project 0001 = "controller.prj"
 Drag Bar Left = 229
-Window Top = 244
-Window Left = 136
-Window Bottom = 1415
-Window Right = 2083
+Window Top = 105
+Window Left = 186
+Window Bottom = 1439
+Window Right = 2111
 Maximized = False
 Maximized Children = True
 Max32 Number Of Errors = 20
@@ -46,7 +46,7 @@ Batch Build Release = False
 Batch Build Debug = False
 
 [File 0001]
-Path = "/c/Users/chris/Desktop/EEL 4915L - Senior Design II/WindowsGUI/controller.uir"
+Path = "/c/workspace/git/Table-Framework/WindowsGUI/controller.uir"
 File Type = "User Interface Resource"
 Disk Date = 3572693852
 In Projects = "1,"
@@ -57,23 +57,23 @@ Window Width = 683
 Window Z-Order = 2
 
 [File 0002]
-Path = "/c/Users/chris/Desktop/EEL 4915L - Senior Design II/WindowsGUI/controller.c"
+Path = "/c/workspace/git/Table-Framework/WindowsGUI/controller.c"
 File Type = "CSource"
-Disk Date = 3572973358
+Disk Date = 3573049199
 In Projects = "1,"
 Window Top = 45
 Window Z-Order = 1
-Source Window State = "1,19,19,19,39,42,42,0,0,210,0,236,0,236,0,68,9,0,19,40,400,600,1,22,"
+Source Window State = "1,102,102,102,8,19,8,0,0,207,0,247,0,247,0,92,57,0,104,31,400,600,1,22,"
 
 [File 0003]
-Path = "/c/Users/chris/Desktop/EEL 4915L - Senior Design II/WindowsGUI/ExtraPuTTY.lib"
+Path = "/c/workspace/git/Table-Framework/WindowsGUI/ExtraPuTTY.lib"
 File Type = "Library"
 Disk Date = 3518104268
 In Projects = "1,"
 
 [Tab Order]
-Tab 0001 = "/c/Users/chris/Desktop/EEL 4915L - Senior Design II/WindowsGUI/controller.uir"
-Tab 0002 = "/c/Users/chris/Desktop/EEL 4915L - Senior Design II/WindowsGUI/controller.c"
+Tab 0001 = "/c/workspace/git/Table-Framework/WindowsGUI/controller.uir"
+Tab 0002 = "/c/workspace/git/Table-Framework/WindowsGUI/controller.c"
 
 [Default Build Config 0001 Debug]
 Generate Browse Info = True
