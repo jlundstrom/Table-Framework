@@ -90,7 +90,7 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
             @Override
             public void onClick(View v)
             {
-                DateFormat df = new SimpleDateFormat("HH-mm MM-dd-yy");
+                DateFormat df = new SimpleDateFormat("HH:mm:ss MM-dd-yy");
                 String date = df.format(Calendar.getInstance().getTime());
                 btWrite("t" + date + "\0");
             }
