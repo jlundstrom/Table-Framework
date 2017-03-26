@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -79,11 +80,13 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         btn_sync.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 DateFormat df = new SimpleDateFormat("HH:mm:ss MM-dd-yy");
                 String date = df.format(Calendar.getInstance().getTime());
                 date = "t" + date + "\0";
+
                 btWrite(date);
             }
         });
@@ -91,8 +94,9 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         btn_disconnect.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 btDisconnect();
             }
         });
@@ -104,6 +108,7 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         // If the button is pressed
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
         {
+            view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             switch (view.getId())
             {
                 case R.id.btn_start:
