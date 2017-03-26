@@ -4,10 +4,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.MotionEvent;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -28,6 +32,7 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
     Button btn_left;
     Button btn_right;
     Button btn_disconnect;
+    ImageButton btn_sync;
 
     String address = null;
     private ProgressDialog progress;
@@ -56,6 +61,7 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         btn_left       = (Button)findViewById(R.id.btn_left);
         btn_right      = (Button)findViewById(R.id.btn_right);
         btn_disconnect = (Button)findViewById(R.id.btn_disconnect);
+        btn_sync       = (ImageButton)findViewById(R.id.btn_sync);
 
         // Call the class to connect
         new btConnect().execute();
@@ -69,6 +75,7 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         btn_down.setOnTouchListener(this);
         btn_left.setOnTouchListener(this);
         btn_right.setOnTouchListener(this);
+
         btn_disconnect.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -77,6 +84,18 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
                 btDisconnect();
             }
         });
+
+        btn_sync.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                DateFormat df = new SimpleDateFormat("HH-mm MM-dd-yy");
+                String date = df.format(Calendar.getInstance().getTime());
+                btWrite(date + "\0");
+            }
+        });
+
     }
 
     @Override
