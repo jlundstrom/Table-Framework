@@ -13,10 +13,10 @@ Number of Projects = 1
 Active Project = 1
 Project 0001 = "controller.prj"
 Drag Bar Left = 229
-Window Top = 105
-Window Left = 186
-Window Bottom = 1439
-Window Right = 2111
+Window Top = 691
+Window Left = -626
+Window Bottom = 2025
+Window Right = 1299
 Maximized = False
 Maximized Children = True
 Max32 Number Of Errors = 20
@@ -63,7 +63,7 @@ Disk Date = 3573049199
 In Projects = "1,"
 Window Top = 45
 Window Z-Order = 1
-Source Window State = "1,102,102,102,8,19,8,0,0,207,0,247,0,247,0,92,57,0,104,31,400,600,1,22,"
+Source Window State = "1,102,102,102,8,19,8,0,0,174,0,247,0,247,0,92,57,0,104,31,400,600,1,22,"
 
 [File 0003]
 Path = "/c/workspace/git/Table-Framework/WindowsGUI/ExtraPuTTY.lib"

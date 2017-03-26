@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:text="Disconnect"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/btn_select"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="Select"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/btn_right" />
+        android:layout_toStartOf="@+id/btn_start" />
 
     <Button
         android:id="@+id/btn_start"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="Start"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/btn_select" />
+        android:layout_toEndOf="@+id/btn_right" />
 
     <Button
         android:id="@+id/btn_up"
@@ -56,17 +56,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="A"
-        android:layout_alignBaseline="@+id/btn_right"
-        android:layout_alignBottom="@+id/btn_right"
-        android:layout_alignParentEnd="true" />
+        android:layout_above="@+id/btn_b"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:id="@+id/btn_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="B"
-        android:layout_below="@+id/btn_a"
-        android:layout_alignStart="@+id/btn_disconnect" />
+        android:layout_marginEnd="39dp"
+        android:layout_below="@+id/btn_right"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:id="@+id/btn_left"

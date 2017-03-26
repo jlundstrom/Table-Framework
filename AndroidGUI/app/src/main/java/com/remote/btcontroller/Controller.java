@@ -13,7 +13,6 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
-
 import java.io.IOException;
 import java.util.UUID;
 
@@ -32,13 +31,14 @@ public class Controller extends AppCompatActivity implements OnTouchListener
 
     String address = null;
     private ProgressDialog progress;
-    BluetoothAdapter mBluetooth = null;
-    BluetoothSocket btSocket = null;
+    BluetoothAdapter mBluetooth   = null;
+    BluetoothSocket btSocket      = null;
     private boolean isBtConnected = false;
-    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    static final UUID mUUID      = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bt_controller);
 
@@ -47,15 +47,15 @@ public class Controller extends AppCompatActivity implements OnTouchListener
         address = newIntent.getStringExtra(MainActivity.EXTRA_ADDRESS);
 
         // Call the buttons
-        btn_start = (Button) findViewById(R.id.btn_start);
-        btn_select = (Button) findViewById(R.id.btn_select);
-        btn_a = (Button) findViewById(R.id.btn_a);
-        btn_b = (Button) findViewById(R.id.btn_b);
-        btn_up = (Button) findViewById(R.id.btn_up);
-        btn_down = (Button) findViewById(R.id.btn_down);
-        btn_left = (Button) findViewById(R.id.btn_left);
-        btn_right = (Button) findViewById(R.id.btn_right);
-        btn_disconnect = (Button) findViewById(R.id.btn_disconnect);
+        btn_start      = (Button)findViewById(R.id.btn_start);
+        btn_select     = (Button)findViewById(R.id.btn_select);
+        btn_a          = (Button)findViewById(R.id.btn_a);
+        btn_b          = (Button)findViewById(R.id.btn_b);
+        btn_up         = (Button)findViewById(R.id.btn_up);
+        btn_down       = (Button)findViewById(R.id.btn_down);
+        btn_left       = (Button)findViewById(R.id.btn_left);
+        btn_right      = (Button)findViewById(R.id.btn_right);
+        btn_disconnect = (Button)findViewById(R.id.btn_disconnect);
 
         // Call the class to connect
         new btConnect().execute();
@@ -69,40 +69,52 @@ public class Controller extends AppCompatActivity implements OnTouchListener
         btn_down.setOnTouchListener(this);
         btn_left.setOnTouchListener(this);
         btn_right.setOnTouchListener(this);
-        btn_disconnect.setOnClickListener(new View.OnClickListener() {
+        btn_disconnect.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 btDisconnect();
             }
         });
     }
 
     @Override
-    public boolean onTouch(View view, MotionEvent event) {
+    public boolean onTouch(View view, MotionEvent event)
+    {
         // If the button is pressed
-        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            switch (view.getId()) {
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
+        {
+            switch (view.getId())
+            {
                 case R.id.btn_start:
                     btWrite("h\0");
                     break;
+
                 case R.id.btn_select:
                     btWrite("j\0");
                     break;
+
                 case R.id.btn_a:
                     btWrite("q\0");
                     break;
+
                 case R.id.btn_b:
                     btWrite("e\0");
                     break;
+
                 case R.id.btn_up:
                     btWrite("w\0");
                     break;
+
                 case R.id.btn_down:
                     btWrite("s\0");
                     break;
+
                 case R.id.btn_left:
                     btWrite("a\0");
                     break;
+
                 case R.id.btn_right:
                     btWrite("d\0");
                     break;
@@ -110,30 +122,39 @@ public class Controller extends AppCompatActivity implements OnTouchListener
         }
 
         // If the button is released or dragged out of view
-        if (event.getActionMasked() == MotionEvent.ACTION_UP ||
-                event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-            switch (view.getId()) {
+        if ((event.getActionMasked() == MotionEvent.ACTION_UP) ||
+                (event.getActionMasked() == MotionEvent.ACTION_CANCEL))
+        {
+            switch (view.getId())
+            {
                 case R.id.btn_start:
                     btWrite("H\0");
                     break;
+
                 case R.id.btn_select:
                     btWrite("J\0");
                     break;
+
                 case R.id.btn_a:
                     btWrite("Q\0");
                     break;
+
                 case R.id.btn_b:
                     btWrite("E\0");
                     break;
+
                 case R.id.btn_up:
                     btWrite("W\0");
                     break;
+
                 case R.id.btn_down:
                     btWrite("S\0");
                     break;
+
                 case R.id.btn_left:
                     btWrite("A\0");
                     break;
+
                 case R.id.btn_right:
                     btWrite("D\0");
                     break;
@@ -150,6 +171,7 @@ public class Controller extends AppCompatActivity implements OnTouchListener
             try
             {
                 // Close the connection
+                msg("Disconnected");
                 btSocket.close();
             }
             catch (IOException e)
@@ -164,7 +186,7 @@ public class Controller extends AppCompatActivity implements OnTouchListener
     private void btWrite(String m)
     {
         // If the btSocket is busy
-        if (btSocket!=null)
+        if (btSocket != null)
         {
             try
             {
@@ -193,28 +215,29 @@ public class Controller extends AppCompatActivity implements OnTouchListener
         protected void onPreExecute()
         {
             // Show progress dialog
-            progress = ProgressDialog.show(Controller.this, "Connecting...", "Please wait");
+            progress = ProgressDialog.show(Controller.this, "Please Wait",
+                    "Connecting to device...");
         }
 
         @Override
-        protected Void doInBackground(Void... devices)
+        protected Void doInBackground(Void ... devices)
         {
             // While progress dialog is shown, connection is done in background
             try
-            {   // If the btSocket is not busy or no device is connected
-                if ( btSocket == null || !isBtConnected )
+            {
+                // If the btSocket is not busy or no device is connected
+                if ((btSocket == null) || !isBtConnected)
                 {
                     // Get the mobile bluetooth device
                     mBluetooth = BluetoothAdapter.getDefaultAdapter();
                     // Connect to the device address and checks if available
                     BluetoothDevice device = mBluetooth.getRemoteDevice(address);
                     // Create an SPP connection
-                    btSocket = device.createInsecureRfcommSocketToServiceRecord(myUUID);
+                    btSocket = device.createInsecureRfcommSocketToServiceRecord(mUUID);
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                     // Start the connection
                     btSocket.connect();
                 }
-
             }
             catch (IOException e)
             {
@@ -232,7 +255,7 @@ public class Controller extends AppCompatActivity implements OnTouchListener
 
             if (!ConnectSuccess)
             {
-                msg("Connection failed. Is it SPP Bluetooth? Try again.");
+                msg("Connection failed. Try again.");
                 finish();
             }
             else
