@@ -24,7 +24,8 @@
         android:layout_height="wrap_content"
         android:text="Select"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/btn_start" />
+        android:layout_alignEnd="@+id/btn_right"
+        android:layout_marginEnd="12dp" />
 
     <Button
         android:id="@+id/btn_start"
@@ -32,7 +33,8 @@
         android:layout_height="wrap_content"
         android:text="Start"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/btn_right" />
+        android:layout_toStartOf="@+id/btn_sync"
+        android:layout_marginEnd="31dp" />
 
     <Button
         android:id="@+id/btn_up"
@@ -47,10 +49,10 @@
         android:id="@+id/btn_down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="35dp"
+        android:text="Down"
         android:layout_above="@+id/btn_select"
-        android:layout_alignStart="@+id/btn_up"
-        android:layout_marginBottom="42dp"
-        android:text="Down" />
+        android:layout_alignStart="@+id/btn_up" />
 
     <Button
         android:id="@+id/btn_a"
