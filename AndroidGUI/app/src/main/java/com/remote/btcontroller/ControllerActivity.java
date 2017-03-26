@@ -76,6 +76,18 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         btn_left.setOnTouchListener(this);
         btn_right.setOnTouchListener(this);
 
+        btn_sync.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                DateFormat df = new SimpleDateFormat("HH:mm:ss MM-dd-yy");
+                String date = df.format(Calendar.getInstance().getTime());
+                date = "t" + date + "\0";
+                btWrite(date);
+            }
+        });
+
         btn_disconnect.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -84,18 +96,6 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
                 btDisconnect();
             }
         });
-
-        btn_sync.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                DateFormat df = new SimpleDateFormat("HH:mm:ss MM-dd-yy");
-                String date = df.format(Calendar.getInstance().getTime());
-                btWrite("t" + date + "\0");
-            }
-        });
-
     }
 
     @Override

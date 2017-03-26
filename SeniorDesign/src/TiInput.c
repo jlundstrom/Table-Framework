@@ -1,15 +1,15 @@
 #ifdef CPU1
-#include <string.h> // string library
+#include <string.h>
 #include "input.h"
 #include "F28x_Project.h"
 
 // string-compatible helper functions
-int cmdEquals(char buf1[], char buf2[], Uint16 length);
 void flush(char buf[], Uint16 length);
 void sciRead(char buf[], Uint16 length);
 void sciWrite(char buf[]);
 
 unsigned char Input_Status;
+char          timeString[32] = "";
 
 // Initialize input device
 void Input_init(void)
@@ -61,31 +61,39 @@ void Input_init(void)
    sciWrite("\r\n\n\nSmart Table Startup\0");
 }
 
+
 // Check for input status updates and update
 // Input_Status to represent current key presses
 void Input_Poll(void)
 {
    if (SciaRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
    {
-      char   rcvBuf [8] = "";        // variable length receive buffer for strings
+      char   rcvBuf [2]  = "";     // receive buffer
       Uint16 isLowercase = 0;
 
-      sciRead(rcvBuf, 1);        // read the input
-      sciWrite(rcvBuf);          // echo the input
+      sciRead(rcvBuf, 1);          // read the input
+      sciWrite(rcvBuf);            // echo the input
 
-      isLowercase                       = rcvBuf[0] & 0x20;
-      rcvBuf[0]                        |= 0x20;
-      GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+      isLowercase = rcvBuf[0] & 0x20;
+      rcvBuf[0]  |= 0x20;
+
+      if (rcvBuf[0] == 't')
+      {
+         sciRead(timeString, 18);  // read and store the date and time
+         GpioDataRegs.GPBTOGGLE.bit.GPIO34 = 1;
+      }
 
       if (rcvBuf[0] == 'w')
       {
          if (!isLowercase)
          {
             Input_Status &= ~UP_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
             Input_Status |= UP_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
 
@@ -94,10 +102,12 @@ void Input_Poll(void)
          if (!isLowercase)
          {
             Input_Status &= ~LEFT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
             Input_Status |= LEFT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
 
@@ -106,10 +116,12 @@ void Input_Poll(void)
          if (!isLowercase)
          {
             Input_Status &= ~DOWN_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
             Input_Status |= DOWN_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
 
@@ -118,10 +130,12 @@ void Input_Poll(void)
          if (!isLowercase)
          {
             Input_Status &= ~RIGHT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
             Input_Status |= RIGHT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
 
@@ -130,10 +144,12 @@ void Input_Poll(void)
          if (!isLowercase)
          {
             Input_Status &= ~A_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
             Input_Status |= A_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
 
@@ -142,10 +158,12 @@ void Input_Poll(void)
          if (!isLowercase)
          {
             Input_Status &= ~B_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
             Input_Status |= B_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
 
@@ -154,10 +172,12 @@ void Input_Poll(void)
          if (!isLowercase)
          {
             Input_Status &= ~START_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
             Input_Status |= START_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
 
@@ -166,14 +186,17 @@ void Input_Poll(void)
          if (!isLowercase)
          {
             Input_Status &= ~SELECT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
             Input_Status |= SELECT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
    }
 }
+
 
 void sciRead(char buf[], Uint16 length)
 {
@@ -190,6 +213,7 @@ void sciRead(char buf[], Uint16 length)
    }
 }
 
+
 void sciWrite(char buf[])
 {
    Uint16 bytesWritten = 0;
@@ -205,29 +229,12 @@ void sciWrite(char buf[])
    }
 }
 
-// flush global receive buffer
+
+// flush any buffer if needed
 void flush(char buf[], Uint16 length)
 {
    strncpy(buf, "", length);
 }
 
-// Check the receive buffer for matches.
-// Instead of:  if (ReceivedChar == 'w'),
-// Try this:    if (commandEquals("w",1))
-int cmdEquals(char buf1[], char buf2[], Uint16 length)
-{
-   Uint16 returnVal = 0;
-
-   returnVal = strncmp(buf1, buf2, length);
-
-   if (!returnVal) // if they are equal
-   {
-      return(1);   // run the control statement
-   }
-   else
-   {
-      return(0); // don't run the control statement
-   }
-}
 
 #endif
