@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.remote.btcontroller.Controller"
+            android:name="com.remote.btcontroller.ControllerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation">
         </activity>
     </application>

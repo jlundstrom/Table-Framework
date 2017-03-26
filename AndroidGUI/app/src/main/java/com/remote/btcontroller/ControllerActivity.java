@@ -16,7 +16,7 @@ import android.os.AsyncTask;
 import java.io.IOException;
 import java.util.UUID;
 
-public class Controller extends AppCompatActivity implements OnTouchListener
+public class ControllerActivity extends AppCompatActivity implements OnTouchListener
 {
     // Initialization
     Button btn_start;
@@ -215,7 +215,7 @@ public class Controller extends AppCompatActivity implements OnTouchListener
         protected void onPreExecute()
         {
             // Show progress dialog
-            progress = ProgressDialog.show(Controller.this, "Please Wait",
+            progress = ProgressDialog.show(ControllerActivity.this, "Please Wait",
                     "Connecting to device...");
         }
 

@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity
 
         else
         {
-            Toast.makeText(getApplicationContext(), "Paired device not found.",
+            Toast.makeText(getApplicationContext(), "No paired devices found.",
                     Toast.LENGTH_LONG).show();
         }
 
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity
             String address = info.substring(info.length() - 17);
 
             // Make an intent to start next activity
-            Intent i = new Intent(MainActivity.this, Controller.class);
+            Intent i = new Intent(MainActivity.this, ControllerActivity.class);
 
             // Change the activity
             i.putExtra(EXTRA_ADDRESS, address);
