@@ -11,14 +11,6 @@
     tools:context="com.remote.btcontroller.ControllerActivity">
 
     <Button
-        android:id="@+id/btn_disconnect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Disconnect"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
         android:id="@+id/btn_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -95,5 +87,23 @@
         app:srcCompat="@android:drawable/stat_notify_sync_noanim"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/btn_p1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Player 1"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/btn_b"
+        android:layout_marginEnd="10dp" />
+
+    <Button
+        android:id="@+id/btn_p2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Player 2"
+        android:layout_marginLeft="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/btn_sync" />
 
 </RelativeLayout>

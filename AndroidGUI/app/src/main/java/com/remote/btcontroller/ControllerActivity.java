@@ -2,6 +2,7 @@ package com.remote.btcontroller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.graphics.Color;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import java.text.DateFormat;
@@ -20,10 +21,14 @@ import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
 import java.io.IOException;
 import java.util.UUID;
+import java.lang.Character;
 
 public class ControllerActivity extends AppCompatActivity implements OnTouchListener
 {
     // Initialization
+    Toast myToast = null;
+    String command = null;
+    int flag = 0;
     Button btn_start;
     Button btn_select;
     Button btn_a;
@@ -32,7 +37,8 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
     Button btn_down;
     Button btn_left;
     Button btn_right;
-    Button btn_disconnect;
+    Button btn_p1;
+    Button btn_p2;
     ImageButton btn_sync;
 
     String address = null;
@@ -40,7 +46,7 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
     BluetoothAdapter mBluetooth   = null;
     BluetoothSocket btSocket      = null;
     private boolean isBtConnected = false;
-    static final UUID mUUID      = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    static final UUID mUUID       = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -61,8 +67,9 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         btn_down       = (Button)findViewById(R.id.btn_down);
         btn_left       = (Button)findViewById(R.id.btn_left);
         btn_right      = (Button)findViewById(R.id.btn_right);
-        btn_disconnect = (Button)findViewById(R.id.btn_disconnect);
         btn_sync       = (ImageButton)findViewById(R.id.btn_sync);
+        btn_p1         = (Button)findViewById(R.id.btn_p1);
+        btn_p2         = (Button)findViewById(R.id.btn_p2);
 
         // Call the class to connect
         new btConnect().execute();
@@ -85,62 +92,93 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
                 view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 DateFormat df = new SimpleDateFormat("HH:mm:ss MM-dd-yy");
                 String date = df.format(Calendar.getInstance().getTime());
-                date = "t" + date + "\0";
-
-                btWrite(date);
+                btWrite("z" + date + "\0");
+                msg("Time synchronized");
             }
         });
 
-        btn_disconnect.setOnClickListener(new View.OnClickListener()
+        btn_p1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                flag = 1;
+                command = "qwertyui";
+                msg("You are Player 1");
+                disable();
+            }
+        });
+
+        btn_p2.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                btDisconnect();
+                flag = 1;
+                command = "asdfghjk";
+                msg("You are Player 2");
+                disable();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        btDisconnect();
+    }
+
+    public void disable() {
+        btn_p1.setEnabled(false); // disable the ability to click it
+        btn_p1.setClickable(false);
+       //btn_p1.setBackgroundColor(Color.parseColor("#808080"));
+        btn_p2.setEnabled(false); // disable the ability to click it
+        btn_p2.setClickable(false);
+        //btn_p2.setBackgroundColor(Color.parseColor("#808080"));
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent event)
     {
         // If the button is pressed
+        if (flag == 0){
+            msg("Choose a Player!");
+            return true;
+        }
+
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
         {
             view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             switch (view.getId())
             {
                 case R.id.btn_start:
-                    btWrite("h\0");
+                    btWrite(Character.toString(command.charAt(0))+"\0");
                     break;
 
                 case R.id.btn_select:
-                    btWrite("j\0");
+                    btWrite(Character.toString(command.charAt(1))+"\0");
                     break;
 
                 case R.id.btn_a:
-                    btWrite("q\0");
+                    btWrite(Character.toString(command.charAt(2))+"\0");
                     break;
 
                 case R.id.btn_b:
-                    btWrite("e\0");
+                    btWrite(Character.toString(command.charAt(3))+"\0");
                     break;
 
                 case R.id.btn_up:
-                    btWrite("w\0");
+                    btWrite(Character.toString(command.charAt(4))+"\0");
                     break;
 
                 case R.id.btn_down:
-                    btWrite("s\0");
+                    btWrite(Character.toString(command.charAt(5))+"\0");
                     break;
 
                 case R.id.btn_left:
-                    btWrite("a\0");
+                    btWrite(Character.toString(command.charAt(6))+"\0");
                     break;
 
                 case R.id.btn_right:
-                    btWrite("d\0");
+                    btWrite(Character.toString(command.charAt(7))+"\0");
                     break;
             }
         }
@@ -152,35 +190,35 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
             switch (view.getId())
             {
                 case R.id.btn_start:
-                    btWrite("H\0");
+                    btWrite(Character.toString(command.charAt(0)).toUpperCase()+"\0");
                     break;
 
                 case R.id.btn_select:
-                    btWrite("J\0");
+                    btWrite(Character.toString(command.charAt(1)).toUpperCase()+"\0");
                     break;
 
                 case R.id.btn_a:
-                    btWrite("Q\0");
+                    btWrite(Character.toString(command.charAt(2)).toUpperCase()+"\0");
                     break;
 
                 case R.id.btn_b:
-                    btWrite("E\0");
+                    btWrite(Character.toString(command.charAt(3)).toUpperCase()+"\0");
                     break;
 
                 case R.id.btn_up:
-                    btWrite("W\0");
+                    btWrite(Character.toString(command.charAt(4)).toUpperCase()+"\0");
                     break;
 
                 case R.id.btn_down:
-                    btWrite("S\0");
+                    btWrite(Character.toString(command.charAt(5)).toUpperCase()+"\0");
                     break;
 
                 case R.id.btn_left:
-                    btWrite("A\0");
+                    btWrite(Character.toString(command.charAt(6)).toUpperCase()+"\0");
                     break;
 
                 case R.id.btn_right:
-                    btWrite("D\0");
+                    btWrite(Character.toString(command.charAt(7)).toUpperCase()+"\0");
                     break;
             }
         }
@@ -227,7 +265,11 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
     // Make a toast notification
     private void msg(String s)
     {
-        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+        if (myToast != null) {
+            myToast.cancel();
+        }
+        myToast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+        myToast.show();
     }
 
     private class btConnect extends AsyncTask<Void, Void, Void>
