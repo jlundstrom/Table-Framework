@@ -74,8 +74,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Down"
-        android:layout_marginEnd="42dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginBottom="53dp"
         android:layout_above="@+id/linearLayout2"
         android:layout_alignEnd="@+id/btn_right" />
 
