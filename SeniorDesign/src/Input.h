@@ -2,14 +2,23 @@
 #define __INPUT__
 
 // Bits representing each key
-#define P1_UP_INPUT 0x02
-#define P1_DOWN_INPUT 0x04
-#define P1_LEFT_INPUT 0x06
+#define P1_UP_INPUT 0x01
+#define P1_DOWN_INPUT 0x02
+#define P1_LEFT_INPUT 0x04
 #define P1_RIGHT_INPUT 0x08
-#define P1_A_INPUT 0x20
-#define P1_B_INPUT 0x40
-#define P1_START_INPUT 0x60
+#define P1_A_INPUT 0x10
+#define P1_B_INPUT 0x20
+#define P1_START_INPUT 0x40
 #define P1_SELECT_INPUT 0x80
+
+#define UP_INPUT 0x01
+#define DOWN_INPUT 0x02
+#define LEFT_INPUT 0x04
+#define RIGHT_INPUT 0x08
+#define A_INPUT 0x10
+#define B_INPUT 0x20
+#define START_INPUT 0x40
+#define SELECT_INPUT 0x80
 
 #define P2_UP_INPUT 0x03
 #define P2_DOWN_INPUT 0x05

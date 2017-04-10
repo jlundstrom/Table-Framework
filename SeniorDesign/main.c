@@ -52,8 +52,11 @@ int main() {
 
 #ifdef WIN32
         // Print frame status for windows
-        printf("Input: %02X\n", Input_Status);
-        printf("FPS: %02d\n", FPS);
+		if (DRAWN)
+		{
+			printf("Input: %02X\n", Input_Status);
+			printf("FPS: %02d\n", FPS);
+		}
 #endif
     }
 

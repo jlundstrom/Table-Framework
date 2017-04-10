@@ -17,7 +17,7 @@ void App_Menu_Init(void) {
 
 void App_Menu_Tick(void) {
 	unsigned char Input;
-	if (frame == 4) {
+	if (frame == 2) {
 		Input = Input_Status & ~pastKeys;
 		pastKeys = Input_Status;
 		frame = 0;
