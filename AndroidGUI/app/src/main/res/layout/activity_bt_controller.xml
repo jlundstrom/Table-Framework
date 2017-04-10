@@ -10,41 +10,74 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.remote.btcontroller.ControllerActivity">
 
-    <Button
-        android:id="@+id/btn_select"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Select"
+        android:weightSum="3"
+        android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/btn_right"
-        android:layout_marginEnd="12dp" />
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout2">
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start" />
+        <Button
+            android:id="@+id/btn_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_start"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Start"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/btn_sync"
-        android:layout_marginEnd="31dp" />
+        android:weightSum="3"
+        android:gravity="right"
+        android:id="@+id/linearLayout1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/btn_p1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Player 1" />
+
+        <Button
+            android:id="@+id/btn_p2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Player 2" />
+
+        <ImageButton
+            android:id="@+id/btn_sync"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@android:drawable/stat_notify_sync_noanim" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Up"
         android:layout_above="@+id/btn_left"
-        android:layout_alignEnd="@+id/btn_right"
-        android:layout_marginEnd="42dp"
-        android:text="Up" />
+        android:layout_alignStart="@+id/btn_down" />
 
     <Button
         android:id="@+id/btn_down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="35dp"
         android:text="Down"
-        android:layout_above="@+id/btn_select"
-        android:layout_alignStart="@+id/btn_up" />
+        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="35dp"
+        android:layout_above="@+id/linearLayout2"
+        android:layout_alignEnd="@+id/btn_right" />
 
     <Button
         android:id="@+id/btn_a"
@@ -52,15 +85,14 @@
         android:layout_height="wrap_content"
         android:text="A"
         android:layout_above="@+id/btn_b"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="20dp" />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:id="@+id/btn_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="B"
-        android:layout_marginEnd="39dp"
+        android:layout_marginEnd="42dp"
         android:layout_below="@+id/btn_right"
         android:layout_alignParentEnd="true" />
 
@@ -68,42 +100,17 @@
         android:id="@+id/btn_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Left"
         android:layout_above="@+id/btn_down"
-        android:layout_alignParentStart="true"
-        android:text="Left" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/btn_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_down"
-        android:layout_toEndOf="@+id/btn_left"
-        android:text="Right" />
-
-    <ImageButton
-        android:id="@+id/btn_sync"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/stat_notify_sync_noanim"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:id="@+id/btn_p1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Player 1"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/btn_b"
-        android:layout_marginEnd="10dp" />
-
-    <Button
-        android:id="@+id/btn_p2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Player 2"
-        android:layout_marginLeft="30dp"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/btn_sync" />
+        android:text="Right"
+        android:layout_alignBaseline="@+id/btn_left"
+        android:layout_alignBottom="@+id/btn_left"
+        android:layout_toEndOf="@+id/btn_left" />
 
 </RelativeLayout>
