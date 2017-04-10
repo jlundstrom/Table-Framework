@@ -5,7 +5,6 @@
 int idx;
 int frame;
 int x, y;
-unsigned char pastKeys;
 
 void App_Menu_Init(void) {	
 	clearDisplay();
@@ -16,18 +15,15 @@ void App_Menu_Init(void) {
 }
 
 void App_Menu_Tick(void) {
-	unsigned char Input;
 	if (frame == 2) {
-		Input = Input_Status & ~pastKeys;
-		pastKeys = Input_Status;
 		frame = 0;
-		if (Input) {
-			if (Input_Status & UP_INPUT) {
+		if (Input_Tap) {
+			if (Input_Tap & UP_INPUT) {
 				setPixel(0, idx, PIXEL_BLACK);
 				apps[idx].Demo_Deinit();
 				idx--;
 			}
-			if (Input_Status & DOWN_INPUT) {
+			if (Input_Tap & DOWN_INPUT) {
 				setPixel(0, idx, PIXEL_BLACK);
 				apps[idx].Demo_Deinit();
 				idx++;
@@ -38,18 +34,20 @@ void App_Menu_Tick(void) {
 			if (idx >= APP_COUNT) {
 				idx = APP_COUNT-1;
 			}
-			if (Input_Status &(UP_INPUT | DOWN_INPUT)) {
+			if (Input_Tap &(UP_INPUT | DOWN_INPUT)) {
 				drawRect(2, 0, WIDTH, HEIGHT, PIXEL_BLACK);
 				apps[idx].Demo_Init();
 				setPixel(0, idx, PIXEL_GREEN);
 			}
-			if (Input_Status & A_INPUT) {
+			if (Input_Tap & A_INPUT) {
 				apps[idx].Demo_Deinit();
 				currentApp = &apps[idx];
 				clearDisplay();
 				currentApp->App_Init();
 				idx = -1;
 			}
+
+			Input_Tap &= !(UP_INPUT | DOWN_INPUT | A_INPUT);
 		}
 	}
 	if (idx != -1) {

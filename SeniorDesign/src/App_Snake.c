@@ -20,7 +20,6 @@ struct appData {
 	unsigned short length;
 	char frame;
 	unsigned char Direction;
-	unsigned char pastKeys;
 	unsigned char snake[WIDTH*HEIGHT];
 } typedef appData;
 appData* Snake_Data;
@@ -104,17 +103,15 @@ void App_Snake_Place_Food() {
 void App_Snake_Game_Over_Tick(){
 	if (Snake_Data->frame % 4 == 3) {
 		setPixel(getRandom() % WIDTH, getRandom() % HEIGHT, PIXEL_RED);
-		if (Input_Status & ~Snake_Data->pastKeys) {
+		if (Input_Tap) {
 			clearDisplay();
 			App_Snake_Deinit();
 			App_Snake_Init();
 		}
-		Snake_Data->pastKeys = Input_Status & 0xFF;
 	}
 }
 
 void App_Snake_Tick(void) {
-	unsigned char Input;
 	Pixel tmp;
 	if (Snake_Data->Direction & GAME_OVER) {
 		App_Snake_Game_Over_Tick();
@@ -129,25 +126,26 @@ void App_Snake_Tick(void) {
 		else {
 			App_Snake_Remove_Tail();
 		}
-		Input = Input_Status & ~Snake_Data->pastKeys;
-		Snake_Data->pastKeys = Input_Status & 0xFF;
-		if (Input) {
-			if (Input & UP_INPUT && Snake_Data->Direction != DIRECTION_DOWN) {
+
+		if (Input_Tap) {
+			if (Input_Tap & UP_INPUT && Snake_Data->Direction != DIRECTION_DOWN) {
 				Snake_Data->Direction = DIRECTION_UP;
-			} else if (Input & DOWN_INPUT && Snake_Data->Direction != DIRECTION_UP) {
+			} else if (Input_Tap & DOWN_INPUT && Snake_Data->Direction != DIRECTION_UP) {
 				Snake_Data->Direction = DIRECTION_DOWN;
-			} else if (Input & LEFT_INPUT && Snake_Data->Direction != DIRECTION_RIGHT) {
+			} else if (Input_Tap & LEFT_INPUT && Snake_Data->Direction != DIRECTION_RIGHT) {
 				Snake_Data->Direction = LEFT_INPUT;
-			} else if (Input & RIGHT_INPUT && Snake_Data->Direction != DIRECTION_LEFT) {
+			} else if (Input_Tap & RIGHT_INPUT && Snake_Data->Direction != DIRECTION_LEFT) {
 				Snake_Data->Direction = DIRECTION_RIGHT;
 			}
 			if (!Snake_Data->Direction) {
 				return;
 			}
 
-			if (Input & A_INPUT) {
+			if (Input_Tap & A_INPUT) {
 				Snake_Data->Direction |= SEGMENT_ACTIVE;
 			}
+
+			Input_Tap &= !(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT);
 
 			if (Snake_Data->headX < 0|| Snake_Data->headX > WIDTH) {
 				Snake_Data->Direction |= SEGMENT_ACTIVE;

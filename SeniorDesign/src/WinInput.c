@@ -3,6 +3,10 @@
 #include <windows.h>
 
 unsigned char Input_Status;
+unsigned char User2_Input_Status;
+
+unsigned char Input_Tap;
+unsigned char User2_Input_Tap;
 
 // Get character status from Windows
 int check_Char(char c) {
@@ -16,6 +20,8 @@ void Input_init(void) {
 // Check if user is pressing an input key
 // If one is pressed set the bit high else low
 void Input_Poll(void) {
+	unsigned char prev = Input_Status;
+
 	if (check_Char('W')) {
 		Input_Status |= UP_INPUT;
 	} else {
@@ -63,5 +69,8 @@ void Input_Poll(void) {
 	else {
 		Input_Status &= ~SELECT_INPUT;
 	}
+
+	// Raise Tap for keys with a state change that ends with it being pressed
+	Input_Tap |= (prev ^ Input_Status) & Input_Status;
 }
 #endif
