@@ -2,44 +2,44 @@ package com.remote.btcontroller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.graphics.Color;
-import android.bluetooth.BluetoothSocket;
+import android.os.AsyncTask;
 import android.content.Intent;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.Toast;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothSocket;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.os.AsyncTask;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.Calendar;
 import java.lang.Character;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class ControllerActivity extends AppCompatActivity implements OnTouchListener
 {
     // Initialization
-    Toast myToast = null;
+    int flag       = 0;
     String command = null;
-    int flag = 0;
-    Button btn_start;
-    Button btn_select;
-    Button btn_a;
-    Button btn_b;
+    Toast message  = null;
+
+    ImageButton btn_sync;
+    Button btn_p1;
+    Button btn_p2;
     Button btn_up;
     Button btn_down;
     Button btn_left;
     Button btn_right;
-    Button btn_p1;
-    Button btn_p2;
-    ImageButton btn_sync;
+    Button btn_a;
+    Button btn_b;
+    Button btn_start;
+    Button btn_select;
 
     String address = null;
     private ProgressDialog progress;
@@ -52,59 +52,53 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bt_controller);
 
         // Receive the address of the bluetooth device
         Intent newIntent = getIntent();
         address = newIntent.getStringExtra(MainActivity.EXTRA_ADDRESS);
 
+        setContentView(R.layout.activity_bt_controller);
+
         // Call the buttons
-        btn_start      = (Button)findViewById(R.id.btn_start);
-        btn_select     = (Button)findViewById(R.id.btn_select);
-        btn_a          = (Button)findViewById(R.id.btn_a);
-        btn_b          = (Button)findViewById(R.id.btn_b);
-        btn_up         = (Button)findViewById(R.id.btn_up);
-        btn_down       = (Button)findViewById(R.id.btn_down);
-        btn_left       = (Button)findViewById(R.id.btn_left);
-        btn_right      = (Button)findViewById(R.id.btn_right);
-        btn_sync       = (ImageButton)findViewById(R.id.btn_sync);
-        btn_p1         = (Button)findViewById(R.id.btn_p1);
-        btn_p2         = (Button)findViewById(R.id.btn_p2);
+        btn_sync   = (ImageButton)findViewById(R.id.btn_sync);
+        btn_p1     = (Button)findViewById(R.id.btn_p1);
+        btn_p2     = (Button)findViewById(R.id.btn_p2);
+        btn_up     = (Button)findViewById(R.id.btn_up);
+        btn_down   = (Button)findViewById(R.id.btn_down);
+        btn_left   = (Button)findViewById(R.id.btn_left);
+        btn_right  = (Button)findViewById(R.id.btn_right);
+        btn_a      = (Button)findViewById(R.id.btn_a);
+        btn_b      = (Button)findViewById(R.id.btn_b);
+        btn_start  = (Button)findViewById(R.id.btn_start);
+        btn_select = (Button)findViewById(R.id.btn_select);
 
         // Call the class to connect
         new btConnect().execute();
 
         // Listen for button presses and send the commands
-        btn_start.setOnTouchListener(this);
-        btn_select.setOnTouchListener(this);
-        btn_a.setOnTouchListener(this);
-        btn_b.setOnTouchListener(this);
-        btn_up.setOnTouchListener(this);
-        btn_down.setOnTouchListener(this);
-        btn_left.setOnTouchListener(this);
-        btn_right.setOnTouchListener(this);
-
         btn_sync.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
                 view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                msg("Time synchronized");
                 DateFormat df = new SimpleDateFormat("HH:mm:ss MM-dd-yy");
                 String date = df.format(Calendar.getInstance().getTime());
                 btWrite("z" + date + "\0");
-                msg("Time synchronized");
             }
         });
 
         btn_p1.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                msg("You are Player 1");
+                disablePlayerButtons();
                 flag = 1;
                 command = "qwertyui";
-                msg("You are Player 1");
-                disable();
             }
         });
 
@@ -113,34 +107,39 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
             @Override
             public void onClick(View view)
             {
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                msg("You are Player 2");
+                disablePlayerButtons();
                 flag = 1;
                 command = "asdfghjk";
-                msg("You are Player 2");
-                disable();
             }
         });
+
+        btn_up.setOnTouchListener(this);
+        btn_down.setOnTouchListener(this);
+        btn_left.setOnTouchListener(this);
+        btn_right.setOnTouchListener(this);
+        btn_a.setOnTouchListener(this);
+        btn_b.setOnTouchListener(this);
+        btn_start.setOnTouchListener(this);
+        btn_select.setOnTouchListener(this);
     }
 
-    @Override
-    public void onBackPressed() {
-        btDisconnect();
-    }
-
-    public void disable() {
-        btn_p1.setEnabled(false); // disable the ability to click it
+    public void disablePlayerButtons()
+    {
+        btn_p1.setEnabled(false);
         btn_p1.setClickable(false);
-       //btn_p1.setBackgroundColor(Color.parseColor("#808080"));
-        btn_p2.setEnabled(false); // disable the ability to click it
+        btn_p2.setEnabled(false);
         btn_p2.setClickable(false);
-        //btn_p2.setBackgroundColor(Color.parseColor("#808080"));
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent event)
     {
         // If the button is pressed
-        if (flag == 0){
-            msg("Choose a Player!");
+        if (flag == 0)
+        {
+            msg("You must choose a player!");
             return true;
         }
 
@@ -149,36 +148,36 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
             view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             switch (view.getId())
             {
-                case R.id.btn_start:
-                    btWrite(Character.toString(command.charAt(0))+"\0");
-                    break;
-
-                case R.id.btn_select:
-                    btWrite(Character.toString(command.charAt(1))+"\0");
-                    break;
-
-                case R.id.btn_a:
-                    btWrite(Character.toString(command.charAt(2))+"\0");
-                    break;
-
-                case R.id.btn_b:
-                    btWrite(Character.toString(command.charAt(3))+"\0");
-                    break;
-
                 case R.id.btn_up:
-                    btWrite(Character.toString(command.charAt(4))+"\0");
+                    btWrite(Character.toString(command.charAt(0)) + "\0");
                     break;
 
                 case R.id.btn_down:
-                    btWrite(Character.toString(command.charAt(5))+"\0");
+                    btWrite(Character.toString(command.charAt(1)) + "\0");
                     break;
 
                 case R.id.btn_left:
-                    btWrite(Character.toString(command.charAt(6))+"\0");
+                    btWrite(Character.toString(command.charAt(2)) + "\0");
                     break;
 
                 case R.id.btn_right:
-                    btWrite(Character.toString(command.charAt(7))+"\0");
+                    btWrite(Character.toString(command.charAt(3)) + "\0");
+                    break;
+
+                case R.id.btn_a:
+                    btWrite(Character.toString(command.charAt(4)) + "\0");
+                    break;
+
+                case R.id.btn_b:
+                    btWrite(Character.toString(command.charAt(5)) + "\0");
+                    break;
+
+                case R.id.btn_start:
+                    btWrite(Character.toString(command.charAt(6)) + "\0");
+                    break;
+
+                case R.id.btn_select:
+                    btWrite(Character.toString(command.charAt(7)) + "\0");
                     break;
             }
         }
@@ -189,40 +188,57 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         {
             switch (view.getId())
             {
-                case R.id.btn_start:
-                    btWrite(Character.toString(command.charAt(0)).toUpperCase()+"\0");
-                    break;
-
-                case R.id.btn_select:
-                    btWrite(Character.toString(command.charAt(1)).toUpperCase()+"\0");
-                    break;
-
-                case R.id.btn_a:
-                    btWrite(Character.toString(command.charAt(2)).toUpperCase()+"\0");
-                    break;
-
-                case R.id.btn_b:
-                    btWrite(Character.toString(command.charAt(3)).toUpperCase()+"\0");
-                    break;
-
                 case R.id.btn_up:
-                    btWrite(Character.toString(command.charAt(4)).toUpperCase()+"\0");
+                    btWrite(Character.toString(command.charAt(0)).toUpperCase() + "\0");
                     break;
 
                 case R.id.btn_down:
-                    btWrite(Character.toString(command.charAt(5)).toUpperCase()+"\0");
+                    btWrite(Character.toString(command.charAt(1)).toUpperCase() + "\0");
                     break;
 
                 case R.id.btn_left:
-                    btWrite(Character.toString(command.charAt(6)).toUpperCase()+"\0");
+                    btWrite(Character.toString(command.charAt(2)).toUpperCase() + "\0");
                     break;
 
                 case R.id.btn_right:
-                    btWrite(Character.toString(command.charAt(7)).toUpperCase()+"\0");
+                    btWrite(Character.toString(command.charAt(3)).toUpperCase() + "\0");
+                    break;
+
+                case R.id.btn_a:
+                    btWrite(Character.toString(command.charAt(4)).toUpperCase() + "\0");
+                    break;
+
+                case R.id.btn_b:
+                    btWrite(Character.toString(command.charAt(5)).toUpperCase() + "\0");
+                    break;
+
+                case R.id.btn_start:
+                    btWrite(Character.toString(command.charAt(6)).toUpperCase() + "\0");
+                    break;
+
+                case R.id.btn_select:
+                    btWrite(Character.toString(command.charAt(7)).toUpperCase() + "\0");
                     break;
             }
         }
         return true;
+    }
+
+    // Make a toast notification
+    private void msg(String s)
+    {
+        if (message != null)
+        {
+            message.cancel();
+        }
+        message = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+        message.show();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        btDisconnect();
     }
 
     private void btDisconnect()
@@ -260,16 +276,6 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
                 msg("Error");
             }
         }
-    }
-
-    // Make a toast notification
-    private void msg(String s)
-    {
-        if (myToast != null) {
-            myToast.cancel();
-        }
-        myToast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
-        myToast.show();
     }
 
     private class btConnect extends AsyncTask<Void, Void, Void>
@@ -321,7 +327,7 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
 
             if (!ConnectSuccess)
             {
-                msg("Connection failed. Try again.");
+                msg("Connection failed, try again");
                 finish();
             }
             else

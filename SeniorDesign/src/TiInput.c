@@ -295,7 +295,7 @@ void Input_Poll(void)
          }
       }
 
-      if (rcvBuf[0] == 'h')
+      if (rcvBuf[0] == 'g')
       {
          if (!isLowercase)
          {
