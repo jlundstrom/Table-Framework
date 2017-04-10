@@ -105,7 +105,7 @@ void Input_Poll(void)
       {
          // read and store the date and time
          sciaRead(timeString, 18);
-         GpioDataRegs.GPBTOGGLE.bit.GPIO34 = 1;
+         GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
       }
 
       if (rcvBuf[0] == 'q')
@@ -236,7 +236,7 @@ void Input_Poll(void)
       if (rcvBuf[0] == 'z')
       {
          scibRead(timeString, 18);
-         GpioDataRegs.GPBTOGGLE.bit.GPIO34 = 1;
+         GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
       }
 
       if (rcvBuf[0] == 'a')
