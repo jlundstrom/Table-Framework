@@ -51,28 +51,26 @@ void App_Init(void) {
 void App_Tick(void) {
 	if (Basic_Data->frame == 4) {
 		Basic_Data->frame = 0;
-		if (Input_Tap) {
+		if (Input_Status) {
 			setPixel(Basic_Data->x, Basic_Data->y, PIXEL_BLACK);
-			if (Input_Tap & UP_INPUT) {
+			if (Input_Status & UP_INPUT) {
 				Basic_Data->y--;
 			}
-			if (Input_Tap & DOWN_INPUT) {
+			if (Input_Status & DOWN_INPUT) {
 				Basic_Data->y++;
 			}
-			if (Input_Tap & LEFT_INPUT) {
+			if (Input_Status & LEFT_INPUT) {
 				Basic_Data->x--;
 			}
-			if (Input_Tap & RIGHT_INPUT) {
+			if (Input_Status & RIGHT_INPUT) {
 				Basic_Data->x++;
 			}
-			if (Input_Tap & A_INPUT) {
+			if (Input_Status & A_INPUT) {
 				
 			}
-			if (Input_Tap & B_INPUT) {
+			if (Input_Status & B_INPUT) {
 				
 			}
-
-			Input_Tap &= !(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT | B_INPUT);
 
 			if (Basic_Data->x < 0) {
 				Basic_Data->x = WIDTH - 1;
