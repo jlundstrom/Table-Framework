@@ -10,7 +10,7 @@ unsigned int current =0;
 
 
 unsigned int getRandom() {
-    //return rand();
+    return rand();
     current=SEED * MULT + INC % 65536;   //0-2^16 can be adjusted for wider range
     SEED = current;
     return current;

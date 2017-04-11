@@ -2,6 +2,7 @@
 #include "Draw.h"
 #include "Noise.h"
 
+double noise[noiseHeight][noiseWidth];
 
 void generateNoise() //run first to populate
 {

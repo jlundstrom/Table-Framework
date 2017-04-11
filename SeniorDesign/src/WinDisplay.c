@@ -141,7 +141,6 @@ void Display_init() {
 	}
 
 	char b[100];
-	printf(b, "You got ID# %d as your pixelformat!\n", chosenPixelFormat);
 
 	int result = SetPixelFormat(g.hdc, chosenPixelFormat, &pfd);
 
