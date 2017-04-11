@@ -54,8 +54,8 @@ int main() {
         // Print frame status for windows
 		if (DRAWN)
 		{
-			printf("Input: %02X\n", Input_Status);
-			printf("FPS: %02d\n", FPS);
+			printf("Input: %02X ", Input_Status);
+			printf("FPS: %02d\r", FPS);
 		}
 #endif
     }
