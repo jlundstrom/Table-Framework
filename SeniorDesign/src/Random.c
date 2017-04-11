@@ -10,6 +10,7 @@ unsigned int current =0;
 
 
 unsigned int getRandom() {
+    //return rand();
     current=SEED * MULT + INC % 65536;   //0-2^16 can be adjusted for wider range
     SEED = current;
     return current;
@@ -19,8 +20,8 @@ void updateSEED(unsigned int s){ //re-seed with only 1-64k
     SEED = s;
 }
 
-unsigned int getRandomLow(){  //0-2^8
-    return (getRandom() & 0x00FF);
+unsigned char getRandomLow(){  //0-2^8
+    return (unsigned char)(getRandom() & 0x00FF);
 }
 
 unsigned int getRandomLowExtend(){ //0-2^9
