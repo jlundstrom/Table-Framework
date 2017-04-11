@@ -35,7 +35,7 @@ void App_Menu_Tick(void) {
 				idx = APP_COUNT-1;
 			}
 			if (Input_Tap &(UP_INPUT | DOWN_INPUT)) {
-				drawRect(2, 0, WIDTH, HEIGHT, PIXEL_BLACK);
+				drawRect(0, 0, WIDTH, HEIGHT, PIXEL_BLACK);
 				apps[idx].Demo_Init();
 				setPixel(0, idx, PIXEL_GREEN);
 			}
