@@ -12,6 +12,8 @@ void App_Menu_Init(void) {
 	frame = 0;
 	apps[idx].Demo_Init();
 	setPixel(0, idx, PIXEL_GREEN);
+
+	Input_Tap = 0;
 }
 
 void App_Menu_Tick(void) {
@@ -22,17 +24,13 @@ void App_Menu_Tick(void) {
 				setPixel(0, idx, PIXEL_BLACK);
 				apps[idx].Demo_Deinit();
 				idx--;
+				if (idx < 0) { idx = 0; };
 			}
-			if (Input_Tap & DOWN_INPUT) {
+			else if (Input_Tap & DOWN_INPUT) {
 				setPixel(0, idx, PIXEL_BLACK);
 				apps[idx].Demo_Deinit();
 				idx++;
-			}
-			if (idx < 0) {
-				idx = 0;
-			}
-			if (idx >= APP_COUNT) {
-				idx = APP_COUNT-1;
+				if (idx >= APP_COUNT) { idx = APP_COUNT - 1; }
 			}
 			if (Input_Tap &(UP_INPUT | DOWN_INPUT)) {
 				drawRect(0, 0, WIDTH, HEIGHT, PIXEL_BLACK);
@@ -71,10 +69,14 @@ void App_Menu_New(App* app) {
 
 void App_Menu_Poll() {
 	if (Input_Status & START_INPUT) {
-		if (currentApp != &homeApp) {
+		if (currentApp != &homeApp) {			
 			currentApp->App_Deinit();
 			currentApp = &homeApp;
 			currentApp->App_Init();
 		}
+		idx = 0;
+		drawRect(0, 0, WIDTH, HEIGHT, PIXEL_BLACK);
+		apps[idx].Demo_Init();
+		setPixel(0, idx, PIXEL_GREEN);
 	}
 }
