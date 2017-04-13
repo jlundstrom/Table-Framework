@@ -54,15 +54,6 @@ void App_Tetris_Init(void) {
 	Tetris_Data->frame = 0;
 	Tetris_Data->BG = PIXEL_WHITE;
 
-	/*Tetris_Data->block.color = PIXEL_CYAN;
-	Tetris_Data->block.width = 4;
-	Tetris_Data->block.height = 1;
-	Tetris_Data->block.y = 0;
-	Tetris_Data->block.x = (BOARD_WIDTH / 2) - (Tetris_Data->block.width / 2);
-	Tetris_Data->block.pixels[0] = 1;
-	Tetris_Data->block.pixels[1] = 1;
-	Tetris_Data->block.pixels[2] = 1;
-	Tetris_Data->block.pixels[3] = 1;*/
 	Tetris_GenerateBlock(Tetris_Data);
 
 	drawRect(Tetris_Data->left, Tetris_Data->top, Tetris_Data->left + BOARD_WIDTH, Tetris_Data->top + BOARD_HEIGHT, Tetris_Data->BG);
@@ -152,6 +143,44 @@ unsigned char Tetris_SetCell(appData *data, char x, char y, unsigned char val) {
 	return data->board[x + (y * BOARD_WIDTH)] = val;
 }
 
+unsigned char Tetris_RotateLeft(appData *data) {
+	int x, y;
+	unsigned char tmp[MAX_BLOCKSIZE];
+	for (x = 0; x < data->block.width; x++)
+	{
+		for (y = 0; y < data->block.height; y++)
+		{
+			tmp[data->block.height - y - 1 + (x * 4)] = data->block.pixels[x + (y * 4)];
+		}
+	}
+	for (x = 0; x < MAX_BLOCKSIZE; x++)
+	{
+		data->block.pixels[x] = tmp[x];
+	}
+	x = data->block.width;
+	data->block.width = data->block.height;
+	data->block.height = x;
+}
+
+unsigned char Tetris_RotateRight(appData *data) {
+	int x, y;
+	unsigned char tmp[MAX_BLOCKSIZE];
+	for (x = 0; x < data->block.width; x++)
+	{
+		for (y = 0; y < data->block.height; y++)
+		{
+			tmp[y + ((data->block.width - x - 1) * 4)] = data->block.pixels[x + (y * 4)];
+		}
+	}
+	for (x = 0; x < MAX_BLOCKSIZE; x++)
+	{
+		data->block.pixels[x] = tmp[x];
+	}
+	x = data->block.width;
+	data->block.width = data->block.height;
+	data->block.height = x;
+}
+
 int Tetris_CheckMove(appData *data, char xOffset, char yOffset) {
 	int x, y;
 
@@ -187,6 +216,10 @@ int Tetris_CheckMove(appData *data, char xOffset, char yOffset) {
 	return 1;
 }
 
+void Tetris_RemoveRow(appData *data, char row) {
+
+}
+
 void Tetris_Drop(appData *data, int drop) {
 	int x, y;
 
@@ -211,21 +244,20 @@ void Tetris_Drop(appData *data, int drop) {
 	}
 	if (Input_Tap & A_INPUT)
 	{
-
+		Tetris_RotateRight(data);
+		if (!Tetris_CheckMove(data, 0, 0))
+		{
+			Tetris_RotateLeft(data);
+		}
 	}
 	else if (Input_Tap & B_INPUT)
 	{
-		
+		Tetris_RotateLeft(data);
+		if (!Tetris_CheckMove(data, 0, 0))
+		{
+			Tetris_RotateRight(data);
+		}
 	}
-
-	//if (data->block.x < 0)
-	//{
-	//	data->block.x = 0;
-	//}
-	//else if (data->block.x > BOARD_WIDTH - data->block.width)
-	//{
-	//	data->block.x = BOARD_WIDTH - data->block.width;
-	//}
 	
 	if (drop > 0 && !Tetris_CheckMove(data, 0, drop))
 	{
@@ -248,7 +280,12 @@ void Tetris_Drop(appData *data, int drop) {
 			}
 		}
 	}
-	data->state &= ~PLACE_BLOCK;
+	
+	if (data->state & PLACE_BLOCK)
+	{
+
+		data->state &= ~PLACE_BLOCK;
+	}
 	if (data->state & SPAWN_NEW_BLOCK)
 	{
 		Tetris_GenerateBlock(data);
