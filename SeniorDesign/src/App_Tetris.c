@@ -134,7 +134,13 @@ void Tetris_GenerateBlock(appData *data) {
 	Tetris_Data->block.y = 0;
 	Tetris_Data->block.x = (BOARD_WIDTH / 2) - (Tetris_Data->block.width / 2);
 }
+int Tetris_GetPixelX(appData *data, char x) {
+	return data->left + x;
+}
 
+int Tetris_GetPixelY(appData *data, char y) {
+	return data->top + y;
+}
 unsigned char Tetris_GetCell(appData *data, char x, char y) {
 	return data->board[x + (y * BOARD_WIDTH)];
 }
@@ -217,7 +223,22 @@ int Tetris_CheckMove(appData *data, char xOffset, char yOffset) {
 }
 
 void Tetris_RemoveRow(appData *data, char row) {
+	int x, y;
+	for (y = row; y > 0; y--)
+	{
+		for (x = 0; x < BOARD_WIDTH; x++)
+		{
+			Tetris_SetCell(data, x, y, Tetris_GetCell(data, x, y - 1));
+			setPixel(Tetris_GetPixelX(data, x), Tetris_GetPixelY(data, y), 
+				getPixel(Tetris_GetPixelX(data, x), Tetris_GetPixelY(data, y - 1)));
+		}
+	}
 
+	for (x = 0; x < BOARD_WIDTH; x++)
+	{
+		Tetris_SetCell(data, x, 0, 0);
+		setPixel(Tetris_GetPixelX(data, x), Tetris_GetPixelY(data, 0), data->BG);
+	}
 }
 
 void Tetris_Drop(appData *data, int drop) {
@@ -229,7 +250,7 @@ void Tetris_Drop(appData *data, int drop) {
 		{
 			if (data->block.pixels[x + (y *4)])
 			{
-				setPixel(data->left + data->block.x + x, data->top + data->block.y + y, Tetris_Data->BG);
+				setPixel(Tetris_GetPixelX(data, data->block.x + x), Tetris_GetPixelY(data, data->block.y + y), Tetris_Data->BG);
 			}
 		}
 	}
@@ -272,7 +293,7 @@ void Tetris_Drop(appData *data, int drop) {
 		{
 			if (data->block.pixels[x + (y * 4)])
 			{
-				setPixel(data->left + data->block.x + x, data->top + data->block.y + y, data->block.color);
+				setPixel(Tetris_GetPixelX(data, data->block.x + x), Tetris_GetPixelY(data, data->block.y + y), data->block.color);
 				if (data->state & PLACE_BLOCK)
 				{
 					Tetris_SetCell(data, data->block.x + x, data->block.y + y, 1);
@@ -283,7 +304,21 @@ void Tetris_Drop(appData *data, int drop) {
 	
 	if (data->state & PLACE_BLOCK)
 	{
-
+		for (y = data->block.height - 1 ; y >= 0 ; y--)
+		{
+			for (x = 0; x < BOARD_WIDTH; x++)
+			{
+				if (!Tetris_GetCell(data, x, data->block.y + y))
+				{
+					break;
+				}
+				if (x == BOARD_WIDTH - 1)
+				{
+					Tetris_RemoveRow(data, y + data->block.y);
+					data->block.y++;
+				}
+			}
+		}
 		data->state &= ~PLACE_BLOCK;
 	}
 	if (data->state & SPAWN_NEW_BLOCK)
