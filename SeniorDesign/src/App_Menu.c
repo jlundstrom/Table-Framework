@@ -47,7 +47,7 @@ void App_Menu_Tick(void) {
 				idx = -1;
 			}
 
-			Input_Tap &= !(UP_INPUT | DOWN_INPUT | A_INPUT);
+			Input_Tap &= ~(UP_INPUT | DOWN_INPUT | A_INPUT);
 		}
 	}
 	if (idx != -1) {

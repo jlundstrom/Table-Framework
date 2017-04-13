@@ -145,6 +145,7 @@
     <ClInclude Include="..\..\SeniorDesign\src\App_Conway.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Menu.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Snake.h" />
+    <ClInclude Include="..\..\SeniorDesign\src\App_Tetris.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Display.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Draw.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Input.h" />
@@ -158,6 +159,7 @@
     <ClCompile Include="..\..\SeniorDesign\src\App_Conway.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Menu.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Snake.c" />
+    <ClCompile Include="..\..\SeniorDesign\src\App_Tetris.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Draw.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Noise.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Random.c" />

@@ -1,4 +1,4 @@
-#include "App_Basic.h"
+#include "App_Snake.h"
 #include "Draw.h"
 #include "Input.h"
 #include "Random.h"
@@ -56,7 +56,7 @@ void App_Snake_Init(void) {
 	setPixel(Snake_Data->headX, Snake_Data->headY, PIXEL_CYAN);
 	App_Snake_Place_Food();
 
-	Input_Tap &= !(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT);
+	Input_Tap &= ~(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT);
 }
 
 void App_Snake_Remove_Tail() {
@@ -148,7 +148,7 @@ void App_Snake_Tick(void) {
 				Snake_Data->Direction |= SEGMENT_ACTIVE;
 			}
 
-			Input_Tap &= !(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT);
+			Input_Tap &= ~(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT);
 			Snake_Data->snake[Snake_Data->headIdx] = Snake_Data->Direction & DIRECTION;
 		}
 

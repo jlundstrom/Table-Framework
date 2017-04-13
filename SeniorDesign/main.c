@@ -27,6 +27,7 @@ int main() {
     App_Basic_New(&apps[0]);
     App_Snake_New(&apps[1]);
 	App_Conway_New(&apps[2]);
+	App_Tetris_New(&apps[3]);
 
 	// Initialize the Menu
     currentApp = &homeApp;
@@ -41,8 +42,10 @@ int main() {
         // Tick the application if a frame has been drawn
         // Clearing the flag if it's been used
         if(DRAWN == 1) {
+			printf("TapPre: %02X ", Input_Tap);
             currentApp->App_Tick();
             DRAWN = 0;
+			printf("TapPost: %02X ", Input_Tap);
         }
 
         // Trigger a frame redraw. Currently only used by WinDisplay
@@ -55,6 +58,7 @@ int main() {
 		if (DRAWN)
 		{
 			printf("Input: %02X ", Input_Status);
+			printf("Tap: %02X ", Input_Tap);
 			printf("FPS: %02d\r", FPS);
 		}
 #endif
