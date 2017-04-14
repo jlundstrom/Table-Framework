@@ -1,6 +1,6 @@
 #ifdef CPU1
 #include <string.h>
-#include "input.h"
+#include "Input.h"
 #include "F28x_Project.h"
 
 // string-compatible helper functions
@@ -11,6 +11,10 @@ void scibRead(char buf[], Uint16 length);
 void scibWrite(char buf[]);
 
 unsigned char Input_Status;
+unsigned char User2_Input_Status;
+
+unsigned char Input_Tap;
+unsigned char User2_Input_Tap;
 char          timeString[32] = "";
 
 // Initialize input device
