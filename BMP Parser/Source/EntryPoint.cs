@@ -36,6 +36,7 @@ namespace BMPtoArray
                     for (int f = 0; f < fileEntries.Length; f++)
                     {
                         Bitmap img = new Bitmap(fileEntries[f]);
+                        wo.Write("char    ");
                         wo.Write(Path.GetFileNameWithoutExtension(fileEntries[f]));
                         wo.Write("["+ img.Width + "]"+ "[" + img.Height + "]"+" = {");
                         for (int i = 0; i < img.Width; i++)
@@ -59,6 +60,10 @@ namespace BMPtoArray
                                 }
                             }
                             wo.Write(" }");
+                            if (i + 1 < img.Width)
+                            {
+                                wo.Write(",");
+                            }
                         }
                         wo.Write(" };\n");
                     }
@@ -82,6 +87,7 @@ namespace BMPtoArray
                     for (int f = 0; f < fileEntries.Length; f++)
                     {
                         Bitmap img = new Bitmap(fileEntries[f]);
+                        wo.Write("char    ");
                         wo.Write(Path.GetFileNameWithoutExtension(fileEntries[f]));
                         wo.Write("[" + img.Width + "]" + "[" + img.Height + "]" +"[3]" +" = {");
                         for (int i = 0; i < img.Width; i++)
@@ -99,6 +105,10 @@ namespace BMPtoArray
                                 }
                             }
                             wo.Write(" }");
+                            if (i + 1 < img.Width)
+                            {
+                                wo.Write(",");
+                            }
                         }
                         wo.Write(" };\n");
                     }
