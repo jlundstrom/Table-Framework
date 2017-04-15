@@ -142,10 +142,13 @@
   <ItemGroup>
     <ClInclude Include="..\..\SeniorDesign\src\App.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Basic.h" />
+    <ClInclude Include="..\..\SeniorDesign\src\App_Boot.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Conway.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Menu.h" />
+    <ClInclude Include="..\..\SeniorDesign\src\App_Party.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Snake.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Tetris.h" />
+    <ClInclude Include="..\..\SeniorDesign\src\App_Tron.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Display.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Draw.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Input.h" />
@@ -156,10 +159,13 @@
     <ClCompile Include="..\..\SeniorDesign\main.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Basic.c" />
+    <ClCompile Include="..\..\SeniorDesign\src\App_Boot.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Conway.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Menu.c" />
+    <ClCompile Include="..\..\SeniorDesign\src\App_Party.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Snake.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Tetris.c" />
+    <ClCompile Include="..\..\SeniorDesign\src\App_Tron.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Draw.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Noise.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Random.c" />
