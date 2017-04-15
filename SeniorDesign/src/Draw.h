@@ -13,8 +13,8 @@ struct pixel {
 } typedef Pixel;
 
 struct point {
-    uint_least8_t x;
-    uint_least8_t y;
+    char x;
+    char y;
 } typedef Point;
 
 

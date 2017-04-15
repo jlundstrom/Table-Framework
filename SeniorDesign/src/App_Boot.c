@@ -28,6 +28,10 @@ void Demo_Boot_Init(void) {
 
 void Demo_Boot_Tick(void) {
     Pixel pixel;
+    pixel.R=0;
+    pixel.G=0;
+    pixel.B=0;
+    drawBackground(pixel);
     char string[5]={'B','O','O','T',' '};
     char string2[5]={'M','O','D','E',' '};
     pixel.R=255;
