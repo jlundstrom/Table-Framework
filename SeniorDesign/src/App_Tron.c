@@ -27,6 +27,7 @@ void App_Tron_Deinit(void);
 void App_Tron_New(App* app);
 void drawWinner(int winner);
 int collisionCheck(int xnext, int ynext);
+void modeSetter(void);
 
 void Demo_Tron_Init(void) {
     appTron_Data = &AppStorage;
@@ -94,9 +95,11 @@ void App_Tron_Init(void) {
 }
 
 void App_Tron_Tick(void) {
+    int winnar=0;
     if(appTron_Data->mode==0)
     {
 
+        modeSetter();
     }
     if(appTron_Data->mode==1)
     {
@@ -127,7 +130,32 @@ void drawWinner(int winner)
     }
 }
 
-int collisionCheck(int xnext, int ynext) //collision check returns true if collision hit, check at beginning to process next frame
+void modeSetter(void) //last call, sets next frame
+{
+    int hit1,hit2;
+    hit1 = collisionCheck(appTron_Data->point1.x,appTron_Data->point1.y);
+    hit2 = collisionCheck(appTron_Data->point2.x,appTron_Data->point2.y);
+    if(hit1&&hit2==1)
+    {
+        appTron_Data->mode = 3;
+        return;
+    }
+    if(hit1==1)
+    {
+        appTron_Data->mode = 2;
+        return;
+    }
+    if(hit2==1)
+    {
+        appTron_Data->mode = 1;
+        return;
+    }
+    appTron_Data->mode = 0;
+    return;
+}
+
+
+int collisionCheck(int xnext, int ynext) //collision check returns true if collision hit, check at end to process next frame
 {
     if(inBounds(xnext,ynext)!=1)
     {
