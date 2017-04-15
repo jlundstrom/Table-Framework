@@ -94,11 +94,12 @@ void App_Boot_Init(void)
    pixelText.R = 255;
    pixelText.G = 0;
    pixelText.B = 0;
+   generateNoise();
 }
 
 
 void App_Boot_Tick(void) {
-    generateNoise();
+
     int i,j;
     uint16_t mask = 0x8000;
     if(appBoot_Data->fadeoutFlag>0)

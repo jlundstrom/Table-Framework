@@ -2,6 +2,16 @@
 #include "Draw.h"
 #include "Noise.h"
 
+#ifndef __cplusplus
+#ifdef __TI_COMPILER_VERSION__
+#if __TI_COMPILER_VERSION__ >= 15009000
+#pragma CODE_SECTION(drawCloud, ".TI.ramfunc");
+#else
+#pragma CODE_SECTION(drawCloud, "ramfuncs");
+#endif
+#endif
+#endif
+
 double noise[noiseHeight][noiseWidth];
 
 void generateNoise() //run first to populate
@@ -58,7 +68,7 @@ double turbulence(double x, double y, double size) //size is zoom factor
    return(128.0 * value / initialSize);  //scaled for 0-255
 }
 
-__attribute__((ramfunc))
+
 void drawCloud(int RGB) // send 1,2,3 for which color to not hold constant
 {
    if (!((RGB < 4) && (RGB > 0)))
