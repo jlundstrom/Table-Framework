@@ -105,7 +105,7 @@ void App_Tron_Tick(void) {
         updatePlayerPos(2);
         modeSetter();
     }
-    if(appTron_Data->mode>0)
+    if(appTron_Data->mode==1)
     {
         drawWinner(appTron_Data->winner);
     }
@@ -147,13 +147,13 @@ void modeSetter(void) //last call, sets next frame
     hit2 = collisionCheck(appTron_Data->point2.x,appTron_Data->point2.y);
     if((hit1&&hit2)==1)
     {
-        appTron_Data->mode = 3;
+        appTron_Data->mode = 1;
         appTron_Data->winner = 3;
         return;
     }
     if(hit1==1)
     {
-        appTron_Data->mode = 2;
+        appTron_Data->mode = 1;
         appTron_Data->winner =2;
         return;
     }
