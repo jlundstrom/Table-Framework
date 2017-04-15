@@ -18,20 +18,15 @@ import android.bluetooth.BluetoothDevice;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.Calendar;
-import java.lang.Character;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class ControllerActivity extends AppCompatActivity implements OnTouchListener
 {
     // Initialization
-    int flag       = 0;
-    String command = null;
     Toast message  = null;
 
     ImageButton btn_sync;
-    Button btn_p1;
-    Button btn_p2;
     Button btn_up;
     Button btn_down;
     Button btn_left;
@@ -61,8 +56,6 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
 
         // Call the buttons
         btn_sync   = (ImageButton)findViewById(R.id.btn_sync);
-        btn_p1     = (Button)findViewById(R.id.btn_p1);
-        btn_p2     = (Button)findViewById(R.id.btn_p2);
         btn_up     = (Button)findViewById(R.id.btn_up);
         btn_down   = (Button)findViewById(R.id.btn_down);
         btn_left   = (Button)findViewById(R.id.btn_left);
@@ -83,35 +76,9 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
             {
                 view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 msg("Time synchronized");
-                DateFormat df = new SimpleDateFormat("HH:mm:ss MM-dd-yy");
+                DateFormat df = new SimpleDateFormat("MM-dd");
                 String date = df.format(Calendar.getInstance().getTime());
                 btWrite("z" + date + "\0");
-            }
-        });
-
-        btn_p1.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                msg("You are Player 1");
-                disablePlayerButtons();
-                flag = 1;
-                command = "qwertyui";
-            }
-        });
-
-        btn_p2.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                msg("You are Player 2");
-                disablePlayerButtons();
-                flag = 1;
-                command = "asdfghjk";
             }
         });
 
@@ -125,59 +92,44 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         btn_select.setOnTouchListener(this);
     }
 
-    public void disablePlayerButtons()
-    {
-        btn_p1.setEnabled(false);
-        btn_p1.setClickable(false);
-        btn_p2.setEnabled(false);
-        btn_p2.setClickable(false);
-    }
-
     @Override
     public boolean onTouch(View view, MotionEvent event)
     {
-        // If the button is pressed
-        if (flag == 0)
-        {
-            msg("You must choose a player!");
-            return true;
-        }
-
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
         {
             view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             switch (view.getId())
             {
                 case R.id.btn_up:
-                    btWrite(Character.toString(command.charAt(0)) + "\0");
+                    btWrite("w\0");
                     break;
 
                 case R.id.btn_down:
-                    btWrite(Character.toString(command.charAt(1)) + "\0");
+                    btWrite("s\0");
                     break;
 
                 case R.id.btn_left:
-                    btWrite(Character.toString(command.charAt(2)) + "\0");
+                    btWrite("a\0");
                     break;
 
                 case R.id.btn_right:
-                    btWrite(Character.toString(command.charAt(3)) + "\0");
+                    btWrite("d\0");
                     break;
 
                 case R.id.btn_a:
-                    btWrite(Character.toString(command.charAt(4)) + "\0");
+                    btWrite("h\0");
                     break;
 
                 case R.id.btn_b:
-                    btWrite(Character.toString(command.charAt(5)) + "\0");
+                    btWrite("j\0");
                     break;
 
                 case R.id.btn_start:
-                    btWrite(Character.toString(command.charAt(6)) + "\0");
+                    btWrite("q\0");
                     break;
 
                 case R.id.btn_select:
-                    btWrite(Character.toString(command.charAt(7)) + "\0");
+                    btWrite("e\0");
                     break;
             }
         }
@@ -189,35 +141,35 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
             switch (view.getId())
             {
                 case R.id.btn_up:
-                    btWrite(Character.toString(command.charAt(0)).toUpperCase() + "\0");
+                    btWrite("W\0");
                     break;
 
                 case R.id.btn_down:
-                    btWrite(Character.toString(command.charAt(1)).toUpperCase() + "\0");
+                    btWrite("S\0");
                     break;
 
                 case R.id.btn_left:
-                    btWrite(Character.toString(command.charAt(2)).toUpperCase() + "\0");
+                    btWrite("A\0");
                     break;
 
                 case R.id.btn_right:
-                    btWrite(Character.toString(command.charAt(3)).toUpperCase() + "\0");
+                    btWrite("D\0");
                     break;
 
                 case R.id.btn_a:
-                    btWrite(Character.toString(command.charAt(4)).toUpperCase() + "\0");
+                    btWrite("H\0");
                     break;
 
                 case R.id.btn_b:
-                    btWrite(Character.toString(command.charAt(5)).toUpperCase() + "\0");
+                    btWrite("J\0");
                     break;
 
                 case R.id.btn_start:
-                    btWrite(Character.toString(command.charAt(6)).toUpperCase() + "\0");
+                    btWrite("Q\0");
                     break;
 
                 case R.id.btn_select:
-                    btWrite(Character.toString(command.charAt(7)).toUpperCase() + "\0");
+                    btWrite("E\0");
                     break;
             }
         }

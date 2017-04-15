@@ -19,16 +19,20 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:id="@+id/linearLayout2">
+
         <Button
             android:id="@+id/btn_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start" />
+            android:text="Start"
+            android:textSize="12sp" />
+
         <Button
             android:id="@+id/btn_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select" />
+            android:text="Select"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -36,22 +40,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:weightSum="3"
-        android:gravity="right"
+        android:gravity="center"
         android:id="@+id/linearLayout1"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
-
-        <Button
-            android:id="@+id/btn_p1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Player 1" />
-
-        <Button
-            android:id="@+id/btn_p2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Player 2" />
 
         <ImageButton
             android:id="@+id/btn_sync"
@@ -63,54 +55,58 @@
 
     <Button
         android:id="@+id/btn_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Up"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
         android:layout_above="@+id/btn_left"
-        android:layout_alignStart="@+id/btn_down" />
+        android:layout_toEndOf="@+id/btn_left"
+        android:text="Up"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/btn_down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
+        android:layout_marginBottom="26dp"
         android:text="Down"
-        android:layout_marginEnd="41dp"
-        android:layout_marginBottom="53dp"
+        android:textSize="12sp"
         android:layout_above="@+id/linearLayout2"
-        android:layout_alignEnd="@+id/btn_right" />
+        android:layout_toEndOf="@+id/btn_left" />
 
     <Button
         android:id="@+id/btn_a"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="A"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
         android:layout_above="@+id/btn_b"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:text="A"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/btn_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="B"
-        android:layout_marginEnd="42dp"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/btn_right"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginEnd="42dp"
+        android:text="B"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/btn_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Left"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
         android:layout_above="@+id/btn_down"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:text="Left"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/btn_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
+        android:layout_below="@+id/btn_up"
+        android:layout_toEndOf="@+id/btn_up"
         android:text="Right"
-        android:layout_alignBaseline="@+id/btn_left"
-        android:layout_alignBottom="@+id/btn_left"
-        android:layout_toEndOf="@+id/btn_left" />
+        android:textSize="12sp" />
 
 </RelativeLayout>
