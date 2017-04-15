@@ -86,10 +86,10 @@ void App_Tron_Init(void) {
     appTron_Data->P2UP = 2;
     appTron_Data->flag = 0;
     appTron_Data->mode = 0;
-    appTron_Data->point1.x = 1;
-    appTron_Data->point2.x = 30;
-    appTron_Data->point1.y = 1;
-    appTron_Data->point2.y = 14;
+    appTron_Data->point1.x = 2;
+    appTron_Data->point2.x = 29;
+    appTron_Data->point1.y = 2;
+    appTron_Data->point2.y = 13;
     pixel.R=0;
     pixel.G=255;
     pixel.B=255;
