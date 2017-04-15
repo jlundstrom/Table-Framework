@@ -78,7 +78,7 @@ void App_Boot_Init(void)
    generateNoise();
 }
 
-
+__attribute__((ramfunc))
 void App_Boot_Tick(void) {
 
     int i,j;

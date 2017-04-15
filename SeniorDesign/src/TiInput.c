@@ -56,9 +56,9 @@ void Input_init(void)
 
    // Status LED
    GpioCtrlRegs.GPCDIR.bit.GPIO70 = 1;
-   GpioDataRegs.GPCDAT.bit.GPIO70 = 1;
+   GpioDataRegs.GPCDAT.bit.GPIO70 = 0;
    GpioCtrlRegs.GPCDIR.bit.GPIO69 = 1;
-   GpioDataRegs.GPCDAT.bit.GPIO69 = 1;
+   GpioDataRegs.GPCDAT.bit.GPIO69 = 0;
 
    EDIS;
 

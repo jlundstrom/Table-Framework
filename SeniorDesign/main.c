@@ -42,7 +42,7 @@ int main()
 
    // Main application loop Quit if select is pressed
    // Quitting is currently used for Windows emulation
-   while (!(Input_Status & SELECT_INPUT))
+   while (1)
    {
       // Check if the start button is pressed to return to menu
       App_Menu_Poll();

@@ -154,42 +154,42 @@ void App_Tron_Tick(void)
       }
       if (User2_Input_Tap)
       {
-          if (Input_Tap & UP_INPUT && (appTron_Data->P2UP != DIRECTION_DOWN))
+          if (User2_Input_Tap & UP_INPUT && (appTron_Data->P2UP != DIRECTION_DOWN))
            {
               appTron_Data->P2UP &= !DIRECTION;
               appTron_Data->P2UP |= DIRECTION_UP;
            }
-           else if (Input_Tap & DOWN_INPUT && (appTron_Data->P2UP != DIRECTION_UP))
+           else if (User2_Input_Tap & DOWN_INPUT && (appTron_Data->P2UP != DIRECTION_UP))
            {
               appTron_Data->P2UP &= !DIRECTION;
               appTron_Data->P2UP |= DIRECTION_DOWN;
            }
-           else if (Input_Tap & LEFT_INPUT && (appTron_Data->P2UP != DIRECTION_RIGHT))
+           else if (User2_Input_Tap & LEFT_INPUT && (appTron_Data->P2UP != DIRECTION_RIGHT))
            {
               appTron_Data->P2UP &= !DIRECTION;
               appTron_Data->P2UP |= DIRECTION_LEFT;
            }
-           else if (Input_Tap & RIGHT_INPUT && (appTron_Data->P2UP != DIRECTION_LEFT))
+           else if (User2_Input_Tap & RIGHT_INPUT && (appTron_Data->P2UP != DIRECTION_LEFT))
            {
               appTron_Data->P2UP &= !DIRECTION;
               appTron_Data->P2UP |= DIRECTION_RIGHT;
            }
-         if (Input_Tap & B_INPUT)
+         if (User2_Input_Tap & B_INPUT)
          {
             rotateUp(2, 0);
          }
-         if (Input_Tap & A_INPUT)
+         if (User2_Input_Tap & A_INPUT)
          {
             rotateUp(2, 1);
          }
       }
-      Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT);
-      User2_Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT);
+      Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT | UP_INPUT | DOWN_INPUT | A_INPUT | B_INPUT);
+      User2_Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT | UP_INPUT | DOWN_INPUT | A_INPUT | B_INPUT);
       //insert code for bluetooth
       //void rotateUp(int player, int LR) make sure to call this for inputs
       //L = 0         R = 1
       appTron_Data->frame++;
-      if (appTron_Data->frame % 3 == 0)
+      if (appTron_Data->frame % 4 == 0)
       {
          updatePlayerPos(1);
          updatePlayerPos(2);

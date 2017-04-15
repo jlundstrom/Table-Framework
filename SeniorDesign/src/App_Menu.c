@@ -89,7 +89,7 @@ void App_Menu_New(App *app)
 
 void App_Menu_Poll()
 {
-   if (Input_Status & START_INPUT)
+   if (Input_Tap & START_INPUT)
    {
       if (currentApp != &homeApp)
       {
@@ -101,5 +101,11 @@ void App_Menu_Poll()
       drawRect(0, 0, WIDTH, HEIGHT, PIXEL_BLACK);
       apps[idx].Demo_Init();
       setPixel(0, idx, PIXEL_GREEN);
+   }else if (Input_Tap & SELECT_INPUT)
+   {
+      currentApp->App_Deinit();
+      drawRect(0, 0, WIDTH, HEIGHT, PIXEL_BLACK);
+      currentApp->App_Init();
    }
+   Input_Tap &= ~(START_INPUT | SELECT_INPUT);
 }
