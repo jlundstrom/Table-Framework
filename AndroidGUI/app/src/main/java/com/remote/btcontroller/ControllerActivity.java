@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
+import android.view.KeyEvent;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothSocket;
 import android.bluetooth.BluetoothAdapter;
@@ -80,7 +81,7 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
                 DateFormat df2 = new SimpleDateFormat("hh:ss");
                 String date = df1.format(Calendar.getInstance().getTime());
                 String time = df2.format(Calendar.getInstance().getTime());
-                btWrite("z\0");
+                btWrite("z");
                 btWrite(date + "\0");
                 btWrite(time + "\0");
             }
@@ -94,6 +95,40 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         btn_b.setOnTouchListener(this);
         btn_start.setOnTouchListener(this);
         btn_select.setOnTouchListener(this);
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        int action = event.getAction();
+        int keyCode = event.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+
+                if (action == KeyEvent.ACTION_DOWN) {
+                    btWrite("e\0");
+                }
+
+                if (action == KeyEvent.ACTION_UP) {
+                    btWrite("E\0");
+                }
+
+                return true;
+
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+
+                if (action == KeyEvent.ACTION_DOWN) {
+                    btWrite("q\0");
+                }
+
+                if (action == KeyEvent.ACTION_UP) {
+                    btWrite("Q\0");
+                }
+
+                return true;
+
+            default:
+                return super.dispatchKeyEvent(event);
+        }
     }
 
     @Override
