@@ -30,7 +30,7 @@ int sign(int x);
 void toString(char string[], int bottomtop, Pixel color);
 void printTextOffset(char text, int x, int y, Pixel color);
 int textConvert(char text, int x, int y);
-
+Pixel HSV2RGB(int H, int S, int V);
 // Retrieve pixel, and return first pixel for invalid inputs
 Pixel getPixel(int x, int y) {
 	if (x > WIDTH || y > HEIGHT || x < 0 || y < 0) {
@@ -807,4 +807,60 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                 default:
                     return 0;
     }
+}
+
+Pixel HSV2RGB(int H, int S, int V){
+ int i;
+ float f, p, q, t, h, s, v;
+ Pixel RGB;
+ h=(float)H;
+ s=(float)S;
+ v=(float)V;
+
+ s /=255;
+
+ if( s == 0 ) { // achRomatic (GRey)
+ RGB.R = RGB.G = RGB.B = v;
+ return RGB;
+ }
+
+ h /= 60;            // sectoR 0 to 5
+ i = floor( h );
+ f = h - i;            // factoRial paRt of h
+ p = (unsigned char)(v * ( 1 - s ));
+ q = (unsigned char)(v * ( 1 - s * f ));
+ t = (unsigned char)(v * ( 1 - s * ( 1 - f ) ));
+
+ switch( i ) {
+ case 0:
+ RGB.R = v;
+ RGB.G = t;
+ RGB.B = p;
+ return RGB;
+ case 1:
+ RGB.R = q;
+ RGB.G = v;
+ RGB.B = p;
+ return RGB;
+ case 2:
+ RGB.R = p;
+ RGB.G = v;
+ RGB.B = t;
+ return RGB;
+ case 3:
+ RGB.R = p;
+ RGB.G = q;
+ RGB.B = v;
+ return RGB;
+ case 4:
+ RGB.R = t;
+ RGB.G = p;
+ RGB.B = v;
+ return RGB;
+ default:        // case 5:
+ RGB.R = v;
+ RGB.G = p;
+ RGB.B = q;
+ return RGB;
+ }
 }

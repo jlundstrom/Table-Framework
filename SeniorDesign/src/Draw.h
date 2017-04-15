@@ -61,4 +61,6 @@ void toString(char string[], int bottomtop, Pixel color);
 void printTextOffset(char text, int x, int y, Pixel color);
 //prints from bottom left going up 7, right 5
 extern void clearDisplay(void);
+extern Pixel HSV2RGB(int H, int S, int V);
+//HSV/HSB to RGB
 #endif

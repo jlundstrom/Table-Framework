@@ -3,21 +3,32 @@
 #include "Noise.h"
 #include "Input.h"
 
-struct appBoot_Data {
+struct appData {
     int frame;
-} typedef appBoot_Data;
-appBoot_Data* Boot_Data;
+    unsigned char flag;
+    unsigned char fadeoutFlag;
+} typedef appData;
+appData* appBoot_Data;
+void Demo_Boot_Init(void);
+void Demo_Boot_Tick(void);
+void Demo_Boot_Deinit(void);
+void App_Boot_Init(void);
+void App_Boot_Tick(void);
+void App_Boot_Deinit(void);
+void App_Boot_New(App* app);
 
 char    nihao[32][16] = { { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0 }, { 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 }, { 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1 }, { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }, { 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1 }, { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, { 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 }, { 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0 }, { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0 }, { 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0 }, { 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 }, { 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }, { 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+Pixel pixelText;
 
 void Demo_Boot_Init(void) {
-    Boot_Data = &AppStorage;
-    Boot_Data->frame = 0;
+    appBoot_Data = &AppStorage;
+    appBoot_Data->frame = 0;
+    appBoot_Data->flag = 0;
 }
 
 void Demo_Boot_Tick(void) {
     Pixel pixel;
-    char string[]={'H','I','Y','A','S'};
+    char string[5]={'H','I','Y','A','S'};
     pixel.R=255;
     pixel.G=0;
     pixel.B=0;
@@ -25,43 +36,72 @@ void Demo_Boot_Tick(void) {
 }
 
 void Demo_Boot_Deinit(void) {
-    Boot_Data->frame = 0;
-    Boot_Data = 0;
+    appBoot_Data->frame = 0;
+    appBoot_Data = 0;
 }
 
 void App_Boot_Init(void) {
-    Boot_Data = &AppStorage;
-    Boot_Data->frame = 0;
+    appBoot_Data = &AppStorage;
+    appBoot_Data->frame = 240;
+    appBoot_Data->flag = 0;
+    appBoot_Data->fadeoutFlag = 250;
+    pixelText.R=255;
+    pixelText.G=0;
+    pixelText.B=0;
 }
 
 void App_Boot_Tick(void) {
     generateNoise();
-    drawCloud(3);
+    updateSEED(getRandom());
     int i,j;
-    Pixel pixel;
-    pixel.R=255;
-    pixel.G=0;
-    pixel.B=0;
-    for(i=0;i<32;i++)
+    if(appBoot_Data->fadeoutFlag>0)
     {
-        for(j=0;j<16;j++)
-        {
-            if(nihao[i][j]==1)
+        drawCloud(3);
+        for(i=0;i<32;i++)
             {
-                setPixel(i,j,pixel);
+                for(j=0;j<16;j++)
+                {
+                    if(nihao[i][j]==1)
+                    {
+                        setPixel(i,j,pixelText);
+                    }
+                }
             }
-        }
+        appBoot_Data->fadeoutFlag--;
+        pixelText.R--;
     }
-    Boot_Data->frame++;
+    else
+    {
+        if(appBoot_Data->frame>350)
+            {
+                appBoot_Data->flag=0;
+            }
+            if(appBoot_Data->frame<0)
+            {
+                appBoot_Data->flag=1;
+            }
+            if(appBoot_Data->flag==1)
+            {
+                appBoot_Data->frame++;
+            }
+            else
+            {
+                appBoot_Data->frame--;
+            }
+
+            Pixel store = HSV2RGB(appBoot_Data->frame,255,255);
+            drawCloudColor(store);
+    }
+
 }
 
 void App_Boot_Deinit(void) {
     int i;
-    for (i = 0; i < sizeof(appBoot_Data); i++) {
+    for (i = 0; i < sizeof(appData); i++) {
         AppStorage[i] = 0;
     }
 
-    Boot_Data = 0;
+    appBoot_Data = 0;
 }
 
 void App_Boot_New(App* app) {

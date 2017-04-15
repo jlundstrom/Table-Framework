@@ -92,3 +92,33 @@ void drawCloud(int RGB) // send 1,2,3 for which color to not hold constant
     }
 }
 
+void drawCloudColor(Pixel color)
+{
+    int x;
+    int y;
+    char temp;
+    Pixel pixel;
+    pixel.R=color.R;
+    pixel.G=color.G;
+    pixel.B=color.B;
+    for(x=0;x<noiseWidth;x++)
+    {
+        for(y=0;y<noiseHeight;y++)
+        {
+            temp = 5 + (char) turbulence(x,y,3);
+            if((temp+pixel.R) < 255)
+            {
+                pixel.R+=temp;
+            }
+            if((temp+pixel.G) < 255)
+            {
+                pixel.R+=temp;
+            }
+            if((temp+pixel.B) < 255)
+            {
+                pixel.R+=temp;
+            }
+            setPixel(x,y,pixel);
+        }
+    }
+}
