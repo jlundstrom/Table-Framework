@@ -16,6 +16,7 @@
 #include "src/App_Menu.h"
 #include "src/App_Conway.h"
 #include "src/App_Boot.h"
+#include "src/App_Party.h"
 
 int main() {
     // Initializes platform specifics components
@@ -30,6 +31,7 @@ int main() {
 	App_Conway_New(&apps[2]);
 	App_Tetris_New(&apps[3]);
 	App_Boot_New(&apps[4]);
+	App_Party_New(&apps[5]);
 	// Initialize the Menu
     currentApp = &homeApp;
     currentApp->App_Init();
