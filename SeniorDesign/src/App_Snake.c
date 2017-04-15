@@ -138,7 +138,7 @@ void App_Snake_Tick(void) {
 			}
 			else if (Input_Tap & LEFT_INPUT && Snake_Data->Direction != DIRECTION_RIGHT) {
 				Snake_Data->Direction &= !DIRECTION;
-				Snake_Data->Direction |= LEFT_INPUT;
+				Snake_Data->Direction |= DIRECTION_LEFT;
 			}
 			else if (Input_Tap & RIGHT_INPUT && Snake_Data->Direction != DIRECTION_LEFT) {
 				Snake_Data->Direction &= !DIRECTION;
@@ -149,24 +149,24 @@ void App_Snake_Tick(void) {
 			    dirTemp = Snake_Data->Direction & DIRECTION;
 			    Snake_Data->Direction &= ~DIRECTION;
 			    dirTemp = dirTemp << 1;
-			    if (dirTemp)
+			    if (!(dirTemp& DIRECTION))
 			    {
-			        dirTemp=0x01;
+			        dirTemp= DIRECTION_UP;
 			    }
 				Snake_Data->Direction |= dirTemp;
 			}
 			if (Input_Tap & B_INPUT) {
-			                dirTemp = Snake_Data->Direction & DIRECTION;
-			                Snake_Data->Direction &= ~DIRECTION;
-			                dirTemp = dirTemp >> 1;
-			                if (dirTemp)
-			                {
-			                    dirTemp=0x08;
-			                }
-			                Snake_Data->Direction |= dirTemp;
-			            }
+                dirTemp = Snake_Data->Direction & DIRECTION;
+                Snake_Data->Direction &= ~DIRECTION;
+                dirTemp = dirTemp >> 1;
+                if (!dirTemp)
+                {
+                    dirTemp= DIRECTION_RIGHT;
+                }
+                Snake_Data->Direction |= dirTemp;
+            }
 
-			Input_Tap &= ~(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT);
+			Input_Tap &= ~(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT | B_INPUT);
 			Snake_Data->snake[Snake_Data->headIdx] = Snake_Data->Direction & DIRECTION;
 		}
 
