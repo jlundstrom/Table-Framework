@@ -102,7 +102,7 @@ void drawCloudColor(int hue)
     {
         for(y=0;y<noiseHeight;y++)
         {
-            temp = 5 + (char) turbulence(x,y,3);
+            temp = turbulence(x,y,3);
             pixel = HSV2RGB(hue,255,temp);
             setPixel(x,y,pixel);
         }

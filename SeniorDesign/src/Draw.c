@@ -819,14 +819,14 @@ Pixel HSV2RGB(int H, int S, int V){
 
  s /=255;
 
- if( s == 0 ) { // achRomatic (GRey)
+ if( s == 0 ) { // achromatic (grey)
  RGB.R = RGB.G = RGB.B = v;
  return RGB;
  }
 
- h /= 60;            // sectoR 0 to 5
+ h /= 60;            // sector 0 to 5
  i = floor( h );
- f = h - i;            // factoRial paRt of h
+ f = h - i;            // factorial part of h
  p = (unsigned char)(v * ( 1 - s ));
  q = (unsigned char)(v * ( 1 - s * f ));
  t = (unsigned char)(v * ( 1 - s * ( 1 - f ) ));
