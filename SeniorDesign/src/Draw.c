@@ -345,9 +345,9 @@ void floodFill(int xo, int yo, Pixel fill, Pixel wall)
 void toString(char string[], int bottomtop, Pixel color) //0 1 for bottom top len 4 max for the string
 {
     int i;
-    for(i=0;i<4;i++)
+    for(i=0;i<5;i++)
     {
-        printTextOffset(string[i] , i*5+1, bottomtop*8 ,color);
+        printTextOffset(string[i] , i*5, bottomtop*8 ,color);
     }
 }
 
@@ -417,7 +417,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
     switch(text)
     {
                 case 'A':
-                    if(A[x][y]=='1')
+                    if(A[x][y]==1)
                     {
                         return 1;
                     }
@@ -426,7 +426,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'B':
-                    if(B[x][y]=='1')
+                    if(B[x][y]==1)
                     {
                         return 1;
                     }
@@ -435,7 +435,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'C':
-                    if(C[x][y]=='1')
+                    if(C[x][y]==1)
                     {
                         return 1;
                     }
@@ -444,7 +444,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'D':
-                    if(D[x][y]=='1')
+                    if(D[x][y]==1)
                     {
                         return 1;
                     }
@@ -453,7 +453,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'E':
-                    if(E[x][y]=='1')
+                    if(E[x][y]==1)
                     {
                         return 1;
                     }
@@ -462,7 +462,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'F':
-                    if(F[x][y]=='1')
+                    if(F[x][y]==1)
                     {
                         return 1;
                     }
@@ -471,7 +471,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'G':
-                    if(G[x][y]=='1')
+                    if(G[x][y]==1)
                     {
                         return 1;
                     }
@@ -480,7 +480,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'H':
-                    if(H[x][y]=='1')
+                    if(H[x][y]==1)
                     {
                         return 1;
                     }
@@ -489,7 +489,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'I':
-                    if(I[x][y]=='1')
+                    if(I[x][y]==1)
                     {
                         return 1;
                     }
@@ -498,7 +498,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'J':
-                    if(J[x][y]=='1')
+                    if(J[x][y]==1)
                     {
                         return 1;
                     }
@@ -507,7 +507,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'K':
-                    if(K[x][y]=='1')
+                    if(K[x][y]==1)
                     {
                         return 1;
                     }
@@ -516,7 +516,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'L':
-                    if(L[x][y]=='1')
+                    if(L[x][y]==1)
                     {
                         return 1;
                     }
@@ -525,7 +525,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'M':
-                    if(M[x][y]=='1')
+                    if(M[x][y]==1)
                     {
                         return 1;
                     }
@@ -534,7 +534,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'N':
-                    if(N[x][y]=='1')
+                    if(N[x][y]==1)
                     {
                         return 1;
                     }
@@ -543,7 +543,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'O':
-                    if(O[x][y]=='1')
+                    if(O[x][y]==1)
                     {
                         return 1;
                     }
@@ -552,7 +552,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'P':
-                    if(P[x][y]=='1')
+                    if(P[x][y]==1)
                     {
                         return 1;
                     }
@@ -561,7 +561,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'Q':
-                    if(Q[x][y]=='1')
+                    if(Q[x][y]==1)
                     {
                         return 1;
                     }
@@ -570,7 +570,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'R':
-                    if(R[x][y]=='1')
+                    if(R[x][y]==1)
                     {
                         return 1;
                     }
@@ -579,7 +579,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'S':
-                    if(S[x][y]=='1')
+                    if(S[x][y]==1)
                     {
                         return 1;
                     }
@@ -588,7 +588,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'T':
-                    if(T[x][y]=='1')
+                    if(T[x][y]==1)
                     {
                         return 1;
                     }
@@ -597,7 +597,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'U':
-                    if(U[x][y]=='1')
+                    if(U[x][y]==1)
                     {
                         return 1;
                     }
@@ -606,7 +606,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'V':
-                    if(V[x][y]=='1')
+                    if(V[x][y]==1)
                     {
                         return 1;
                     }
@@ -615,7 +615,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'W':
-                    if(W[x][y]=='1')
+                    if(W[x][y]==1)
                     {
                         return 1;
                     }
@@ -624,7 +624,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'X':
-                    if(X[x][y]=='1')
+                    if(X[x][y]==1)
                     {
                         return 1;
                     }
@@ -633,7 +633,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'Y':
-                    if(Y[x][y]=='1')
+                    if(Y[x][y]==1)
                     {
                         return 1;
                     }
@@ -642,7 +642,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case 'Z':
-                    if(Z[x][y]=='1')
+                    if(Z[x][y]==1)
                     {
                         return 1;
                     }
@@ -651,7 +651,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '0':
-                    if(num0[x][y]=='1')
+                    if(num0[x][y]==1)
                     {
                         return 1;
                     }
@@ -659,8 +659,8 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                     {
                         return 0;
                     }
-                case '1':
-                    if(num1[x][y]=='1')
+                case 1:
+                    if(num1[x][y]==1)
                     {
                         return 1;
                     }
@@ -669,7 +669,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '2':
-                    if(num2[x][y]=='1')
+                    if(num2[x][y]==1)
                     {
                         return 1;
                     }
@@ -678,7 +678,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '3':
-                    if(num3[x][y]=='1')
+                    if(num3[x][y]==1)
                     {
                         return 1;
                     }
@@ -687,7 +687,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '4':
-                    if(num4[x][y]=='1')
+                    if(num4[x][y]==1)
                     {
                         return 1;
                     }
@@ -696,7 +696,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '5':
-                    if(num5[x][y]=='1')
+                    if(num5[x][y]==1)
                     {
                         return 1;
                     }
@@ -705,7 +705,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '6':
-                    if(num6[x][y]=='1')
+                    if(num6[x][y]==1)
                     {
                         return 1;
                     }
@@ -714,7 +714,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '7':
-                    if(num7[x][y]=='1')
+                    if(num7[x][y]==1)
                     {
                         return 1;
                     }
@@ -723,7 +723,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '8':
-                    if(num8[x][y]=='1')
+                    if(num8[x][y]==1)
                     {
                         return 1;
                     }
@@ -732,7 +732,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '9':
-                    if(num9[x][y]=='1')
+                    if(num9[x][y]==1)
                     {
                         return 1;
                     }
@@ -741,7 +741,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '?':
-                    if(question[x][y]=='1')
+                    if(question[x][y]==1)
                     {
                         return 1;
                     }
@@ -750,7 +750,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '!':
-                    if(exclaim[x][y]=='1')
+                    if(exclaim[x][y]==1)
                     {
                         return 1;
                     }
@@ -759,7 +759,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '[':
-                    if(bracketL[x][y]=='1')
+                    if(bracketL[x][y]==1)
                     {
                         return 1;
                     }
@@ -768,7 +768,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case ']':
-                    if(bracketR[x][y]=='1')
+                    if(bracketR[x][y]==1)
                     {
                         return 1;
                     }
@@ -777,7 +777,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '\\':
-                    if(backslash[x][y]=='1')
+                    if(backslash[x][y]==1)
                     {
                         return 1;
                     }
@@ -786,7 +786,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                         return 0;
                     }
                 case '-':
-                    if(hypen[x][y]=='1')
+                    if(hypen[x][y]==1)
                     {
                         return 1;
                     }
