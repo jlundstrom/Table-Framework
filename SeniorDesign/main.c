@@ -35,6 +35,7 @@ int main()
    App_Boot_New(&apps[4]);
    App_Party_New(&apps[5]);
    App_Tron_New(&apps[6]);
+   App_Clock_New(&apps[7]);
    // Initialize the Menu
    currentApp = &homeApp;
    currentApp->App_Init();
