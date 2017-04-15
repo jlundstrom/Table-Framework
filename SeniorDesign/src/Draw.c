@@ -1,6 +1,7 @@
 #include "Draw.h"
 #include <math.h>
 #include <stdint.h>
+#include "Draw_Text.h"
 Pixel Pixels[WIDTH * HEIGHT];
 int_fast8_t xMove[]={1,0,-1,0};
 int_fast8_t yMove[]={0,1,0,-1};
@@ -392,7 +393,7 @@ void printTextOffset(char text, int x, int y, Pixel color) //prints from bottom 
     {
         for (yTraverse=0;yTraverse<7;yTraverse++)
         {
-            if(textConvert(text,xTraverse,yTraverse)==1)
+            if(textConvert(text,xTraverse,yTraverse))
             {
                 setPixel(xTraverse+x,yTraverse+y,color);
             }
@@ -405,440 +406,97 @@ void printTextOffset(char text, int x, int y, Pixel color) //prints from bottom 
 
 int textConvert(char text, int x, int y) //return true false 1,0 if point exists
 {
-    char    exclaim[5][7] = { { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 0, 1 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
-    char    hypen[5][7] = { { 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0 } };
-    char    num0[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 0, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 0, 1 }, { 1, 0, 0, 0, 0, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1 } };
-    char    num1[5][7] = { { 0, 0, 1, 0, 0, 0, 1 }, { 0, 1, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 } };
-    char    num2[5][7] = { { 1, 0, 0, 0, 0, 1, 1 }, { 1, 0, 0, 0, 1, 0, 1 }, { 1, 0, 0, 1, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 0, 1, 0, 0, 0, 0, 1 } };
-    char    num3[5][7] = { { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 0, 1, 0, 1, 1, 1, 0 } };
-    char    num4[5][7] = { { 1, 1, 1, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 0, 0, 0, 0 } };
-    char    num5[5][7] = { { 1, 1, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 0, 1, 1, 1, 0 } };
-    char    num6[5][7] = { { 0, 1, 1, 1, 1, 1, 0 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 0, 1, 1, 1, 0 } };
-    char    num7[5][7] = { { 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 1, 0 }, { 1, 0, 0, 0, 1, 0, 0 }, { 1, 1, 1, 1, 0, 0, 0 } };
-    char    num8[5][7] = { { 0, 1, 0, 1, 1, 1, 0 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 0, 1, 0, 1, 1, 1, 0 } };
-    char    num9[5][7] = { { 1, 1, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1 } };
-    char    A[5][7] = { { 0, 1, 1, 1, 1, 1, 1 }, { 1, 0, 0, 1, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 1, 1 } };
-    char    B[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 0, 1, 0, 1, 1, 1, 0 } };
-    char    C[5][7] = { { 0, 1, 1, 1, 1, 1, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 0, 1, 0, 0, 0, 1, 0 } };
-    char    D[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 0, 1, 1, 1, 1, 1, 0 } };
-    char    E[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 } };
-    char    F[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 } };
-    char    G[5][7] = { { 0, 1, 1, 1, 1, 1, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 1, 0 } };
-    char    H[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 } };
-    char    I[5][7] = { { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
-    char    J[5][7] = { { 1, 0, 0, 0, 0, 1, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 0 } };
-    char    K[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 1, 0, 1, 0, 0, 0 }, { 1, 0, 0, 0, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0 } };
-    char    L[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 } };
-    char    M[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 } };
-    char    N[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0 } };
-    char    O[5][7] = { { 0, 1, 1, 1, 1, 1, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 0, 1, 1, 1, 1, 1, 0 } };
-    char    P[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 0, 0, 0, 0 } };
-    char    Q[5][7] = { { 0, 1, 1, 1, 1, 1, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 1, 0, 1 }, { 1, 0, 0, 0, 0, 1, 0 }, { 0, 1, 1, 1, 1, 0, 1 } };
-    char    question[5][7] = { { 1, 1, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 1, 0, 1 }, { 1, 1, 1, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
-    char    R[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 0, 1, 0, 1, 1, 1, 1 } };
-    char    S[5][7] = { { 1, 1, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 1, 1 } };
-    char    backslash[5][7] = { { 1, 1, 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 0, 1, 0, 0 }, { 0, 0, 0, 0, 0, 1, 1 } };
-    char    T[5][7] = { { 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0 } };
-    char    U[5][7] = { { 1, 1, 1, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 0 } };
-    char    V[5][7] = { { 1, 1, 1, 1, 1, 0, 0 }, { 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 1, 0 }, { 1, 1, 1, 1, 1, 0, 0 } };
-    char    W[5][7] = { { 1, 1, 1, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 0 } };
-    char    X[5][7] = { { 1, 1, 1, 0, 0, 0, 1 }, { 0, 0, 0, 1, 0, 1, 0 }, { 0, 0, 0, 0, 1, 0, 0 }, { 0, 0, 0, 1, 0, 1, 0 }, { 1, 1, 1, 0, 0, 0, 1 } };
-    char    Y[5][7] = { { 1, 1, 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 1, 1, 1, 1 }, { 0, 0, 1, 0, 0, 0, 0 }, { 1, 1, 0, 0, 0, 0, 0 } };
-    char    Z[5][7] = { { 1, 0, 0, 0, 1, 1, 1 }, { 1, 0, 0, 1, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 1, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 } };
-    char    bracketL[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 } };
-    char    bracketR[5][7] = { { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1 } };
-    char    colon[5][7] = { { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
+    char mask = 1 << (6-y);
     switch(text)
     {
-                case 'A':
-                    if(A[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'B':
-                    if(B[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'C':
-                    if(C[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'D':
-                    if(D[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'E':
-                    if(E[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'F':
-                    if(F[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'G':
-                    if(G[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'H':
-                    if(H[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'I':
-                    if(I[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'J':
-                    if(J[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'K':
-                    if(K[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'L':
-                    if(L[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'M':
-                    if(M[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'N':
-                    if(N[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'O':
-                    if(O[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'P':
-                    if(P[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'Q':
-                    if(Q[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'R':
-                    if(R[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'S':
-                    if(S[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'T':
-                    if(T[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'U':
-                    if(U[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'V':
-                    if(V[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'W':
-                    if(W[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'X':
-                    if(X[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'Y':
-                    if(Y[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 'Z':
-                    if(Z[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '0':
-                    if(num0[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case 1:
-                    if(num1[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '2':
-                    if(num2[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '3':
-                    if(num3[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '4':
-                    if(num4[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '5':
-                    if(num5[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '6':
-                    if(num6[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '7':
-                    if(num7[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '8':
-                    if(num8[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '9':
-                    if(num9[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '?':
-                    if(question[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '!':
-                    if(exclaim[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '[':
-                    if(bracketL[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case ']':
-                    if(bracketR[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '\\':
-                    if(backslash[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case '-':
-                    if(hypen[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                case ':':
-                    if(colon[x][y]==1)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                default:
-                    return 0;
+    case 'A':
+        return A[x] & mask;
+    case 'B':
+        return B[x] & mask;
+    case 'C':
+        return C[x] & mask;
+    case 'D':
+        return D[x] & mask;
+    case 'E':
+        return E[x] & mask;
+    case 'F':
+        return F[x] & mask;
+    case 'G':
+        return G[x] & mask;
+    case 'H':
+        return H[x] & mask;
+    case 'I':
+        return I[x] & mask;
+    case 'J':
+        return J[x] & mask;
+    case 'K':
+        return K[x] & mask;
+    case 'L':
+        return L[x] & mask;
+    case 'M':
+        return M[x] & mask;
+    case 'N':
+        return N[x] & mask;
+    case 'O':
+        return O[x] & mask;
+    case 'P':
+        return P[x] & mask;
+    case 'Q':
+        return Q[x] & mask;x
+    case 'R':
+        return R[x] & mask;
+    case 'S':
+        return S[x] & mask;
+    case 'T':
+        return T[x] & mask;
+    case 'U':
+        return U[x] & mask;
+    case 'V':
+        return V[x] & mask;
+    case 'W':
+        return W[x] & mask;
+    case 'X':
+        return X[x] & mask;
+    case 'Y':
+        return Y[x] & mask;
+    case 'Z':
+        return Z[x] & mask;
+    case '0':
+        return num0[x] & mask;
+    case '1':
+        return num1[x] & mask;
+    case '2':
+        return num2[x] & mask;
+    case '3':
+        return num3[x] & mask;
+    case '4':
+        return num4[x] & mask;
+    case '5':
+        return num5[x] & mask;
+    case '6':
+        return num6[x] & mask;
+    case '7':
+        return num7[x] & mask;
+    case '8':
+        return num8[x] & mask;
+    case '9':
+        return num9[x] & mask;
+    case '?':
+        return question[x] & mask;
+    case '!':
+        return exclaim[x] & mask;
+    case '[':
+        return bracketL[x] & mask;
+    case ']':
+        return bracketR[x] & mask;
+    case '\\':
+        return backslash[x] & mask;
+    case '-':
+        return hypen[x] & mask;
+    case ':':
+        return colon[x] & mask;
+    default:
+        return 0;
     }
 }
 

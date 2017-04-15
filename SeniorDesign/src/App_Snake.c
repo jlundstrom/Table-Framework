@@ -5,8 +5,8 @@
 
 #define DIRECTION 0xF
 #define DIRECTION_UP 0x01
-#define DIRECTION_DOWN 0x02
-#define DIRECTION_LEFT 0x04
+#define DIRECTION_LEFT 0x02
+#define DIRECTION_DOWN 0x04
 #define DIRECTION_RIGHT 0x08
 #define SEGMENT_ACTIVE 0x10
 #define GAME_OVER 0x80
@@ -120,6 +120,7 @@ void App_Snake_Game_Over_Tick(){
 
 void App_Snake_Tick(void) {
 	Pixel tmp;
+	unsigned char dirTemp;
 	if (Snake_Data->Direction & GAME_OVER) {
 		App_Snake_Game_Over_Tick();
 	}
@@ -145,8 +146,25 @@ void App_Snake_Tick(void) {
 			}
 
 			if (Input_Tap & A_INPUT) {
-				Snake_Data->Direction |= SEGMENT_ACTIVE;
+			    dirTemp = Snake_Data->Direction & DIRECTION;
+			    Snake_Data->Direction &= ~DIRECTION;
+			    dirTemp = dirTemp << 1;
+			    if (dirTemp)
+			    {
+			        dirTemp=0x01;
+			    }
+				Snake_Data->Direction |= dirTemp;
 			}
+			if (Input_Tap & B_INPUT) {
+			                dirTemp = Snake_Data->Direction & DIRECTION;
+			                Snake_Data->Direction &= ~DIRECTION;
+			                dirTemp = dirTemp >> 1;
+			                if (dirTemp)
+			                {
+			                    dirTemp=0x08;
+			                }
+			                Snake_Data->Direction |= dirTemp;
+			            }
 
 			Input_Tap &= ~(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT);
 			Snake_Data->snake[Snake_Data->headIdx] = Snake_Data->Direction & DIRECTION;
