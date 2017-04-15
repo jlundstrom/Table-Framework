@@ -46,8 +46,10 @@ extern void drawCircleEmpty(int xc, int yc, int radius, Pixel pixel);
 //draw a circle at point xc,yc with radius and set color
 extern void fadeOut(int s);
 // fades all pixels with speed s
-extern void fadeOutExclude(int s, Pixel pixel);
+extern void fadeOutTo(int s, Pixel pixel);
 // fades pixels with speed s, if below threshold ref pixel, sets to ref pixel
+extern void fadeOutExclude(int s, Pixel pixel);
+// fades all pixels with speed s, excludes ref pixel
 extern void drawBackground(Pixel pixel);
 //this will overwrite everything so call early, forceful overwrite all pixels with ref
 extern int comparePixel(Pixel pixel1, Pixel pixel2);
@@ -62,5 +64,7 @@ void printTextOffset(char text, int x, int y, Pixel color);
 //prints from bottom left going up 7, right 5
 extern void clearDisplay(void);
 extern Pixel HSV2RGB(int H, int S, int V);
+extern int inBounds(int x, int y);
+//returns 1 if inside boundaries
 //HSV/HSB to RGB
 #endif

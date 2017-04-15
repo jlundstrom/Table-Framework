@@ -5,10 +5,15 @@
 
 struct appData {
     int frame;
+    int winner;
     unsigned char flag;
     unsigned char mode;
     Point point1;
     Point point2;
+    Pixel P1;
+    Pixel P2;
+    Pixel background;
+
 } typedef appData;
 appData* appTron_Data;
 void Demo_Tron_Init(void);
@@ -18,7 +23,7 @@ void App_Tron_Init(void);
 void App_Tron_Tick(void);
 void App_Tron_Deinit(void);
 void App_Tron_New(App* app);
-
+void drawWinner(int winner);
 
 
 void Demo_Tron_Init(void) {
@@ -64,21 +69,48 @@ void App_Tron_Init(void) {
     pixel.R=0;
     pixel.G=0;
     pixel.B=0;
+    appTron_Data->background = pixel;
     drawBackground(pixel);
     appTron_Data->frame = 0;
+    appTron_Data->winner = 0;
     appTron_Data->flag = 0;
     appTron_Data->mode = 0;
     appTron_Data->point1.x = 1;
     appTron_Data->point2.x = 30;
     appTron_Data->point1.y = 1;
     appTron_Data->point2.y = 14;
+    pixel.R=0;
+    pixel.G=255;
+    pixel.B=255;
+    appTron_Data->P1=pixel;
+    pixel.R=255;
+    pixel.G=0;
+    pixel.B=0;
+    appTron_Data->P2=pixel;
 }
 
 void App_Tron_Tick(void) {
+    if(appTron_Data->mode==0)
+    {
 
-
+    }
+    if(appTron_Data->mode==1)
+    {
+        drawWinner(appTron_Data->winner);
+    }
 }
 
+void drawWinner(int winner)
+{
+    if(winner==1)
+    {
+        fadeOutExclude(5,appTron_Data->P1);
+    }
+    if(winner==2)
+    {
+        fadeOutExclude(5,appTron_Data->P2);
+    }
+}
 
 
 void App_Tron_Deinit(void) {

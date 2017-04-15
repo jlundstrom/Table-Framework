@@ -15,6 +15,7 @@ void setPixel(int x, int y, Pixel pixel);
 void drawRect(int x, int y, int x2, int y2, Pixel pixel) ;
 void drawCircle(int x0, int y0, int radius, Pixel pixel);
 void fadeOut(int s);
+void fadeOutTo(int s, Pixel pixel);
 void fadeOutExclude(int s, Pixel pixel);
 int comparePixel(Pixel pixel1, Pixel pixel2);
 void drawBackground(Pixel pixel);
@@ -128,7 +129,7 @@ void fadeOut(int s)
     return;
 }
 
-void fadeOutExclude(int s, Pixel pixel)  //if outside threshold sets pixel to the exclude pixel
+void fadeOutTo(int s, Pixel pixel)  //if outside threshold sets pixel to the exclude pixel
 {
     int i;
     for (i =0; i<(areaArray);i++)
@@ -162,6 +163,38 @@ void fadeOutExclude(int s, Pixel pixel)  //if outside threshold sets pixel to th
     return;
 }
 
+void fadeOutExclude(int s, Pixel pixel)  //if outside threshold sets pixel to the exclude pixel
+{
+    int x,y,compare;
+    Pixel compareP;
+    for (x=0;x<WIDTH;x++)
+    {
+        for (y=0;y<HEIGHT;y++)
+        {
+            compareP = getPixel(x,y);
+            compare = comparePixel(compareP,pixel);
+            if(compare!=1)
+            {
+                if(compareP.G>(0+s))
+                    {
+                        compareP.G-=s;
+                        setPixel(x,y,compareP);
+                    }
+                if(compareP.R>(0+s))
+                    {
+                        compareP.R-=s;
+                        setPixel(x,y,compareP);
+                    }
+                if(compareP.B>(0+s))
+                    {
+                        compareP.B-=s;
+                        setPixel(x,y,compareP);
+                    }
+            }
+        }
+    }
+    return;
+}
 int comparePixel(Pixel pixel1, Pixel pixel2) //return 0 if not equal, 1 for equal
 {
     if((pixel1.R==pixel2.R)&&(pixel1.G==pixel2.G)&&(pixel1.B==pixel2.B))
