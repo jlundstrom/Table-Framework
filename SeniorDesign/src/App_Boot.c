@@ -52,7 +52,6 @@ void App_Boot_Init(void) {
 
 void App_Boot_Tick(void) {
     generateNoise();
-    updateSEED(getRandom());
     int i,j;
     if(appBoot_Data->fadeoutFlag>0)
     {
@@ -88,9 +87,7 @@ void App_Boot_Tick(void) {
             {
                 appBoot_Data->frame--;
             }
-
-            Pixel store = HSV2RGB(appBoot_Data->frame,255,255);
-            drawCloudColor(store);
+            drawCloudColor(appBoot_Data->frame);
     }
 
 }
