@@ -414,6 +414,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
     char    Z[5][7] = { { 1, 0, 0, 0, 1, 1, 1 }, { 1, 0, 0, 1, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 1, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 } };
     char    bracketL[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 } };
     char    bracketR[5][7] = { { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1 } };
+    char    colon[5][7] = { { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
     switch(text)
     {
                 case 'A':
@@ -787,6 +788,15 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
                     }
                 case '-':
                     if(hypen[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case ':':
+                    if(colon[x][y]==1)
                     {
                         return 1;
                     }
