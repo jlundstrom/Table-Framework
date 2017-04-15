@@ -442,7 +442,7 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
     case 'P':
         return P[x] & mask;
     case 'Q':
-        return Q[x] & mask;x
+        return Q[x] & mask;
     case 'R':
         return R[x] & mask;
     case 'S':
