@@ -47,10 +47,8 @@ int main() {
         // Tick the application if a frame has been drawn
         // Clearing the flag if it's been used
         if(DRAWN == 1) {
-			printf("TapPre: %02X ", Input_Tap);
             currentApp->App_Tick();
             DRAWN = 0;
-			printf("TapPost: %02X ", Input_Tap);
         }
 
         // Trigger a frame redraw. Currently only used by WinDisplay
