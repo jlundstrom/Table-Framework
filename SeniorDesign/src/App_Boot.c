@@ -6,6 +6,7 @@
 struct appData
 {
    int           frame;
+   int           frame2;
    unsigned char flag;
    unsigned char fadeoutFlag;
 }
@@ -69,6 +70,7 @@ void App_Boot_Init(void)
    appBoot_Data              = &AppStorage;
    appBoot_Data->frame       = 240;
    appBoot_Data->flag        = 0;
+   appBoot_Data->frame2       = 0;
    appBoot_Data->fadeoutFlag = 250;
    pixelText.R = 255;
    pixelText.G = 0;
@@ -83,7 +85,11 @@ void App_Boot_Tick(void) {
     uint16_t mask = 0x8000;
     if(appBoot_Data->fadeoutFlag>0)
     {
-        drawCloud(3);
+        if(appBoot_Data->frame2 % 2)
+		{
+			drawCloud(3);
+		}
+		appBoot_Data->frame2++;		
         for(i=31;i>=0;i--)
             {
             mask = 0x8000;
