@@ -28,11 +28,13 @@ void Demo_Boot_Init(void) {
 
 void Demo_Boot_Tick(void) {
     Pixel pixel;
-    char string[5]={'H','I','Y','A','S'};
+    char string[5]={'B','O','O','T',' '};
+    char string2[5]={'M','O','D','E',' '};
     pixel.R=255;
     pixel.G=0;
     pixel.B=0;
-    toString(string,1,pixel);
+    toString(string,0,pixel);
+    toString(string2,1,pixel);
 }
 
 void Demo_Boot_Deinit(void) {
