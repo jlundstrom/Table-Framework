@@ -58,7 +58,7 @@ double turbulence(double x, double y, double size) //size is zoom factor
    return(128.0 * value / initialSize);  //scaled for 0-255
 }
 
-
+__attribute__((ramfunc))
 void drawCloud(int RGB) // send 1,2,3 for which color to not hold constant
 {
    if (!((RGB < 4) && (RGB > 0)))

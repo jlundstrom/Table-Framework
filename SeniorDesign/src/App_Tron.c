@@ -126,6 +126,19 @@ void App_Tron_Tick(void)
             rotateUp(1, 1);
          }
       }
+      if (User2_Input_Tap)
+      {
+         if (Input_Tap & LEFT_INPUT)
+         {
+            rotateUp(1, 0);
+         }
+         if (Input_Tap & RIGHT_INPUT)
+         {
+            rotateUp(1, 1);
+         }
+      }
+      Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT);
+      User2_Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT);
       //insert code for bluetooth
       //void rotateUp(int player, int LR) make sure to call this for inputs
       //L = 0         R = 1
@@ -141,6 +154,7 @@ void App_Tron_Tick(void)
    {
       drawWinner(appTron_Data->winner);
    }
+
 }
 
 
