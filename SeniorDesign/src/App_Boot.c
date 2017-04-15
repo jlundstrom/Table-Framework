@@ -2,7 +2,6 @@
 #include "Draw.h"
 #include "Noise.h"
 #include "Input.h"
-#include <string.h>
 
 struct appData
 {
@@ -10,11 +9,11 @@ struct appData
    unsigned char flag;
    unsigned char fadeoutFlag;
 }
+
 typedef   appData;
 appData *appBoot_Data;
 void Demo_Boot_Init(void);
 void Demo_Boot_Tick(void);
-void Demo_Time_Tick(void);
 void Demo_Boot_Deinit(void);
 void App_Boot_Init(void);
 void App_Boot_Tick(void);
@@ -42,26 +41,6 @@ void Demo_Boot_Tick(void)
    drawBackground(pixel);
    char string[5]  = { 'B', 'O', 'O', 'T', ' ' };
    char string2[5] = { 'M', 'O', 'D', 'E', ' ' };
-   pixel.R = 255;
-   pixel.G = 0;
-   pixel.B = 0;
-   toString(string, 0, pixel);
-   toString(string2, 1, pixel);
-}
-
-
-void Demo_Time_Tick(void)
-{
-   Pixel pixel;
-
-   pixel.R = 0;
-   pixel.G = 0;
-   pixel.B = 0;
-   drawBackground(pixel);
-   char string[5];
-   char string2[5];
-   strncpy(string, time, 5);
-   strncpy(string2, date, 5);
    pixel.R = 255;
    pixel.G = 0;
    pixel.B = 0;
