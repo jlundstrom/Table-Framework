@@ -30,6 +30,7 @@ int collisionCheck(int xnext, int ynext);
 void modeSetter(void);
 void updatePlayerPos(int player);
 void drawPlayers(void);
+void rotateUp(int player, int LR);
 
 void Demo_Tron_Init(void) {
     appTron_Data = &AppStorage;
@@ -101,6 +102,10 @@ void App_Tron_Tick(void) {
     {
         drawPlayers();
 
+        //insert code for bluetooth
+        //void rotateUp(int player, int LR) make sure to call this for inputs
+        //L = 0         R = 1
+
         updatePlayerPos(1);
         updatePlayerPos(2);
         modeSetter();
@@ -138,6 +143,48 @@ void drawWinner(int winner)
         toString(string,0,pixel);
         toString(string2,1,pixel);
     }
+}
+
+void rotateUp(int player, int LR) //L = 0         R = 1
+{
+    if(player==1)
+    {
+        if(LR==0)
+        {
+            appTron_Data->P1UP--;
+        }
+        if(LR==1)
+        {
+            appTron_Data->P1UP++;
+        }
+        if(appTron_Data->P1UP>3)
+        {
+            appTron_Data->P1UP=0;
+        }
+        if(appTron_Data->P1UP<0)
+        {
+            appTron_Data->P1UP=3;
+        }
+    }
+    if(player==2)
+   {
+        if(LR==0)
+        {
+            appTron_Data->P2UP--;
+        }
+        if(LR==1)
+        {
+            appTron_Data->P2UP++;
+        }
+        if(appTron_Data->P2UP>3)
+        {
+            appTron_Data->P2UP=0;
+        }
+        if(appTron_Data->P2UP<0)
+        {
+            appTron_Data->P2UP=3;
+        }
+   }
 }
 
 void modeSetter(void) //last call, sets next frame
