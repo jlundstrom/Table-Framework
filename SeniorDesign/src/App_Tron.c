@@ -28,6 +28,8 @@ void App_Tron_New(App* app);
 void drawWinner(int winner);
 int collisionCheck(int xnext, int ynext);
 void modeSetter(void);
+void updatePlayerPos(int player);
+void drawPlayers(void);
 
 void Demo_Tron_Init(void) {
     appTron_Data = &AppStorage;
@@ -95,16 +97,24 @@ void App_Tron_Init(void) {
 }
 
 void App_Tron_Tick(void) {
-    int winnar=0;
     if(appTron_Data->mode==0)
     {
+        drawPlayers();
 
+        updatePlayerPos(1);
+        updatePlayerPos(2);
         modeSetter();
     }
-    if(appTron_Data->mode==1)
+    if(appTron_Data->mode>0)
     {
         drawWinner(appTron_Data->winner);
     }
+}
+
+void drawPlayers(void) //call first
+{
+    setPixel(appTron_Data->point1.x,appTron_Data->point1.y,appTron_Data->P1);
+    setPixel(appTron_Data->point2.x,appTron_Data->point2.y,appTron_Data->P2);
 }
 
 void drawWinner(int winner)
@@ -135,19 +145,22 @@ void modeSetter(void) //last call, sets next frame
     int hit1,hit2;
     hit1 = collisionCheck(appTron_Data->point1.x,appTron_Data->point1.y);
     hit2 = collisionCheck(appTron_Data->point2.x,appTron_Data->point2.y);
-    if(hit1&&hit2==1)
+    if((hit1&&hit2)==1)
     {
         appTron_Data->mode = 3;
+        appTron_Data->winner = 3;
         return;
     }
     if(hit1==1)
     {
         appTron_Data->mode = 2;
+        appTron_Data->winner =2;
         return;
     }
     if(hit2==1)
     {
         appTron_Data->mode = 1;
+        appTron_Data->winner = 1;
         return;
     }
     appTron_Data->mode = 0;
@@ -183,8 +196,8 @@ void updatePlayerPos(int player) //updates players next position for next frame
     }
     if(player==2)
    {
-       appTron_Data->point1.x+=xmove[appTron_Data->P1UP];
-       appTron_Data->point1.y+=ymove[appTron_Data->P1UP];
+       appTron_Data->point2.x+=xmove[appTron_Data->P2UP];
+       appTron_Data->point2.y+=ymove[appTron_Data->P2UP];
    }
 }
 
