@@ -15,6 +15,7 @@ void setPixel(int x, int y, Pixel pixel);
 void drawRect(int x, int y, int x2, int y2, Pixel pixel) ;
 void drawCircle(int x0, int y0, int radius, Pixel pixel);
 void fadeOut(int s);
+void fadeOutTo(int s, Pixel pixel);
 void fadeOutExclude(int s, Pixel pixel);
 int comparePixel(Pixel pixel1, Pixel pixel2);
 void drawBackground(Pixel pixel);
@@ -27,8 +28,10 @@ int inBounds(int x, int y);
 int breakOut(Point point);
 void floodFill(int xo, int yo, Pixel fill, Pixel wall);
 int sign(int x);
-
-
+void toString(char string[], int bottomtop, Pixel color);
+void printTextOffset(char text, int x, int y, Pixel color);
+int textConvert(char text, int x, int y);
+Pixel HSV2RGB(int H, int S, int V);
 // Retrieve pixel, and return first pixel for invalid inputs
 Pixel getPixel(int x, int y) {
 	if (x > WIDTH || y > HEIGHT || x < 0 || y < 0) {
@@ -126,7 +129,7 @@ void fadeOut(int s)
     return;
 }
 
-void fadeOutExclude(int s, Pixel pixel)  //if outside threshold sets pixel to the exclude pixel
+void fadeOutTo(int s, Pixel pixel)  //if outside threshold sets pixel to the exclude pixel
 {
     int i;
     for (i =0; i<(areaArray);i++)
@@ -160,6 +163,38 @@ void fadeOutExclude(int s, Pixel pixel)  //if outside threshold sets pixel to th
     return;
 }
 
+void fadeOutExclude(int s, Pixel pixel)  //if outside threshold sets pixel to the exclude pixel
+{
+    int x,y,compare;
+    Pixel compareP;
+    for (x=0;x<WIDTH;x++)
+    {
+        for (y=0;y<HEIGHT;y++)
+        {
+            compareP = getPixel(x,y);
+            compare = comparePixel(compareP,pixel);
+            if(compare!=1)
+            {
+                if(compareP.G>(0+s))
+                    {
+                        compareP.G-=s;
+                        setPixel(x,y,compareP);
+                    }
+                if(compareP.R>(0+s))
+                    {
+                        compareP.R-=s;
+                        setPixel(x,y,compareP);
+                    }
+                if(compareP.B>(0+s))
+                    {
+                        compareP.B-=s;
+                        setPixel(x,y,compareP);
+                    }
+            }
+        }
+    }
+    return;
+}
 int comparePixel(Pixel pixel1, Pixel pixel2) //return 0 if not equal, 1 for equal
 {
     if((pixel1.R==pixel2.R)&&(pixel1.G==pixel2.G)&&(pixel1.B==pixel2.B))
@@ -338,4 +373,527 @@ void floodFill(int xo, int yo, Pixel fill, Pixel wall)
         x=stackMax[pointer].x;
         y=stackMax[pointer].y;
     }
+}
+
+void toString(char string[], int bottomtop, Pixel color) //0 1 for bottom top len 4 max for the string
+{
+    int i;
+    for(i=0;i<5;i++)
+    {
+        printTextOffset(string[i] , i*5, bottomtop*8 ,color);
+    }
+}
+
+void printTextOffset(char text, int x, int y, Pixel color) //prints from bottom left going up 7, right 5
+{
+    int xTraverse,yTraverse;
+
+    for (xTraverse=0;xTraverse<5;xTraverse++)
+    {
+        for (yTraverse=0;yTraverse<7;yTraverse++)
+        {
+            if(textConvert(text,xTraverse,yTraverse)==1)
+            {
+                setPixel(xTraverse+x,yTraverse+y,color);
+            }
+        }
+    }
+
+
+
+}
+
+int textConvert(char text, int x, int y) //return true false 1,0 if point exists
+{
+    char    exclaim[5][7] = { { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 0, 1 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
+    char    hypen[5][7] = { { 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0 } };
+    char    num0[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 0, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 0, 1 }, { 1, 0, 0, 0, 0, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1 } };
+    char    num1[5][7] = { { 0, 0, 1, 0, 0, 0, 1 }, { 0, 1, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 } };
+    char    num2[5][7] = { { 1, 0, 0, 0, 0, 1, 1 }, { 1, 0, 0, 0, 1, 0, 1 }, { 1, 0, 0, 1, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 0, 1, 0, 0, 0, 0, 1 } };
+    char    num3[5][7] = { { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 0, 1, 0, 1, 1, 1, 0 } };
+    char    num4[5][7] = { { 1, 1, 1, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 0, 0, 0, 0 } };
+    char    num5[5][7] = { { 1, 1, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 0, 1, 1, 1, 0 } };
+    char    num6[5][7] = { { 0, 1, 1, 1, 1, 1, 0 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 0, 1, 1, 1, 0 } };
+    char    num7[5][7] = { { 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 1, 0 }, { 1, 0, 0, 0, 1, 0, 0 }, { 1, 1, 1, 1, 0, 0, 0 } };
+    char    num8[5][7] = { { 0, 1, 0, 1, 1, 1, 0 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 0, 1, 0, 1, 1, 1, 0 } };
+    char    num9[5][7] = { { 1, 1, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1 } };
+    char    A[5][7] = { { 0, 1, 1, 1, 1, 1, 1 }, { 1, 0, 0, 1, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 1, 1 } };
+    char    B[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 0, 1, 0, 1, 1, 1, 0 } };
+    char    C[5][7] = { { 0, 1, 1, 1, 1, 1, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 0, 1, 0, 0, 0, 1, 0 } };
+    char    D[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 0, 1, 1, 1, 1, 1, 0 } };
+    char    E[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 } };
+    char    F[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 } };
+    char    G[5][7] = { { 0, 1, 1, 1, 1, 1, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 1, 0 } };
+    char    H[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 } };
+    char    I[5][7] = { { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
+    char    J[5][7] = { { 1, 0, 0, 0, 0, 1, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 0 } };
+    char    K[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 1, 0, 1, 0, 0, 0 }, { 1, 0, 0, 0, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0 } };
+    char    L[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 } };
+    char    M[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 } };
+    char    N[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 0, 1, 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0 } };
+    char    O[5][7] = { { 0, 1, 1, 1, 1, 1, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 0, 1, 1, 1, 1, 1, 0 } };
+    char    P[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 0, 0, 0, 0 } };
+    char    Q[5][7] = { { 0, 1, 1, 1, 1, 1, 0 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 1, 0, 1 }, { 1, 0, 0, 0, 0, 1, 0 }, { 0, 1, 1, 1, 1, 0, 1 } };
+    char    question[5][7] = { { 1, 1, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 1, 0, 1 }, { 1, 1, 1, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
+    char    R[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0, 0 }, { 0, 1, 0, 1, 1, 1, 1 } };
+    char    S[5][7] = { { 1, 1, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 1, 1 } };
+    char    backslash[5][7] = { { 1, 1, 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 0, 1, 0, 0 }, { 0, 0, 0, 0, 0, 1, 1 } };
+    char    T[5][7] = { { 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0 } };
+    char    U[5][7] = { { 1, 1, 1, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 0 } };
+    char    V[5][7] = { { 1, 1, 1, 1, 1, 0, 0 }, { 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 1, 0 }, { 1, 1, 1, 1, 1, 0, 0 } };
+    char    W[5][7] = { { 1, 1, 1, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 0 } };
+    char    X[5][7] = { { 1, 1, 1, 0, 0, 0, 1 }, { 0, 0, 0, 1, 0, 1, 0 }, { 0, 0, 0, 0, 1, 0, 0 }, { 0, 0, 0, 1, 0, 1, 0 }, { 1, 1, 1, 0, 0, 0, 1 } };
+    char    Y[5][7] = { { 1, 1, 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 1, 1, 1, 1 }, { 0, 0, 1, 0, 0, 0, 0 }, { 1, 1, 0, 0, 0, 0, 0 } };
+    char    Z[5][7] = { { 1, 0, 0, 0, 1, 1, 1 }, { 1, 0, 0, 1, 0, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1 }, { 1, 1, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 } };
+    char    bracketL[5][7] = { { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 } };
+    char    bracketR[5][7] = { { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1 } };
+    char    colon[5][7] = { { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
+    switch(text)
+    {
+                case 'A':
+                    if(A[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'B':
+                    if(B[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'C':
+                    if(C[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'D':
+                    if(D[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'E':
+                    if(E[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'F':
+                    if(F[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'G':
+                    if(G[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'H':
+                    if(H[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'I':
+                    if(I[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'J':
+                    if(J[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'K':
+                    if(K[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'L':
+                    if(L[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'M':
+                    if(M[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'N':
+                    if(N[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'O':
+                    if(O[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'P':
+                    if(P[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'Q':
+                    if(Q[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'R':
+                    if(R[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'S':
+                    if(S[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'T':
+                    if(T[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'U':
+                    if(U[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'V':
+                    if(V[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'W':
+                    if(W[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'X':
+                    if(X[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'Y':
+                    if(Y[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 'Z':
+                    if(Z[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '0':
+                    if(num0[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case 1:
+                    if(num1[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '2':
+                    if(num2[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '3':
+                    if(num3[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '4':
+                    if(num4[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '5':
+                    if(num5[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '6':
+                    if(num6[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '7':
+                    if(num7[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '8':
+                    if(num8[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '9':
+                    if(num9[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '?':
+                    if(question[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '!':
+                    if(exclaim[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '[':
+                    if(bracketL[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case ']':
+                    if(bracketR[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '\\':
+                    if(backslash[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case '-':
+                    if(hypen[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                case ':':
+                    if(colon[x][y]==1)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                default:
+                    return 0;
+    }
+}
+
+Pixel HSV2RGB(int H, int S, int V){
+ int i;
+ float f, p, q, t, h, s, v;
+ Pixel RGB;
+ h=(float)H;
+ s=(float)S;
+ v=(float)V;
+
+ s /=255;
+
+ if( s == 0 ) { // achromatic (grey)
+ RGB.R = RGB.G = RGB.B = v;
+ return RGB;
+ }
+
+ h /= 60;            // sector 0 to 5
+ i = floor( h );
+ f = h - i;            // factorial part of h
+ p = (unsigned char)(v * ( 1 - s ));
+ q = (unsigned char)(v * ( 1 - s * f ));
+ t = (unsigned char)(v * ( 1 - s * ( 1 - f ) ));
+
+ switch( i ) {
+ case 0:
+ RGB.R = v;
+ RGB.G = t;
+ RGB.B = p;
+ return RGB;
+ case 1:
+ RGB.R = q;
+ RGB.G = v;
+ RGB.B = p;
+ return RGB;
+ case 2:
+ RGB.R = p;
+ RGB.G = v;
+ RGB.B = t;
+ return RGB;
+ case 3:
+ RGB.R = p;
+ RGB.G = q;
+ RGB.B = v;
+ return RGB;
+ case 4:
+ RGB.R = t;
+ RGB.G = p;
+ RGB.B = v;
+ return RGB;
+ default:        // case 5:
+ RGB.R = v;
+ RGB.G = p;
+ RGB.B = q;
+ return RGB;
+ }
 }

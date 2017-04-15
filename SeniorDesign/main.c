@@ -15,6 +15,9 @@
 #include "src/App_Snake.h"
 #include "src/App_Menu.h"
 #include "src/App_Conway.h"
+#include "src/App_Boot.h"
+#include "src/App_Party.h"
+#include "src/App_Tron.h"
 
 int main() {
     // Initializes platform specifics components
@@ -27,7 +30,10 @@ int main() {
     App_Basic_New(&apps[0]);
     App_Snake_New(&apps[1]);
 	App_Conway_New(&apps[2]);
-
+	App_Tetris_New(&apps[3]);
+	App_Boot_New(&apps[4]);
+	App_Party_New(&apps[5]);
+	App_Tron_New(&apps[6]);
 	// Initialize the Menu
     currentApp = &homeApp;
     currentApp->App_Init();
@@ -41,8 +47,10 @@ int main() {
         // Tick the application if a frame has been drawn
         // Clearing the flag if it's been used
         if(DRAWN == 1) {
+			printf("TapPre: %02X ", Input_Tap);
             currentApp->App_Tick();
             DRAWN = 0;
+			printf("TapPost: %02X ", Input_Tap);
         }
 
         // Trigger a frame redraw. Currently only used by WinDisplay
@@ -52,8 +60,12 @@ int main() {
 
 #ifdef WIN32
         // Print frame status for windows
-        printf("Input: %02X\n", Input_Status);
-        printf("FPS: %02d\n", FPS);
+		if (DRAWN)
+		{
+			printf("Input: %02X ", Input_Status);
+			printf("Tap: %02X ", Input_Tap);
+			printf("FPS: %02d\r", FPS);
+		}
 #endif
     }
 

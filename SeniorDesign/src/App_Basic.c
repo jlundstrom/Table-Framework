@@ -6,7 +6,6 @@ struct appBasic_Data {
 	int x;
 	int y;
 	int frame;
-	unsigned char pastKeys;
 } typedef appBasic_Data;
 appBasic_Data* Basic_Data;
 
@@ -50,29 +49,26 @@ void App_Init(void) {
 }
 
 void App_Tick(void) {
-	unsigned char Input;
 	if (Basic_Data->frame == 4) {
 		Basic_Data->frame = 0;
-		Input = Input_Status & ~Basic_Data->pastKeys;
-		Basic_Data->pastKeys = Input_Status & 0xF0;
-		if (Input) {
+		if (Input_Status) {
 			setPixel(Basic_Data->x, Basic_Data->y, PIXEL_BLACK);
-			if (Input & UP_INPUT) {
+			if (Input_Status & UP_INPUT) {
 				Basic_Data->y--;
 			}
-			if (Input & DOWN_INPUT) {
+			if (Input_Status & DOWN_INPUT) {
 				Basic_Data->y++;
 			}
-			if (Input & LEFT_INPUT) {
+			if (Input_Status & LEFT_INPUT) {
 				Basic_Data->x--;
 			}
-			if (Input & RIGHT_INPUT) {
+			if (Input_Status & RIGHT_INPUT) {
 				Basic_Data->x++;
 			}
-			if (Input & A_INPUT) {
+			if (Input_Status & A_INPUT) {
 				
 			}
-			if (Input & B_INPUT) {
+			if (Input_Status & B_INPUT) {
 				
 			}
 

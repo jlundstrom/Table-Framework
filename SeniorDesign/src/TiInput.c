@@ -1,6 +1,6 @@
 #ifdef CPU1
 #include <string.h>
-#include "input.h"
+#include "Input.h"
 #include "F28x_Project.h"
 
 // string-compatible helper functions
@@ -11,6 +11,10 @@ void scibRead(char buf[], Uint16 length);
 void scibWrite(char buf[]);
 
 unsigned char Input_Status;
+unsigned char User2_Input_Status;
+
+unsigned char Input_Tap;
+unsigned char User2_Input_Tap;
 char          timeString[32] = "";
 
 // Initialize input device
@@ -90,6 +94,7 @@ void Input_init(void)
 // Input_Status to represent current key presses
 void Input_Poll(void)
 {
+	unsigned char prev;
    if (SciaRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
    {
       char   rcvBuf [2]  = "";     // receive buffer
@@ -100,7 +105,7 @@ void Input_Poll(void)
 
       isLowercase = rcvBuf[0] & 0x20;
       rcvBuf[0]  |= 0x20;
-
+	  prev = Input_Status;
       if (rcvBuf[0] == 'z')
       {
          // read and store the date and time
@@ -112,12 +117,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P1_UP_INPUT;
+            Input_Status &= ~UP_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P1_UP_INPUT;
+            Input_Status |= UP_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -126,12 +131,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P1_DOWN_INPUT;
+            Input_Status &= ~DOWN_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P1_DOWN_INPUT;
+            Input_Status |= DOWN_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -140,12 +145,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P1_LEFT_INPUT;
+            Input_Status &= ~LEFT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P1_LEFT_INPUT;
+            Input_Status |= LEFT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -154,12 +159,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P1_RIGHT_INPUT;
+            Input_Status &= ~RIGHT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P1_RIGHT_INPUT;
+            Input_Status |= RIGHT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -168,12 +173,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P1_A_INPUT;
+            Input_Status &= ~A_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P1_A_INPUT;
+            Input_Status |= A_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -182,12 +187,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P1_B_INPUT;
+            Input_Status &= ~B_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P1_B_INPUT;
+            Input_Status |= B_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -196,12 +201,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P1_START_INPUT;
+            Input_Status &= ~START_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P1_START_INPUT;
+            Input_Status |= START_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -210,15 +215,17 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P1_SELECT_INPUT;
+            Input_Status &= ~SELECT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P1_SELECT_INPUT;
+            Input_Status |= SELECT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
+	  // Raise Tap for keys with a state change that ends with it being pressed
+	  Input_Tap |= (prev ^ Input_Status) & Input_Status;
    }
 
    if (ScibRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
@@ -232,6 +239,8 @@ void Input_Poll(void)
       isLowercase = rcvBuf[0] & 0x20;
       rcvBuf[0]  |= 0x20;
 
+	  prev = User2_Input_Status;
+
       // read and store the date and time
       if (rcvBuf[0] == 'z')
       {
@@ -243,12 +252,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P2_UP_INPUT;
+			User2_Input_Status &= ~UP_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P2_UP_INPUT;
+			User2_Input_Status |= UP_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -257,12 +266,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P2_DOWN_INPUT;
+			User2_Input_Status &= ~DOWN_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P2_DOWN_INPUT;
+			User2_Input_Status |= DOWN_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -271,12 +280,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P2_LEFT_INPUT;
+            User2_Input_Status &= ~LEFT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P2_LEFT_INPUT;
+			User2_Input_Status |= LEFT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -285,12 +294,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P2_RIGHT_INPUT;
+			User2_Input_Status &= ~RIGHT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P2_RIGHT_INPUT;
+			User2_Input_Status |= RIGHT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -299,12 +308,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P2_A_INPUT;
+			User2_Input_Status &= ~A_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P2_A_INPUT;
+			User2_Input_Status |= A_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -313,12 +322,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P2_B_INPUT;
+			User2_Input_Status &= ~B_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P2_B_INPUT;
+			User2_Input_Status |= B_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -327,12 +336,12 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P2_START_INPUT;
+			User2_Input_Status &= ~START_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P2_START_INPUT;
+			User2_Input_Status |= START_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
@@ -341,15 +350,18 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            Input_Status &= ~P2_SELECT_INPUT;
+			User2_Input_Status &= ~SELECT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-            Input_Status |= P2_SELECT_INPUT;
+			User2_Input_Status |= SELECT_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
+	  
+	  // Raise Tap for keys with a state change that ends with it being pressed
+	  User2_Input_Tap |= (prev ^ User2_Input_Status) & User2_Input_Status;
    }
 }
 

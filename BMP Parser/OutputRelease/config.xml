@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--mode 1 = BW        2 = color if implemented -->
+<Config> 
+  <SourceDirectory>C:\Users\CeleCate\Documents\text out</SourceDirectory>  
+  <FileName>*.bmp</FileName>
+  <Mode>1</Mode>
+  <OutputDirectory>C:\Users\CeleCate\Documents\text outConvert</OutputDirectory>
+</Config>

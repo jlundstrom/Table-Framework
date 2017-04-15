@@ -104,6 +104,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -144,9 +145,11 @@
     <ClInclude Include="..\..\SeniorDesign\src\App_Conway.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Menu.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Snake.h" />
+    <ClInclude Include="..\..\SeniorDesign\src\App_Tetris.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Display.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Draw.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Input.h" />
+    <ClInclude Include="..\..\SeniorDesign\src\Noise.h" />
     <ClInclude Include="..\..\SeniorDesign\src\Random.h" />
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +159,9 @@
     <ClCompile Include="..\..\SeniorDesign\src\App_Conway.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Menu.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Snake.c" />
+    <ClCompile Include="..\..\SeniorDesign\src\App_Tetris.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Draw.c" />
+    <ClCompile Include="..\..\SeniorDesign\src\Noise.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Random.c" />
     <ClCompile Include="..\..\SeniorDesign\src\TiDisplay.c" />
     <ClCompile Include="..\..\SeniorDesign\src\TiInput.c" />

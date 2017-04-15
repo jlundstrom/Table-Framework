@@ -2,7 +2,7 @@
 #define __APP__
 
 // Count of applicaions in menu
-#define APP_COUNT 3
+#define APP_COUNT 7
 
 // Structs for critical application functions and
 typedef void voidFunc(void);
@@ -16,7 +16,7 @@ struct App {
 }typedef App;
 
 // Shared data for applications
-extern char AppStorage[];
+extern unsigned char AppStorage[];
 
 // Array of applications for menu
 extern App apps[];

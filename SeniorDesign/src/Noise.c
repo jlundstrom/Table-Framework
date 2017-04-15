@@ -2,6 +2,7 @@
 #include "Draw.h"
 #include "Noise.h"
 
+double noise[noiseHeight][noiseWidth];
 
 void generateNoise() //run first to populate
 {
@@ -91,3 +92,19 @@ void drawCloud(int RGB) // send 1,2,3 for which color to not hold constant
     }
 }
 
+void drawCloudColor(int hue)
+{
+    int x;
+    int y;
+    int temp;
+    Pixel pixel;
+    for(x=0;x<noiseWidth;x++)
+    {
+        for(y=0;y<noiseHeight;y++)
+        {
+            temp = turbulence(x,y,3);
+            pixel = HSV2RGB(hue,255,temp);
+            setPixel(x,y,pixel);
+        }
+    }
+}

@@ -5,7 +5,7 @@
 // Get a random integer
 extern unsigned int getRandom();
 // Get a random integer 0-2^8
-extern unsigned int getRandomLow();
+extern unsigned char getRandomLow();
 // Get a random integer 0-2^9
 extern unsigned int getRandomLowExtend();
 // Update SEED do not use 0

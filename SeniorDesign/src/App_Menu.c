@@ -5,7 +5,6 @@
 int idx;
 int frame;
 int x, y;
-unsigned char pastKeys;
 
 void App_Menu_Init(void) {	
 	clearDisplay();
@@ -13,43 +12,40 @@ void App_Menu_Init(void) {
 	frame = 0;
 	apps[idx].Demo_Init();
 	setPixel(0, idx, PIXEL_GREEN);
+
+	Input_Tap = 0;
 }
 
 void App_Menu_Tick(void) {
-	unsigned char Input;
-	if (frame == 4) {
-		Input = Input_Status & ~pastKeys;
-		pastKeys = Input_Status;
+	if (frame == 2) {
 		frame = 0;
-		if (Input) {
-			if (Input_Status & UP_INPUT) {
+		if (Input_Tap) {
+			if (Input_Tap & UP_INPUT) {
 				setPixel(0, idx, PIXEL_BLACK);
 				apps[idx].Demo_Deinit();
 				idx--;
+				if (idx < 0) { idx = 0; };
 			}
-			if (Input_Status & DOWN_INPUT) {
+			else if (Input_Tap & DOWN_INPUT) {
 				setPixel(0, idx, PIXEL_BLACK);
 				apps[idx].Demo_Deinit();
 				idx++;
+				if (idx >= APP_COUNT) { idx = APP_COUNT - 1; }
 			}
-			if (idx < 0) {
-				idx = 0;
-			}
-			if (idx >= APP_COUNT) {
-				idx = APP_COUNT-1;
-			}
-			if (Input_Status &(UP_INPUT | DOWN_INPUT)) {
-				drawRect(2, 0, WIDTH, HEIGHT, PIXEL_BLACK);
+			if (Input_Tap &(UP_INPUT | DOWN_INPUT)) {
+				drawRect(0, 0, WIDTH, HEIGHT, PIXEL_BLACK);
 				apps[idx].Demo_Init();
 				setPixel(0, idx, PIXEL_GREEN);
 			}
-			if (Input_Status & A_INPUT) {
+			if (Input_Tap & A_INPUT) {
 				apps[idx].Demo_Deinit();
 				currentApp = &apps[idx];
 				clearDisplay();
 				currentApp->App_Init();
 				idx = -1;
 			}
+
+			Input_Tap &= ~(UP_INPUT | DOWN_INPUT | A_INPUT);
 		}
 	}
 	if (idx != -1) {
@@ -73,10 +69,14 @@ void App_Menu_New(App* app) {
 
 void App_Menu_Poll() {
 	if (Input_Status & START_INPUT) {
-		if (currentApp != &homeApp) {
+		if (currentApp != &homeApp) {			
 			currentApp->App_Deinit();
 			currentApp = &homeApp;
 			currentApp->App_Init();
 		}
+		idx = 0;
+		drawRect(0, 0, WIDTH, HEIGHT, PIXEL_BLACK);
+		apps[idx].Demo_Init();
+		setPixel(0, idx, PIXEL_GREEN);
 	}
 }
