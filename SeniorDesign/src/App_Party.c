@@ -1,6 +1,7 @@
 #include "App_Party.h"
 #include "Draw.h"
 #include "Input.h"
+#include "Random.h"
 struct appData {
     int frame;
 } typedef appData;

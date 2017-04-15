@@ -6,6 +6,8 @@
 struct appData {
     int frame;
     int winner;
+    int P1UP;
+    int P2UP;
     unsigned char flag;
     unsigned char mode;
     Point point1;
@@ -24,7 +26,7 @@ void App_Tron_Tick(void);
 void App_Tron_Deinit(void);
 void App_Tron_New(App* app);
 void drawWinner(int winner);
-
+int collisionCheck(int xnext, int ynext);
 
 void Demo_Tron_Init(void) {
     appTron_Data = &AppStorage;
@@ -73,6 +75,8 @@ void App_Tron_Init(void) {
     drawBackground(pixel);
     appTron_Data->frame = 0;
     appTron_Data->winner = 0;
+    appTron_Data->P1UP = 0;
+    appTron_Data->P2UP = 2;
     appTron_Data->flag = 0;
     appTron_Data->mode = 0;
     appTron_Data->point1.x = 1;
@@ -110,8 +114,51 @@ void drawWinner(int winner)
     {
         fadeOutExclude(5,appTron_Data->P2);
     }
+    if(winner==3)
+    {
+        Pixel pixel;
+        pixel.R=255;
+        pixel.G=0;
+        pixel.B=0;
+        char string[5]={'D','B','L','E',' '};
+        char string2[5]={'D','E','A','T','H'};
+        toString(string,0,pixel);
+        toString(string2,1,pixel);
+    }
 }
 
+int collisionCheck(int xnext, int ynext) //collision check returns true if collision hit, check at beginning to process next frame
+{
+    if(inBounds(xnext,ynext)!=1)
+    {
+        return 1;
+    }
+    if(comparePixel(appTron_Data->P1,getPixel(xnext, ynext))==1)
+    {
+        return 1;
+    }
+    if(comparePixel(appTron_Data->P2,getPixel(xnext, ynext))==1)
+    {
+        return 1;
+    }
+    return 0;
+}
+
+void updatePlayerPos(int player) //updates players next position for next frame
+{
+    int xmove[4]={0,1,0,-1};
+    int ymove[4]={1,0,-1,0};
+    if(player==1)
+    {
+        appTron_Data->point1.x+=xmove[appTron_Data->P1UP];
+        appTron_Data->point1.y+=ymove[appTron_Data->P1UP];
+    }
+    if(player==2)
+   {
+       appTron_Data->point1.x+=xmove[appTron_Data->P1UP];
+       appTron_Data->point1.y+=ymove[appTron_Data->P1UP];
+   }
+}
 
 void App_Tron_Deinit(void) {
     int i;
