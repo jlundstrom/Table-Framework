@@ -21,7 +21,7 @@ void App_Boot_Tick(void);
 void App_Boot_Deinit(void);
 void App_Boot_New(App *app);
 
-uint16_t nihao[32] = { { 0b0000010000000010 }, { 0b0000100000001100 }, { 0b0001000000000000 }, { 0b0011111111101110 },
+const uint16_t nihao[32] = { { 0b0000010000000010 }, { 0b0000100000001100 }, { 0b0001000000000000 }, { 0b0011111111101110 },
                           { 0b1100010000000001 }, { 0b0000100010000001 }, { 0b0001000100010001 }, { 0b1110011001001101 },
                           { 0b0010000000100001 }, { 0b0010111111000001 }, { 0b0010000000000001 }, { 0b0010010000000111 },
                           { 0b0010101000000000 }, { 0b0011000110001000 }, { 0b0000000000000110 }, { 0b0000000000000000 },
@@ -75,12 +75,11 @@ void App_Boot_Init(void)
    pixelText.R = 255;
    pixelText.G = 0;
    pixelText.B = 0;
-   generateNoise();
 }
 
-__attribute__((ramfunc))
-void App_Boot_Tick(void) {
 
+void App_Boot_Tick(void) {
+    generateNoise();
     int i,j;
     uint16_t mask = 0x8000;
     if(appBoot_Data->fadeoutFlag>0)

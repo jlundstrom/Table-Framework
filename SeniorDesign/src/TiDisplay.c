@@ -24,6 +24,7 @@
 #define RESETDUTY        0
 #define EPWM_CMP_UP      1
 #define EPWM_CMP_DOWN    0
+#define PUSEMUL_MIN      5
 //
 // Globals
 //
@@ -123,11 +124,13 @@ __interrupt void epwm1_isr(void)
    {
       EPwm1Regs.TBPRD         = RESETPERIOD;
       EPwm1Regs.CMPA.bit.CMPA = RESETDUTY;
-      if (PauseMul-- == 0)
+      if (PauseMul++ == 0)
       {
-         rawPixels = (unsigned char *)&Pixels[0];
          DRAWN     = 1;
-         PauseMul  = 5;
+      }else if (PauseMul >= PUSEMUL_MIN && !DRAWN)
+      {
+          rawPixels = (unsigned char *)&Pixels[0];
+          PauseMul  = 0;
       }
    }
    else if (*rawPixels & mask)

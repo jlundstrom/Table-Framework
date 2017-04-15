@@ -2,15 +2,6 @@
 #include "Draw.h"
 #include "Noise.h"
 
-#ifndef __cplusplus
-#ifdef __TI_COMPILER_VERSION__
-#if __TI_COMPILER_VERSION__ >= 15009000
-#pragma CODE_SECTION(drawCloud, ".TI.ramfunc");
-#else
-#pragma CODE_SECTION(drawCloud, "ramfuncs");
-#endif
-#endif
-#endif
 
 double noise[noiseHeight][noiseWidth];
 
@@ -118,7 +109,7 @@ void drawCloudColor(int hue)
    {
       for (y = 0; y < noiseHeight; y++)
       {
-         temp  = turbulence(x, y, 3);
+         temp  = 5+ turbulence(x, y, 3);
          pixel = HSV2RGB(hue, 255, temp);
          setPixel(x, y, pixel);
       }
