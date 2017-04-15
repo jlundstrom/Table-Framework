@@ -3,6 +3,9 @@
 #include "Noise.h"
 #include "Input.h"
 
+#define LEFT_INPUT 0x04
+#define RIGHT_INPUT 0x08
+
 struct appData {
     int frame;
     int winner;
@@ -101,14 +104,27 @@ void App_Tron_Tick(void) {
     if(appTron_Data->mode==0)
     {
         drawPlayers();
-
+        if (Input_Tap)
+        {
+            if (Input_Tap & LEFT_INPUT)
+            {
+                rotateUp(1, 0);
+            }
+            if (Input_Tap & RIGHT_INPUT)
+            {
+                rotateUp(1, 1);
+            }
+        }
         //insert code for bluetooth
         //void rotateUp(int player, int LR) make sure to call this for inputs
         //L = 0         R = 1
-
-        updatePlayerPos(1);
-        updatePlayerPos(2);
-        modeSetter();
+        appTron_Data->frame++;
+        if(appTron_Data->frame%3==0)
+        {
+            updatePlayerPos(1);
+            updatePlayerPos(2);
+            modeSetter();
+        }
     }
     if(appTron_Data->mode==1)
     {
