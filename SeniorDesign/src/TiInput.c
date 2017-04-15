@@ -15,8 +15,8 @@ unsigned char User2_Input_Status;
 unsigned char Input_Tap;
 unsigned char User2_Input_Tap;
 
-unsigned char date[6];
-unsigned char time[6];
+char date[6];
+char time[6];
 
 // Initialize input device
 void Input_init(void)

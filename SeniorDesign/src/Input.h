@@ -22,8 +22,8 @@ extern unsigned char User2_Input_Status;
 extern unsigned char Input_Tap;
 extern unsigned char User2_Input_Tap;
 
-extern unsigned char date[6];
-extern unsigned char time[6];
+extern char date[6];
+extern char time[6];
 
 // prototypes for input init and polling functions
 extern void Input_init(void);

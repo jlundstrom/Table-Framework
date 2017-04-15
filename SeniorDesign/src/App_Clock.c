@@ -33,19 +33,7 @@ void Demo_Clock_Init(void)
 
 void Demo_Clock_Tick(void)
 {
-   Pixel pixel;
 
-   pixel.R = 0;
-   pixel.G = 0;
-   pixel.B = 0;
-   drawBackground(pixel);
-   strncpy(string, time, 5);
-   strncpy(string2, date, 5);
-   pixel.R = 255;
-   pixel.G = 0;
-   pixel.B = 0;
-   toString(string, 0, pixel);
-   toString(string2, 1, pixel);
 }
 
 
@@ -68,7 +56,19 @@ void App_Clock_Init(void)
 
 void App_Clock_Tick(void)
 {
+  Pixel pixel;
 
+  pixel.R = 0;
+  pixel.G = 0;
+  pixel.B = 0;
+  drawBackground(pixel);
+  strncpy(string, time, 5);
+  strncpy(string2, date, 5);
+  pixel.R = 255;
+  pixel.G = 0;
+  pixel.B = 0;
+  toString(string, 0, pixel);
+  toString(string2, 1, pixel);
 }
 
 
