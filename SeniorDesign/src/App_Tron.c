@@ -6,6 +6,12 @@
 #define LEFT_INPUT     0x04
 #define RIGHT_INPUT    0x08
 
+#define DIRECTION          0x0F
+#define DIRECTION_UP       2
+#define DIRECTION_LEFT     3
+#define DIRECTION_DOWN     0
+#define DIRECTION_RIGHT    1
+
 struct appData
 {
    int           frame;
@@ -66,7 +72,7 @@ void Demo_Tron_Tick(void)
    toString(string, 0, pixel);
    toString(string2, 1, pixel);
    appTron_Data->frame++;
-   if (appTron_Data->frame > 16)
+   if (appTron_Data->frame >= 16)
    {
       appTron_Data->frame = 0;
    }
@@ -91,8 +97,8 @@ void App_Tron_Init(void)
    drawBackground(pixel);
    appTron_Data->frame    = 0;
    appTron_Data->winner   = 0;
-   appTron_Data->P1UP     = 0;
-   appTron_Data->P2UP     = 2;
+   appTron_Data->P1UP     = DIRECTION_RIGHT;
+   appTron_Data->P2UP     = DIRECTION_LEFT;
    appTron_Data->flag     = 0;
    appTron_Data->mode     = 0;
    appTron_Data->point1.x = 2;
@@ -117,24 +123,64 @@ void App_Tron_Tick(void)
       drawPlayers();
       if (Input_Tap)
       {
-         if (Input_Tap & LEFT_INPUT)
+          if (Input_Tap & UP_INPUT && (appTron_Data->P1UP != DIRECTION_DOWN))
+           {
+              appTron_Data->P1UP &= !DIRECTION;
+              appTron_Data->P1UP |= DIRECTION_UP;
+           }
+           else if (Input_Tap & DOWN_INPUT && (appTron_Data->P1UP != DIRECTION_UP))
+           {
+              appTron_Data->P1UP &= !DIRECTION;
+              appTron_Data->P1UP |= DIRECTION_DOWN;
+           }
+           else if (Input_Tap & LEFT_INPUT && (appTron_Data->P1UP != DIRECTION_RIGHT))
+           {
+              appTron_Data->P1UP &= !DIRECTION;
+              appTron_Data->P1UP |= DIRECTION_LEFT;
+           }
+           else if (Input_Tap & RIGHT_INPUT && (appTron_Data->P1UP != DIRECTION_LEFT))
+           {
+              appTron_Data->P1UP &= !DIRECTION;
+              appTron_Data->P1UP |= DIRECTION_RIGHT;
+           }
+         if (Input_Tap & B_INPUT)
          {
             rotateUp(1, 0);
          }
-         if (Input_Tap & RIGHT_INPUT)
+         if (Input_Tap & A_INPUT)
          {
             rotateUp(1, 1);
          }
       }
       if (User2_Input_Tap)
       {
-         if (Input_Tap & LEFT_INPUT)
+          if (Input_Tap & UP_INPUT && (appTron_Data->P2UP != DIRECTION_DOWN))
+           {
+              appTron_Data->P2UP &= !DIRECTION;
+              appTron_Data->P2UP |= DIRECTION_UP;
+           }
+           else if (Input_Tap & DOWN_INPUT && (appTron_Data->P2UP != DIRECTION_UP))
+           {
+              appTron_Data->P2UP &= !DIRECTION;
+              appTron_Data->P2UP |= DIRECTION_DOWN;
+           }
+           else if (Input_Tap & LEFT_INPUT && (appTron_Data->P2UP != DIRECTION_RIGHT))
+           {
+              appTron_Data->P2UP &= !DIRECTION;
+              appTron_Data->P2UP |= DIRECTION_LEFT;
+           }
+           else if (Input_Tap & RIGHT_INPUT && (appTron_Data->P2UP != DIRECTION_LEFT))
+           {
+              appTron_Data->P2UP &= !DIRECTION;
+              appTron_Data->P2UP |= DIRECTION_RIGHT;
+           }
+         if (Input_Tap & B_INPUT)
          {
-            rotateUp(1, 0);
+            rotateUp(2, 0);
          }
-         if (Input_Tap & RIGHT_INPUT)
+         if (Input_Tap & A_INPUT)
          {
-            rotateUp(1, 1);
+            rotateUp(2, 1);
          }
       }
       Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT);

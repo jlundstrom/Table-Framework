@@ -143,6 +143,7 @@
     <ClInclude Include="..\..\SeniorDesign\src\App.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Basic.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Boot.h" />
+    <ClInclude Include="..\..\SeniorDesign\src\App_Clock.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Conway.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Menu.h" />
     <ClInclude Include="..\..\SeniorDesign\src\App_Party.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="..\..\SeniorDesign\src\App.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Basic.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Boot.c" />
+    <ClCompile Include="..\..\SeniorDesign\src\App_Clock.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Conway.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Menu.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Party.c" />

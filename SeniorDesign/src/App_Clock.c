@@ -10,8 +10,10 @@ struct appData
    unsigned char flag;
    unsigned char fadeoutFlag;
 }
-
 typedef   appData;
+char string[5];
+char string2[5];
+
 appData *appClock_Data;
 void Demo_Clock_Init(void);
 void Demo_Clock_Tick(void);
@@ -60,44 +62,13 @@ void App_Clock_Init(void)
    appClock_Data->frame       = 240;
    appClock_Data->flag        = 0;
    appClock_Data->fadeoutFlag = 250;
-   pixelText.R = 255;
-   pixelText.G = 0;
-   pixelText.B = 0;
+
 }
 
 
 void App_Clock_Tick(void)
 {
-   generateNoise();
 
-   if (appClock_Data->fadeoutFlag > 0)
-   {
-      drawCloud(3);
-      appClock_Data->fadeoutFlag--;
-      pixelText.R--;
-   }
-
-   else
-   {
-      if (appClock_Data->frame > 350)
-      {
-         appClock_Data->flag = 0;
-      }
-      if (appClock_Data->frame < 0)
-      {
-         appClock_Data->flag = 1;
-      }
-      if (appClock_Data->flag == 1)
-      {
-         appClock_Data->frame++;
-      }
-      else
-      {
-         appClock_Data->frame--;
-      }
-
-      drawCloudColor(appClock_Data->frame);
-   }
 }
 
 

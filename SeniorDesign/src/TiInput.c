@@ -102,7 +102,7 @@ void Input_Poll(void)
 
    if (SciaRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
    {
-      sciaRead(rcvBuf, 2);         // read the input
+      sciaRead(rcvBuf, 1);         // read the input
       isLowercase = rcvBuf[0] & 0x20;
       rcvBuf[0]  |= 0x20;
       prev        = Input_Status;
@@ -232,7 +232,7 @@ void Input_Poll(void)
 
    if (ScibRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
    {
-      scibRead(rcvBuf, 2);         // read the input
+      scibRead(rcvBuf, 1);         // read the input
       isLowercase = rcvBuf[0] & 0x20;
       rcvBuf[0]  |= 0x20;
       prev        = User2_Input_Status;

@@ -1,5 +1,5 @@
-#ifndef __APP_BOOT__
-#define __APP_BOOT__
+#ifndef __APP_CLOCK__
+#define __APP_CLOCK__
 #include "App.h"
 
 extern void App_Clock_New(App* app);
