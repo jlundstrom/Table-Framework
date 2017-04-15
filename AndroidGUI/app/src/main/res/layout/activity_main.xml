@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="Find Devices"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <ListView
         android:id="@+id/listDevices"

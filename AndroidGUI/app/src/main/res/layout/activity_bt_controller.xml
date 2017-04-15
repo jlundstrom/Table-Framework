@@ -25,14 +25,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btn_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,15 +60,15 @@
         android:layout_above="@+id/btn_left"
         android:layout_toEndOf="@+id/btn_left"
         android:text="Up"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <Button
         android:id="@+id/btn_down"
         android:layout_width="@dimen/box_size"
         android:layout_height="@dimen/box_size"
-        android:layout_marginBottom="26dp"
+        android:layout_marginBottom="38dp"
         android:text="Down"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:layout_above="@+id/linearLayout2"
         android:layout_toEndOf="@+id/btn_left" />
 
@@ -79,26 +79,26 @@
         android:layout_above="@+id/btn_b"
         android:layout_alignParentEnd="true"
         android:text="A"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <Button
         android:id="@+id/btn_b"
         android:layout_width="@dimen/box_size"
         android:layout_height="@dimen/box_size"
-        android:layout_alignParentEnd="true"
         android:layout_below="@+id/btn_right"
-        android:layout_marginEnd="42dp"
+        android:layout_toStartOf="@+id/btn_a"
         android:text="B"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <Button
         android:id="@+id/btn_left"
         android:layout_width="@dimen/box_size"
         android:layout_height="@dimen/box_size"
+        android:text="Left"
+        android:textSize="14sp"
         android:layout_above="@+id/btn_down"
         android:layout_alignParentStart="true"
-        android:text="Left"
-        android:textSize="12sp" />
+        android:layout_marginStart="9dp" />
 
     <Button
         android:id="@+id/btn_right"
@@ -107,6 +107,6 @@
         android:layout_below="@+id/btn_up"
         android:layout_toEndOf="@+id/btn_up"
         android:text="Right"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
 </RelativeLayout>

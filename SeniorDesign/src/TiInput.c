@@ -4,7 +4,6 @@
 #include "F28x_Project.h"
 
 // string-compatible helper functions
-void flush(char buf[], Uint16 length);
 void sciaRead(char buf[], Uint16 length);
 void sciaWrite(char buf[]);
 void scibRead(char buf[], Uint16 length);
@@ -15,7 +14,9 @@ unsigned char User2_Input_Status;
 
 unsigned char Input_Tap;
 unsigned char User2_Input_Tap;
-char          timeString[32] = "";
+
+unsigned char date[6];
+unsigned char time[6];
 
 // Initialize input device
 void Input_init(void)
@@ -56,6 +57,8 @@ void Input_init(void)
    // Status LED
    GpioCtrlRegs.GPCDIR.bit.GPIO70 = 1;
    GpioDataRegs.GPCDAT.bit.GPIO70 = 1;
+   GpioCtrlRegs.GPCDIR.bit.GPIO69 = 1;
+   GpioDataRegs.GPCDAT.bit.GPIO69 = 1;
 
    EDIS;
 
@@ -67,9 +70,8 @@ void Input_init(void)
 
    // Enable TX, RX, internal SCICLK
    // Disable RX ERR, SLEEP, TXWAKE
-   SciaRegs.SCICTL1.all = 0x03;
-   ScibRegs.SCICTL1.all = 0x03;
-
+   SciaRegs.SCICTL1.all            = 0x03;
+   ScibRegs.SCICTL1.all            = 0x03;
    SciaRegs.SCICTL2.bit.TXINTENA   = 1;
    SciaRegs.SCICTL2.bit.RXBKINTENA = 1;
    ScibRegs.SCICTL2.bit.TXINTENA   = 1;
@@ -85,8 +87,8 @@ void Input_init(void)
    SciaRegs.SCICTL1.all = 0x23;
    ScibRegs.SCICTL1.all = 0x23;
 
-   sciaWrite("\r\n\n\nProgram Start -- Player 1 Channel\0");
-   scibWrite("\r\n\n\nProgram Start -- Player 2 Channel\0");
+   sciaWrite("\r\nProgram Start -- Player 1 Channel\0");
+   scibWrite("\r\nProgram Start -- Player 2 Channel\0");
 }
 
 
@@ -94,26 +96,25 @@ void Input_init(void)
 // Input_Status to represent current key presses
 void Input_Poll(void)
 {
-	unsigned char prev;
+   Uint16        isLowercase = 0;
+   char          rcvBuf [2]  = ""; // receive buffer
+   unsigned char prev;
+
    if (SciaRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
    {
-      char   rcvBuf [2]  = "";     // receive buffer
-      Uint16 isLowercase = 0;
-
-      sciaRead(rcvBuf, 1);         // read the input
-      sciaWrite(rcvBuf);           // echo the input
-
+      sciaRead(rcvBuf, 2);         // read the input
       isLowercase = rcvBuf[0] & 0x20;
       rcvBuf[0]  |= 0x20;
-	  prev = Input_Status;
+      prev        = Input_Status;
+
       if (rcvBuf[0] == 'z')
       {
          // read and store the date and time
-         sciaRead(timeString, 18);
-         GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+         sciaRead(date, 6);
+         sciaRead(time, 6);
       }
 
-      if (rcvBuf[0] == 'q')
+      if (rcvBuf[0] == 'w')
       {
          if (!isLowercase)
          {
@@ -127,7 +128,7 @@ void Input_Poll(void)
          }
       }
 
-      if (rcvBuf[0] == 'w')
+      if (rcvBuf[0] == 's')
       {
          if (!isLowercase)
          {
@@ -141,7 +142,7 @@ void Input_Poll(void)
          }
       }
 
-      if (rcvBuf[0] == 'e')
+      if (rcvBuf[0] == 'a')
       {
          if (!isLowercase)
          {
@@ -155,7 +156,7 @@ void Input_Poll(void)
          }
       }
 
-      if (rcvBuf[0] == 'r')
+      if (rcvBuf[0] == 'd')
       {
          if (!isLowercase)
          {
@@ -169,7 +170,7 @@ void Input_Poll(void)
          }
       }
 
-      if (rcvBuf[0] == 't')
+      if (rcvBuf[0] == 'q')
       {
          if (!isLowercase)
          {
@@ -183,7 +184,7 @@ void Input_Poll(void)
          }
       }
 
-      if (rcvBuf[0] == 'y')
+      if (rcvBuf[0] == 'e')
       {
          if (!isLowercase)
          {
@@ -197,7 +198,7 @@ void Input_Poll(void)
          }
       }
 
-      if (rcvBuf[0] == 'u')
+      if (rcvBuf[0] == 'h')
       {
          if (!isLowercase)
          {
@@ -211,7 +212,7 @@ void Input_Poll(void)
          }
       }
 
-      if (rcvBuf[0] == 'i')
+      if (rcvBuf[0] == 'j')
       {
          if (!isLowercase)
          {
@@ -224,41 +225,37 @@ void Input_Poll(void)
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
       }
-	  // Raise Tap for keys with a state change that ends with it being pressed
-	  Input_Tap |= (prev ^ Input_Status) & Input_Status;
+
+      // Raise Tap for keys with a state change that ends with it being pressed
+      Input_Tap |= (prev ^ Input_Status) & Input_Status;
    }
 
    if (ScibRegs.SCIRXST.bit.RXRDY) // prevents from being locked in inf loop
    {
-      char   rcvBuf [2]  = "";     // receive buffer
-      Uint16 isLowercase = 0;
-
-      scibRead(rcvBuf, 1);         // read the input
-      scibWrite(rcvBuf);           // echo the input
-
+      scibRead(rcvBuf, 2);         // read the input
       isLowercase = rcvBuf[0] & 0x20;
       rcvBuf[0]  |= 0x20;
-
-	  prev = User2_Input_Status;
+      prev        = User2_Input_Status;
 
       // read and store the date and time
       if (rcvBuf[0] == 'z')
       {
-         scibRead(timeString, 18);
-         GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+         // read and store the date and time
+         scibRead(date, 6);
+         scibRead(time, 6);
       }
 
-      if (rcvBuf[0] == 'a')
+      if (rcvBuf[0] == 'w')
       {
          if (!isLowercase)
          {
-			User2_Input_Status &= ~UP_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status &= ~UP_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
          else
          {
-			User2_Input_Status |= UP_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status |= UP_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
       }
 
@@ -266,13 +263,27 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-			User2_Input_Status &= ~DOWN_INPUT;
+            User2_Input_Status &= ~DOWN_INPUT;
             GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
          }
          else
          {
-			User2_Input_Status |= DOWN_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status |= DOWN_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
+         }
+      }
+
+      if (rcvBuf[0] == 'a')
+      {
+         if (!isLowercase)
+         {
+            User2_Input_Status &= ~LEFT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
+         }
+         else
+         {
+            User2_Input_Status |= LEFT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
       }
 
@@ -280,41 +291,41 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-            User2_Input_Status &= ~LEFT_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status &= ~RIGHT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
          else
          {
-			User2_Input_Status |= LEFT_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status |= RIGHT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
       }
 
-      if (rcvBuf[0] == 'f')
+      if (rcvBuf[0] == 'q')
       {
          if (!isLowercase)
          {
-			User2_Input_Status &= ~RIGHT_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status &= ~A_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
          else
          {
-			User2_Input_Status |= RIGHT_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status |= A_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
       }
 
-      if (rcvBuf[0] == 'g')
+      if (rcvBuf[0] == 'e')
       {
          if (!isLowercase)
          {
-			User2_Input_Status &= ~A_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status &= ~B_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
          else
          {
-			User2_Input_Status |= A_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status |= B_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
       }
 
@@ -322,13 +333,13 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-			User2_Input_Status &= ~B_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status &= ~START_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
          else
          {
-			User2_Input_Status |= B_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status |= START_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
       }
 
@@ -336,32 +347,18 @@ void Input_Poll(void)
       {
          if (!isLowercase)
          {
-			User2_Input_Status &= ~START_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status &= ~SELECT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
          else
          {
-			User2_Input_Status |= START_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
+            User2_Input_Status |= SELECT_INPUT;
+            GpioDataRegs.GPCTOGGLE.bit.GPIO69 = 1;
          }
       }
 
-      if (rcvBuf[0] == 'k')
-      {
-         if (!isLowercase)
-         {
-			User2_Input_Status &= ~SELECT_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
-         }
-         else
-         {
-			User2_Input_Status |= SELECT_INPUT;
-            GpioDataRegs.GPCTOGGLE.bit.GPIO70 = 1;
-         }
-      }
-	  
-	  // Raise Tap for keys with a state change that ends with it being pressed
-	  User2_Input_Tap |= (prev ^ User2_Input_Status) & User2_Input_Status;
+      // Raise Tap for keys with a state change that ends with it being pressed
+      User2_Input_Tap |= (prev ^ User2_Input_Status) & User2_Input_Status;
    }
 }
 
@@ -377,22 +374,6 @@ void sciaRead(char buf[], Uint16 length)
       {
       }
       buf[bytesRead] = SciaRegs.SCIRXBUF.all;
-      bytesRead++;
-   }
-}
-
-
-void scibRead(char buf[], Uint16 length)
-{
-   Uint16 bytesRead   = 0;
-   Uint16 bytesToRead = length;
-
-   while (bytesRead < bytesToRead)
-   {
-      while (!ScibRegs.SCIRXST.bit.RXRDY)
-      {
-      }
-      buf[bytesRead] = ScibRegs.SCIRXBUF.all;
       bytesRead++;
    }
 }
@@ -414,6 +395,22 @@ void sciaWrite(char buf[])
 }
 
 
+void scibRead(char buf[], Uint16 length)
+{
+   Uint16 bytesRead   = 0;
+   Uint16 bytesToRead = length;
+
+   while (bytesRead < bytesToRead)
+   {
+      while (!ScibRegs.SCIRXST.bit.RXRDY)
+      {
+      }
+      buf[bytesRead] = ScibRegs.SCIRXBUF.all;
+      bytesRead++;
+   }
+}
+
+
 void scibWrite(char buf[])
 {
    Uint16 bytesWritten = 0;
@@ -427,13 +424,6 @@ void scibWrite(char buf[])
       ScibRegs.SCITXBUF.all = buf[bytesWritten];
       bytesWritten++;
    }
-}
-
-
-// flush any buffer if needed
-void flush(char buf[], Uint16 length)
-{
-   strncpy(buf, "", length);
 }
 
 

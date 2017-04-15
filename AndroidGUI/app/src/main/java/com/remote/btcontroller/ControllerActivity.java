@@ -76,9 +76,13 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
             {
                 view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 msg("Time synchronized");
-                DateFormat df = new SimpleDateFormat("MM-dd");
-                String date = df.format(Calendar.getInstance().getTime());
-                btWrite("z" + date + "\0");
+                DateFormat df1 = new SimpleDateFormat("MM-dd");
+                DateFormat df2 = new SimpleDateFormat("hh:ss");
+                String date = df1.format(Calendar.getInstance().getTime());
+                String time = df2.format(Calendar.getInstance().getTime());
+                btWrite("z\0");
+                btWrite(date + "\0");
+                btWrite(time + "\0");
             }
         });
 
@@ -117,19 +121,19 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
                     break;
 
                 case R.id.btn_a:
-                    btWrite("h\0");
-                    break;
-
-                case R.id.btn_b:
-                    btWrite("j\0");
-                    break;
-
-                case R.id.btn_start:
                     btWrite("q\0");
                     break;
 
-                case R.id.btn_select:
+                case R.id.btn_b:
                     btWrite("e\0");
+                    break;
+
+                case R.id.btn_start:
+                    btWrite("h\0");
+                    break;
+
+                case R.id.btn_select:
+                    btWrite("j\0");
                     break;
             }
         }
@@ -157,19 +161,19 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
                     break;
 
                 case R.id.btn_a:
-                    btWrite("H\0");
-                    break;
-
-                case R.id.btn_b:
-                    btWrite("J\0");
-                    break;
-
-                case R.id.btn_start:
                     btWrite("Q\0");
                     break;
 
-                case R.id.btn_select:
+                case R.id.btn_b:
                     btWrite("E\0");
+                    break;
+
+                case R.id.btn_start:
+                    btWrite("H\0");
+                    break;
+
+                case R.id.btn_select:
+                    btWrite("J\0");
                     break;
             }
         }
