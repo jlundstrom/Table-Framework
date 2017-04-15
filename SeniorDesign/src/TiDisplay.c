@@ -16,6 +16,7 @@
 //
 // Defines
 //
+#define ZEROPERIOD       20
 #define DATAPERIOD       29
 #define RESETPERIOD      61000
 #define ONEDUTY          24
@@ -138,7 +139,7 @@ __interrupt void epwm1_isr(void)
    }
    else
    {
-      EPwm1Regs.TBPRD         = DATAPERIOD;
+      EPwm1Regs.TBPRD         = ZEROPERIOD;
       EPwm1Regs.CMPA.bit.CMPA = ZERODUTY;
 
       mask = mask >> 1;
