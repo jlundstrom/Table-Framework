@@ -48,10 +48,9 @@
         android:id="@+id/btn_down"
         android:layout_width="@dimen/box_size"
         android:layout_height="@dimen/box_size"
-        android:layout_marginBottom="62dp"
         android:text="Down"
         android:textSize="14sp"
-        android:layout_above="@+id/linearLayout2"
+        android:layout_below="@+id/btn_left"
         android:layout_toEndOf="@+id/btn_left" />
 
     <Button
@@ -79,7 +78,7 @@
         android:layout_height="@dimen/box_size"
         android:text="Left"
         android:textSize="14sp"
-        android:layout_above="@+id/btn_down"
+        android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -89,7 +88,7 @@
         android:text="Right"
         android:textSize="14sp"
         android:layout_below="@+id/btn_up"
-        android:layout_toEndOf="@+id/btn_down" />
+        android:layout_toEndOf="@+id/btn_up" />
 
     <ToggleButton
         android:id="@+id/btn_clock"

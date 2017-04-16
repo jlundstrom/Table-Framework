@@ -3,15 +3,16 @@ package com.remote.btcontroller;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.content.Intent;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ToggleButton;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
-import android.view.KeyEvent;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothSocket;
 import android.bluetooth.BluetoothAdapter;
@@ -25,9 +26,6 @@ import java.text.SimpleDateFormat;
 public class ControllerActivity extends AppCompatActivity implements OnTouchListener
 {
     // Initialization
-    Toast message  = null;
-
-    ImageButton btn_sync;
     Button btn_up;
     Button btn_down;
     Button btn_left;
@@ -36,9 +34,16 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
     Button btn_b;
     Button btn_start;
     Button btn_select;
+    ToggleButton btn_clock;
 
-    String address = null;
+    String date    = null;
+    String time    = null;
+    DateFormat df1 = new SimpleDateFormat("MM-dd");
+    DateFormat df2 = new SimpleDateFormat("hh:mm");
+
+    Toast message;
     private ProgressDialog progress;
+    String address = null;
     BluetoothAdapter mBluetooth   = null;
     BluetoothSocket btSocket      = null;
     private boolean isBtConnected = false;
@@ -56,7 +61,6 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         setContentView(R.layout.activity_bt_controller);
 
         // Call the buttons
-        btn_sync   = (ImageButton)findViewById(R.id.btn_sync);
         btn_up     = (Button)findViewById(R.id.btn_up);
         btn_down   = (Button)findViewById(R.id.btn_down);
         btn_left   = (Button)findViewById(R.id.btn_left);
@@ -65,27 +69,10 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         btn_b      = (Button)findViewById(R.id.btn_b);
         btn_start  = (Button)findViewById(R.id.btn_start);
         btn_select = (Button)findViewById(R.id.btn_select);
+        btn_clock  = (ToggleButton)findViewById(R.id.btn_clock);
 
         // Call the class to connect
         new btConnect().execute();
-
-        // Listen for button presses and send the commands
-        btn_sync.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                msg("Time synchronized");
-                DateFormat df1 = new SimpleDateFormat("MM-dd");
-                DateFormat df2 = new SimpleDateFormat("hh:ss");
-                String date = df1.format(Calendar.getInstance().getTime());
-                String time = df2.format(Calendar.getInstance().getTime());
-                btWrite("z");
-                btWrite(date + "\0");
-                btWrite(time + "\0");
-            }
-        });
 
         btn_up.setOnTouchListener(this);
         btn_down.setOnTouchListener(this);
@@ -95,48 +82,42 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         btn_b.setOnTouchListener(this);
         btn_start.setOnTouchListener(this);
         btn_select.setOnTouchListener(this);
+
+        btn_clock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                if (isChecked)
+                {
+                    handler.post(clockUpdater);
+                }
+
+                else
+                {
+                    handler.removeCallbacks(clockUpdater);
+                }
+            }
+        });
     }
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        int action = event.getAction();
-        int keyCode = event.getKeyCode();
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_VOLUME_UP:
-
-                if (action == KeyEvent.ACTION_DOWN) {
-                    btWrite("e\0");
-                }
-
-                if (action == KeyEvent.ACTION_UP) {
-                    btWrite("E\0");
-                }
-
-                return true;
-
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-
-                if (action == KeyEvent.ACTION_DOWN) {
-                    btWrite("q\0");
-                }
-
-                if (action == KeyEvent.ACTION_UP) {
-                    btWrite("Q\0");
-                }
-
-                return true;
-
-            default:
-                return super.dispatchKeyEvent(event);
+    private Handler handler       = new Handler();
+    private Runnable clockUpdater = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            refreshClock();
+            handler.postDelayed(this, 1000);
         }
-    }
+    };
 
     @Override
     public boolean onTouch(View view, MotionEvent event)
     {
-        if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
         {
             view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
             switch (view.getId())
             {
                 case R.id.btn_up:
@@ -174,8 +155,8 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         }
 
         // If the button is released or dragged out of view
-        if ((event.getActionMasked() == MotionEvent.ACTION_UP) ||
-                (event.getActionMasked() == MotionEvent.ACTION_CANCEL))
+        if ((event.getAction() == MotionEvent.ACTION_UP) ||
+                (event.getAction() == MotionEvent.ACTION_CANCEL))
         {
             switch (view.getId())
             {
@@ -212,7 +193,18 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
                     break;
             }
         }
+
         return true;
+    }
+
+    // format and refresh the time and date strings
+    private void refreshClock()
+    {
+        date = df1.format(Calendar.getInstance().getTime());
+        time = df2.format(Calendar.getInstance().getTime());
+        btWrite("z");
+        btWrite(date + "\0");
+        btWrite(time + "\0");
     }
 
     // Make a toast notification
@@ -222,6 +214,7 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         {
             message.cancel();
         }
+
         message = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
         message.show();
     }
@@ -229,7 +222,26 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
     @Override
     public void onBackPressed()
     {
+        handler.removeCallbacks(clockUpdater);
         btDisconnect();
+        super.onBackPressed();
+    }
+
+    private void btWrite(String m)
+    {
+        // If the btSocket is busy
+        if (btSocket != null)
+        {
+            try
+            {
+                // Write to the connected Bluetooth device
+                btSocket.getOutputStream().write(m.toString().getBytes());
+            }
+            catch (IOException e)
+            {
+                msg("Error");
+            }
+        }
     }
 
     private void btDisconnect()
@@ -250,23 +262,6 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         }
 
         finish();
-    }
-
-    private void btWrite(String m)
-    {
-        // If the btSocket is busy
-        if (btSocket != null)
-        {
-            try
-            {
-                // Write to the connected Bluetooth device
-                btSocket.getOutputStream().write(m.toString().getBytes());
-            }
-            catch (IOException e)
-            {
-                msg("Error");
-            }
-        }
     }
 
     private class btConnect extends AsyncTask<Void, Void, Void>
@@ -302,11 +297,13 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
                     btSocket.connect();
                 }
             }
+
             catch (IOException e)
             {
                 // If connection failed, check the exception
                 ConnectSuccess = false;
             }
+
             return null;
         }
 
@@ -321,11 +318,13 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
                 msg("Connection failed, try again");
                 finish();
             }
+
             else
             {
                 msg("Connected");
                 isBtConnected = true;
             }
+
             progress.dismiss();
         }
     }

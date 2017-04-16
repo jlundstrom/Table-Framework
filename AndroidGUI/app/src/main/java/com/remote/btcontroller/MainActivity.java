@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
                     Toast.LENGTH_SHORT).show();
         }
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
                 list);
         listDevices.setAdapter(adapter);
         listDevices.setOnItemClickListener(mListClickListener);
