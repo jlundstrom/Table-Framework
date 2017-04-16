@@ -33,6 +33,18 @@ void Demo_Clock_Init(void)
 
 void Demo_Clock_Tick(void)
 {
+    Pixel pixel;
+    pixel.R = 0;
+    pixel.G = 0;
+    pixel.B = 0;
+    drawBackground(pixel);
+    char string[5]  = { 'C', 'L', 'O', 'C', 'K' };
+    char string2[5] = { 'D', 'S', 'P', 'Y', ' ' };
+    pixel.R = 200;
+    pixel.G = 200;
+    pixel.B = 100;
+    toString(string, 0, pixel);
+    toString(string2, 1, pixel);
 
 }
 

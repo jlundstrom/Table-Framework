@@ -84,11 +84,7 @@ void App_Boot_Tick(void) {
     uint16_t mask = 0x8000;
     if(appBoot_Data->fadeoutFlag>0)
     {
-        if(appBoot_Data->frame2 % 2)
-		{
-			drawCloud(3);
-		}
-		appBoot_Data->frame2++;		
+		drawCloud(3);
         for(i=31;i>=0;i--)
             {
             mask = 0x8000;

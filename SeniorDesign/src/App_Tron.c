@@ -185,9 +185,6 @@ void App_Tron_Tick(void)
       }
       Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT | UP_INPUT | DOWN_INPUT | A_INPUT | B_INPUT);
       User2_Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT | UP_INPUT | DOWN_INPUT | A_INPUT | B_INPUT);
-      //insert code for bluetooth
-      //void rotateUp(int player, int LR) make sure to call this for inputs
-      //L = 0         R = 1
       appTron_Data->frame++;
       if (appTron_Data->frame % 4 == 0)
       {
@@ -198,7 +195,25 @@ void App_Tron_Tick(void)
    }
    if (appTron_Data->mode == 1)
    {
-      drawWinner(appTron_Data->winner);
+        if (Input_Tap & B_INPUT)
+        {
+            App_Tron_Init();
+        }
+        if (Input_Tap & A_INPUT)
+        {
+            App_Tron_Init();
+        }
+        if (User2_Input_Tap & B_INPUT)
+        {
+            App_Tron_Init();
+        }
+        if (User2_Input_Tap & A_INPUT)
+        {
+            App_Tron_Init();
+        }
+        Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT | UP_INPUT | DOWN_INPUT | A_INPUT | B_INPUT);
+        User2_Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT | UP_INPUT | DOWN_INPUT | A_INPUT | B_INPUT);
+        drawWinner(appTron_Data->winner);
    }
 
 }

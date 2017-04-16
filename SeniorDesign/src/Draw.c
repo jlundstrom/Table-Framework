@@ -32,6 +32,8 @@ int sign(int x);
 void toString(char string[], int bottomtop, Pixel color);
 void printTextOffset(char text, int x, int y, Pixel color);
 int textConvert(char text, int x, int y);
+void toStringInvert(char string[], int bottomtop, Pixel color);
+void printTextOffsetInvert(char text, int x, int y, Pixel color);
 Pixel HSV2RGB(int H, int S, int V);
 
 // Retrieve pixel, and return first pixel for invalid inputs
@@ -453,6 +455,39 @@ void printTextOffset(char text, int x, int y, Pixel color) //prints from bottom 
       for (yTraverse = 0; yTraverse < 7; yTraverse++)
       {
          if (textConvert(text, xTraverse, yTraverse))
+         {
+            setPixel(xTraverse + x, yTraverse + y, color);
+         }
+      }
+   }
+}
+
+void toStringInvert(char string[], int bottomtop, Pixel color) //0 1 for bottom top len 4 max for the string
+{
+   int i;
+
+   for (i = 0; i < 5; i++)
+   {
+      printTextOffsetInvert(string[i], i * 6, bottomtop * 8, color);
+      drawLine(i*6-1,0, i*6-1, 16, color);
+   }
+      drawLine(0,7, 31, 7, color);
+      drawLine(0,15, 31, 15, color);
+      drawLine(29,0, 29, 15, color);
+      drawLine(30,0, 30, 15, color);
+      drawLine(31,0, 31, 15, color);
+}
+
+
+void printTextOffsetInvert(char text, int x, int y, Pixel color) //prints from bottom left going up 7, right 5
+{
+   int xTraverse, yTraverse;
+
+   for (xTraverse = 0; xTraverse < 5; xTraverse++)
+   {
+      for (yTraverse = 0; yTraverse < 7; yTraverse++)
+      {
+         if (!textConvert(text, xTraverse, yTraverse))
          {
             setPixel(xTraverse + x, yTraverse + y, color);
          }

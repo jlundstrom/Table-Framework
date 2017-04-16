@@ -58,10 +58,16 @@ extern void drawLine(int x1,int y1, int x2, int y2, Pixel pixel);
 //draws a line between two points, generalized bresenham
 extern void floodFill(int xo, int yo, Pixel fill, Pixel wall);
 //floodfill algo, fill == fill color, wall==color marked as the barrier
-void toString(char string[], int bottomtop, Pixel color);
+extern void toString(char string[], int bottomtop, Pixel color);
 //0 1 for bottom top len 4 max for the string
-void printTextOffset(char text, int x, int y, Pixel color);
+extern void printTextOffset(char text, int x, int y, Pixel color);
 //prints from bottom left going up 7, right 5
+extern void toStringInvert(char string[], int bottomtop, Pixel color);
+//0 1 for bottom top len 4 max for the string, prints not the text, so background printer basically
+extern void printTextOffsetInvert(char text, int x, int y, Pixel color);
+//prints from bottom left going up 7, right 5, prints not the text
+
+
 extern void clearDisplay(void);
 extern Pixel HSV2RGB(int H, int S, int V);
 extern int inBounds(int x, int y);
