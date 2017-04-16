@@ -34,18 +34,26 @@ void App_Snake_Place_Food(void);
 
 void Demo_Snake_Init(void)
 {
-   App_Snake_Init();
 }
 
 
 void Demo_Snake_Tick(void)
 {
+	Pixel pixel;
+	pixel.R = 0;
+	pixel.G = 0;
+	pixel.B = 0;
+	drawBackground(pixel);
+	char string[5] = { 'S', 'N', 'A', 'K', 'E' };
+	pixel.R = 200;
+	pixel.G = 200;
+	pixel.B = 100;
+	toString(string, 0, pixel);
 }
 
 
 void Demo_Snake_Deinit(void)
 {
-   App_Snake_Deinit();
 }
 
 

@@ -49,18 +49,28 @@ void Tetris_GenerateBlock(playerData *);
 
 void Demo_Tetris_Init(void)
 {
-   App_Tetris_Init();
 }
 
 
 void Demo_Tetris_Tick(void)
 {
+	Pixel pixel;
+	pixel.R = 0;
+	pixel.G = 0;
+	pixel.B = 0;
+	drawBackground(pixel);
+	char string[5] = { 'B', 'L', 'O', 'C', 'K' };
+	char string2[5] = { 'D', 'R', 'O', 'P', ' ' };
+	pixel.R = 200;
+	pixel.G = 200;
+	pixel.B = 100;
+	toString(string, 0, pixel);
+	toString(string2, 1, pixel);
 }
 
 
 void Demo_Tetris_Deinit(void)
 {
-   App_Tetris_Deinit();
 }
 
 

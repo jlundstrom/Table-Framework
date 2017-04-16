@@ -17,6 +17,8 @@ void Demo_Init(void)
    Basic_Data->x     = 2;
    Basic_Data->y     = 0;
    Basic_Data->frame = 0;
+
+
 }
 
 

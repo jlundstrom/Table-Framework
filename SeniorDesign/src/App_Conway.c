@@ -99,68 +99,52 @@ unsigned char getNeighbours(unsigned char *table, int x, int y)
 
 void Demo_Conway_Init(void)
 {
-   int rand = getRandom() % 4, x = getRandom() % WIDTH, y = getRandom() % HEIGHT;
+	int rand = getRandom() % 4, x, y;
 
-   Conway_Data = &AppStorage;
-   App_Conway_Deinit();      // Clean Struct
-   Conway_Data             = &AppStorage;
-   Conway_Data->frame      = 0;
-   Conway_Data->generation = 0;
-   Conway_Data->active     = Conway_Data->cells1;
-   Conway_Data->temp       = Conway_Data->cells2;
+	Conway_Data = &AppStorage;
+	App_Conway_Deinit();      // Clean Struct
+	Conway_Data = &AppStorage;
+	Conway_Data->frame = 0;
+	Conway_Data->generation = 0;
+	Conway_Data->active = Conway_Data->cells1;
+	Conway_Data->temp = Conway_Data->cells2;
+	WinColor = getRandomPixel();
 
-   if (rand == 0)
-   {
-      setCell(Conway_Data->active, x, y, 1);
-      setCell(Conway_Data->active, x + 2, y, 1);
-      setCell(Conway_Data->active, x + 4, y, 1);
-      setCell(Conway_Data->active, x, y + 1, 1);
-      setCell(Conway_Data->active, x + 4, y + 1, 1);
-      setCell(Conway_Data->active, x, y + 2, 1);
-      setCell(Conway_Data->active, x + 4, y + 2, 1);
-      setCell(Conway_Data->active, x, y + 3, 1);
-      setCell(Conway_Data->active, x + 4, y + 3, 1);
-      setCell(Conway_Data->active, x, y + 4, 1);
-      setCell(Conway_Data->active, x + 2, y + 4, 1);
-      setCell(Conway_Data->active, x + 4, y + 4, 1);
-   }
-   else if (rand == 1)
-   {
-      setCell(Conway_Data->active, x + 1, y, 1);
-      setCell(Conway_Data->active, x, y + 1, 1);
-      setCell(Conway_Data->active, x + 1, y + 1, 1);
-      setCell(Conway_Data->active, x + 2, y + 1, 1);
-      setCell(Conway_Data->active, x, y + 2, 1);
-      setCell(Conway_Data->active, x + 2, y + 2, 1);
-      setCell(Conway_Data->active, x + 1, y + 3, 1);
-   }
-   else if (rand == 2)
-   {
-      setCell(Conway_Data->active, x++, y, 1);
-      setCell(Conway_Data->active, x++, y, 1);
-      setCell(Conway_Data->active, x++, y, 1);
-      setCell(Conway_Data->active, x++, y, 1);
-      setCell(Conway_Data->active, x++, y, 1);
-      setCell(Conway_Data->active, x++, y, 1);
-      setCell(Conway_Data->active, x++, y, 1);
-      setCell(Conway_Data->active, x++, y, 1);
-      setCell(Conway_Data->active, x++, y, 1);
-      setCell(Conway_Data->active, x++, y, 1);
-   }
-   else
-   {
-      setCell(Conway_Data->active, x + 1, y, 1);
-      setCell(Conway_Data->active, x + 2, y + 1, 1);
-      setCell(Conway_Data->active, x + 2, y + 2, 1);
-      setCell(Conway_Data->active, x + 1, y + 2, 1);
-      setCell(Conway_Data->active, x, y + 2, 1);
-   }
+	Pixel pixel;
+	pixel.R = 0;
+	pixel.G = 0;
+	pixel.B = 0;
+	drawBackground(pixel);
+	//CONWY
+	//LIFE
+	char string[5] = { 'C', 'O', 'N', 'W', 'Y' };
+	char string2[5] = { 'L', 'I', 'F', 'E', ' ' };
+	pixel.R = 200;
+	pixel.G = 200;
+	pixel.B = 100;
+	toString(string, 0, pixel);
+	toString(string2, 1, pixel);
+	for (x = 0; x < WIDTH; x++)
+	{
+		for (y = 0; y < HEIGHT; y++)
+		{
+			pixel = getPixel(x, y);
+			if (pixel.R > 0 || pixel.G > 0 || pixel.B > 0)
+			{
+				setCell(Conway_Data->active, x, y, 1);
+			}
+			else
+			{
+				setCell(Conway_Data->active, x, y, 0);
+			}
+		}
+	}
 }
 
 
 void Demo_Conway_Tick(void)
 {
-   if (Conway_Data->frame != 4)
+   if (Conway_Data->frame != 20)
    {
       Conway_Data->frame++;
       return;
@@ -214,26 +198,62 @@ void Demo_Conway_Deinit(void)
 
 void App_Conway_Init(void)
 {
-   Conway_Data = &AppStorage;
-   App_Conway_Deinit();      // Clean Struct
-   Conway_Data             = &AppStorage;
-   Conway_Data->frame      = 0;
-   Conway_Data->generation = 0;
-   Conway_Data->active     = Conway_Data->cells1;
-   Conway_Data->temp       = Conway_Data->cells2;
+	int rand = getRandom() % 4, x = getRandom() % WIDTH, y = getRandom() % HEIGHT;
 
-   setCell(Conway_Data->active, 15, 6, 1);
-   setCell(Conway_Data->active, 17, 6, 1);
-   setCell(Conway_Data->active, 19, 6, 1);
-   setCell(Conway_Data->active, 15, 7, 1);
-   setCell(Conway_Data->active, 19, 7, 1);
-   setCell(Conway_Data->active, 15, 8, 1);
-   setCell(Conway_Data->active, 19, 8, 1);
-   setCell(Conway_Data->active, 15, 9, 1);
-   setCell(Conway_Data->active, 19, 9, 1);
-   setCell(Conway_Data->active, 15, 10, 1);
-   setCell(Conway_Data->active, 17, 10, 1);
-   setCell(Conway_Data->active, 19, 10, 1);
+	Conway_Data = &AppStorage;
+	App_Conway_Deinit();      // Clean Struct
+	Conway_Data = &AppStorage;
+	Conway_Data->frame = 0;
+	Conway_Data->generation = 0;
+	Conway_Data->active = Conway_Data->cells1;
+	Conway_Data->temp = Conway_Data->cells2;
+
+	if (rand == 0)
+	{
+		setCell(Conway_Data->active, x, y, 1);
+		setCell(Conway_Data->active, x + 2, y, 1);
+		setCell(Conway_Data->active, x + 4, y, 1);
+		setCell(Conway_Data->active, x, y + 1, 1);
+		setCell(Conway_Data->active, x + 4, y + 1, 1);
+		setCell(Conway_Data->active, x, y + 2, 1);
+		setCell(Conway_Data->active, x + 4, y + 2, 1);
+		setCell(Conway_Data->active, x, y + 3, 1);
+		setCell(Conway_Data->active, x + 4, y + 3, 1);
+		setCell(Conway_Data->active, x, y + 4, 1);
+		setCell(Conway_Data->active, x + 2, y + 4, 1);
+		setCell(Conway_Data->active, x + 4, y + 4, 1);
+	}
+	else if (rand == 1)
+	{
+		setCell(Conway_Data->active, x + 1, y, 1);
+		setCell(Conway_Data->active, x, y + 1, 1);
+		setCell(Conway_Data->active, x + 1, y + 1, 1);
+		setCell(Conway_Data->active, x + 2, y + 1, 1);
+		setCell(Conway_Data->active, x, y + 2, 1);
+		setCell(Conway_Data->active, x + 2, y + 2, 1);
+		setCell(Conway_Data->active, x + 1, y + 3, 1);
+	}
+	else if (rand == 2)
+	{
+		setCell(Conway_Data->active, x++, y, 1);
+		setCell(Conway_Data->active, x++, y, 1);
+		setCell(Conway_Data->active, x++, y, 1);
+		setCell(Conway_Data->active, x++, y, 1);
+		setCell(Conway_Data->active, x++, y, 1);
+		setCell(Conway_Data->active, x++, y, 1);
+		setCell(Conway_Data->active, x++, y, 1);
+		setCell(Conway_Data->active, x++, y, 1);
+		setCell(Conway_Data->active, x++, y, 1);
+		setCell(Conway_Data->active, x++, y, 1);
+	}
+	else
+	{
+		setCell(Conway_Data->active, x + 1, y, 1);
+		setCell(Conway_Data->active, x + 2, y + 1, 1);
+		setCell(Conway_Data->active, x + 2, y + 2, 1);
+		setCell(Conway_Data->active, x + 1, y + 2, 1);
+		setCell(Conway_Data->active, x, y + 2, 1);
+	}
 }
 
 

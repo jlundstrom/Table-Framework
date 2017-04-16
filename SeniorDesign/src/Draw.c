@@ -441,7 +441,7 @@ void toString(char string[], int bottomtop, Pixel color) //0 1 for bottom top le
 
    for (i = 0; i < 5; i++)
    {
-      printTextOffset(string[i], i * 6, bottomtop * 8, color);
+      printTextOffset(string[i], i * 6 + 2, bottomtop * 8, color);
    }
 }
 
