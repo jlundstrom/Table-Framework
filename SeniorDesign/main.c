@@ -19,6 +19,7 @@
 #include "src/App_Party.h"
 #include "src/App_Tron.h"
 #include "src/App_Shooter.h"
+#include "src/App_Cloud.h"
 
 int main()
 {
@@ -38,6 +39,7 @@ int main()
    App_Tron_New(&apps[6]);
    App_Clock_New(&apps[7]);
    App_Shoot_New(&apps[8]);
+   App_Cloud_New(&apps[9]);
    // Initialize the Menu
    currentApp = &homeApp;
    currentApp->App_Init();

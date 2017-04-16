@@ -2,7 +2,7 @@
 #define __APP__
 
 // Count of applicaions in menu
-#define APP_COUNT 9
+#define APP_COUNT 10
 
 // Structs for critical application functions and
 typedef void voidFunc(void);

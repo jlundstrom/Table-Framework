@@ -11,4 +11,5 @@ extern double smoothNoise(double x, double y); //use for main noise gen
 extern double turbulence(double x, double y, double size); //blob mode
 extern void drawCloud(int RGB); //send a 1,2,3 command depending on color of clouds
 extern void drawCloudColor(int hue); // draws a cloud with base pixel color
+extern void drawCloudColorRotate(int hue, int size, int base);
 #endif

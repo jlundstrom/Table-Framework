@@ -53,7 +53,7 @@ double turbulence(double x, double y, double size) //size is zoom factor
    while (size >= 1)
    {
       value += smoothNoise(x / size, y / size) * size;
-      size  /= 2.0;
+      size  /= 3.0;
    }
 
    return(128.0 * value / initialSize);  //scaled for 0-255
@@ -109,7 +109,25 @@ void drawCloudColor(int hue)
    {
       for (y = 0; y < noiseHeight; y++)
       {
-         temp  = 5+ turbulence(x, y, 3);
+         temp  = 10+ turbulence(x, y, 3);
+         pixel = HSV2RGB(hue, 255, temp);
+         setPixel(x, y, pixel);
+      }
+   }
+}
+
+void drawCloudColorRotate(int hue, int size, int base)
+{
+   int   x;
+   int   y;
+   int   temp;
+   Pixel pixel;
+
+   for (x = 0; x < noiseWidth; x++)
+   {
+      for (y = 0; y < noiseHeight; y++)
+      {
+         temp  = base + turbulence(x, y, size);
          pixel = HSV2RGB(hue, 255, temp);
          setPixel(x, y, pixel);
       }

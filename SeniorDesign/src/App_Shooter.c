@@ -162,6 +162,7 @@ void Demo_Shoot_Deinit(void)
 
 void App_Shoot_Init(void)
 {
+    generateNoise();
 
 }
 
