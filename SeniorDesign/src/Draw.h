@@ -63,7 +63,7 @@ extern void toString(char string[], int bottomtop, Pixel color);
 extern void printTextOffset(char text, int x, int y, Pixel color);
 //prints from bottom left going up 7, right 5
 extern void toStringInvert(char string[], int bottomtop, Pixel color);
-//0 1 for bottom top len 4 max for the string, prints not the text, so background printer basically
+//0 1 for bottom top len 4 max for the string, prints not the text, so background printer basically, super janky dont use
 extern void printTextOffsetInvert(char text, int x, int y, Pixel color);
 //prints from bottom left going up 7, right 5, prints not the text
 
