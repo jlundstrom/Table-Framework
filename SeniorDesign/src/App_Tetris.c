@@ -5,6 +5,7 @@
 
 #define SPAWN_NEW_BLOCK    0x01
 #define PLACE_BLOCK        0x02
+#define GAME_OVER          0x03
 #define BOARD_WIDTH        9
 #define BOARD_HEIGHT       16
 #define MAX_BLOCKSIZE      4 * 4
@@ -20,7 +21,7 @@ struct block
 }
 typedef   Block;
 
-struct appData
+struct playerData
 {
    unsigned char  top;
    unsigned char  left;
@@ -31,13 +32,20 @@ struct appData
    Block          block;
    unsigned char  board[BOARD_WIDTH * BOARD_HEIGHT];
 }
+typedef   playerData;
+
+struct appData
+{
+	playerData Player1;
+	playerData Player2;
+}
 typedef   appData;
 appData *Tetris_Data;
 
 
 void App_Tetris_Init(void);
 void App_Tetris_Deinit(void);
-void Tetris_GenerateBlock(appData *);
+void Tetris_GenerateBlock(playerData *);
 
 void Demo_Tetris_Init(void)
 {
@@ -59,129 +67,143 @@ void Demo_Tetris_Deinit(void)
 void App_Tetris_Init(void)
 {
    Tetris_Data           = &AppStorage;
-   Tetris_Data->top      = 0;
-   Tetris_Data->left     = 7;
-   Tetris_Data->rotation = 0;
-   Tetris_Data->frame    = 0;
-   Tetris_Data->BG       = PIXEL_WHITE;
+   Tetris_Data->Player1.top      = 0;
+   Tetris_Data->Player1.left     = 1;
+   Tetris_Data->Player1.rotation = 0;
+   Tetris_Data->Player1.frame    = 0;
+   Tetris_Data->Player1.BG       = PIXEL_BLACK;
+   Tetris_Data->Player2.top = 0;
+   Tetris_Data->Player2.left = 17;
+   Tetris_Data->Player2.rotation = 0;
+   Tetris_Data->Player2.frame = 0;
+   Tetris_Data->Player2.BG = PIXEL_BLACK;
 
-   Tetris_GenerateBlock(Tetris_Data);
-
-   drawRect(Tetris_Data->left, Tetris_Data->top, Tetris_Data->left + BOARD_WIDTH, Tetris_Data->top + BOARD_HEIGHT, Tetris_Data->BG);
+   Tetris_GenerateBlock(&(Tetris_Data->Player1));
+   Tetris_GenerateBlock(&(Tetris_Data->Player2));
+   
+   drawRect(Tetris_Data->Player1.left - 1, Tetris_Data->Player1.top - 1, Tetris_Data->Player1.left + BOARD_WIDTH + 1, Tetris_Data->Player1.top + BOARD_HEIGHT + 1, PIXEL_WHITE);
+   drawRect(Tetris_Data->Player2.left - 1, Tetris_Data->Player2.top - 1, Tetris_Data->Player2.left + BOARD_WIDTH + 1, Tetris_Data->Player2.top + BOARD_HEIGHT + 1, PIXEL_RED);
+   drawRect(Tetris_Data->Player1.left, Tetris_Data->Player1.top, Tetris_Data->Player1.left + BOARD_WIDTH, Tetris_Data->Player1.top + BOARD_HEIGHT, Tetris_Data->Player1.BG);
+   drawRect(Tetris_Data->Player2.left, Tetris_Data->Player2.top, Tetris_Data->Player2.left + BOARD_WIDTH, Tetris_Data->Player2.top + BOARD_HEIGHT, Tetris_Data->Player2.BG);
 }
 
 
-void Tetris_GenerateBlock(appData *data)
+void Tetris_GenerateBlock(playerData *data)
 {
    int block = getRandom() % 7, i;
 
    for (i = 0; i < MAX_BLOCKSIZE; i++)
    {
-      Tetris_Data->block.pixels[i] = 0;
+	   data->block.pixels[i] = 0;
    }
    switch (block)
    {
    case 0:
-      Tetris_Data->block.color     = PIXEL_CYAN;
-      Tetris_Data->block.width     = 4;
-      Tetris_Data->block.height    = 1;
-      Tetris_Data->block.pixels[0] = 1;
-      Tetris_Data->block.pixels[1] = 1;
-      Tetris_Data->block.pixels[2] = 1;
-      Tetris_Data->block.pixels[3] = 1;
+      data->block.color     = PIXEL_CYAN;
+      data->block.width     = 4;
+      data->block.height    = 1;
+      data->block.pixels[0] = 1;
+      data->block.pixels[1] = 1;
+      data->block.pixels[2] = 1;
+      data->block.pixels[3] = 1;
       break;
 
    case 1:
-      Tetris_Data->block.color     = PIXEL_BLUE;
-      Tetris_Data->block.width     = 3;
-      Tetris_Data->block.height    = 2;
-      Tetris_Data->block.pixels[0] = 1;
-      Tetris_Data->block.pixels[1] = 1;
-      Tetris_Data->block.pixels[2] = 1;
-      Tetris_Data->block.pixels[6] = 1;
+      data->block.color     = PIXEL_BLUE;
+      data->block.width     = 3;
+      data->block.height    = 2;
+      data->block.pixels[0] = 1;
+      data->block.pixels[1] = 1;
+      data->block.pixels[2] = 1;
+      data->block.pixels[6] = 1;
       break;
 
    case 2:
-      Tetris_Data->block.color     = PIXEL_ORANGE;
-      Tetris_Data->block.width     = 3;
-      Tetris_Data->block.height    = 2;
-      Tetris_Data->block.pixels[0] = 1;
-      Tetris_Data->block.pixels[1] = 1;
-      Tetris_Data->block.pixels[2] = 1;
-      Tetris_Data->block.pixels[4] = 1;
+      data->block.color     = PIXEL_ORANGE;
+      data->block.width     = 3;
+      data->block.height    = 2;
+      data->block.pixels[0] = 1;
+      data->block.pixels[1] = 1;
+      data->block.pixels[2] = 1;
+      data->block.pixels[4] = 1;
       break;
 
    case 3:
-      Tetris_Data->block.color     = PIXEL_YELLOW;
-      Tetris_Data->block.width     = 2;
-      Tetris_Data->block.height    = 2;
-      Tetris_Data->block.pixels[0] = 1;
-      Tetris_Data->block.pixels[1] = 1;
-      Tetris_Data->block.pixels[4] = 1;
-      Tetris_Data->block.pixels[5] = 1;
+      data->block.color     = PIXEL_YELLOW;
+      data->block.width     = 2;
+      data->block.height    = 2;
+      data->block.pixels[0] = 1;
+      data->block.pixels[1] = 1;
+      data->block.pixels[4] = 1;
+      data->block.pixels[5] = 1;
       break;
 
    case 4:
-      Tetris_Data->block.color     = PIXEL_GREEN;
-      Tetris_Data->block.width     = 3;
-      Tetris_Data->block.height    = 2;
-      Tetris_Data->block.pixels[1] = 1;
-      Tetris_Data->block.pixels[2] = 1;
-      Tetris_Data->block.pixels[4] = 1;
-      Tetris_Data->block.pixels[5] = 1;
+      data->block.color     = PIXEL_GREEN;
+      data->block.width     = 3;
+      data->block.height    = 2;
+      data->block.pixels[1] = 1;
+      data->block.pixels[2] = 1;
+      data->block.pixels[4] = 1;
+      data->block.pixels[5] = 1;
       break;
 
    case 5:
-      Tetris_Data->block.color     = PIXEL_PURPLE;
-      Tetris_Data->block.width     = 3;
-      Tetris_Data->block.height    = 2;
-      Tetris_Data->block.pixels[0] = 1;
-      Tetris_Data->block.pixels[1] = 1;
-      Tetris_Data->block.pixels[2] = 1;
-      Tetris_Data->block.pixels[5] = 1;
+      data->block.color     = PIXEL_PURPLE;
+      data->block.width     = 3;
+      data->block.height    = 2;
+      data->block.pixels[0] = 1;
+      data->block.pixels[1] = 1;
+      data->block.pixels[2] = 1;
+      data->block.pixels[5] = 1;
       break;
 
    case 6:
-      Tetris_Data->block.color     = PIXEL_RED;
-      Tetris_Data->block.width     = 3;
-      Tetris_Data->block.height    = 2;
-      Tetris_Data->block.pixels[0] = 1;
-      Tetris_Data->block.pixels[1] = 1;
-      Tetris_Data->block.pixels[5] = 1;
-      Tetris_Data->block.pixels[6] = 1;
+      data->block.color     = PIXEL_RED;
+      data->block.width     = 3;
+      data->block.height    = 2;
+      data->block.pixels[0] = 1;
+      data->block.pixels[1] = 1;
+      data->block.pixels[5] = 1;
+      data->block.pixels[6] = 1;
       break;
    }
 
-   Tetris_Data->block.y = 0;
-   Tetris_Data->block.x = (BOARD_WIDTH / 2) - (Tetris_Data->block.width / 2);
+   data->block.y = 0;
+   data->block.x = (BOARD_WIDTH / 2) - (data->block.width / 2);
+
+   if (!Tetris_CheckMove(data, 0, 0))
+   {
+	   data->state |= GAME_OVER;
+   }
 }
 
 
-int Tetris_GetPixelX(appData *data, char x)
+int Tetris_GetPixelX(playerData *data, char x)
 {
    return data->left + x;
 }
 
 
-int Tetris_GetPixelY(appData *data, char y)
+int Tetris_GetPixelY(playerData *data, char y)
 {
    return data->top + y;
 }
 
 
-unsigned char Tetris_GetCell(appData *data, char x, char y)
+unsigned char Tetris_GetCell(playerData *data, char x, char y)
 {
    return data->board[x + (y * BOARD_WIDTH)];
 }
 
 
-unsigned char Tetris_SetCell(appData *data, char x, char y, unsigned char val)
+unsigned char Tetris_SetCell(playerData *data, char x, char y, unsigned char val)
 {
    return data->board[x + (y * BOARD_WIDTH)] = val;
 }
 
 
-unsigned char Tetris_RotateLeft(appData *data)
+unsigned char Tetris_RotateLeft(playerData *data)
 {
    int           x, y;
    unsigned char tmp[MAX_BLOCKSIZE];
@@ -203,7 +225,7 @@ unsigned char Tetris_RotateLeft(appData *data)
 }
 
 
-unsigned char Tetris_RotateRight(appData *data)
+unsigned char Tetris_RotateRight(playerData *data)
 {
    int           x, y;
    unsigned char tmp[MAX_BLOCKSIZE];
@@ -225,7 +247,7 @@ unsigned char Tetris_RotateRight(appData *data)
 }
 
 
-int Tetris_CheckMove(appData *data, char xOffset, char yOffset)
+int Tetris_CheckMove(playerData *data, char xOffset, char yOffset)
 {
    int x, y;
 
@@ -262,7 +284,7 @@ int Tetris_CheckMove(appData *data, char xOffset, char yOffset)
 }
 
 
-void Tetris_RemoveRow(appData *data, char row)
+void Tetris_RemoveRow(playerData *data, char row)
 {
    int x, y;
 
@@ -284,7 +306,7 @@ void Tetris_RemoveRow(appData *data, char row)
 }
 
 
-void Tetris_Drop(appData *data, int drop)
+void Tetris_Drop(playerData *data, int drop, unsigned char input)
 {
    int x, y;
 
@@ -294,20 +316,20 @@ void Tetris_Drop(appData *data, int drop)
       {
          if (data->block.pixels[x + (y * 4)])
          {
-            setPixel(Tetris_GetPixelX(data, data->block.x + x), Tetris_GetPixelY(data, data->block.y + y), Tetris_Data->BG);
+            setPixel(Tetris_GetPixelX(data, data->block.x + x), Tetris_GetPixelY(data, data->block.y + y), data->BG);
          }
       }
    }
 
-   if ((Input_Tap & RIGHT_INPUT))
+   if ((input & RIGHT_INPUT))
    {
       Tetris_CheckMove(data, 1, 0);
    }
-   else if ((Input_Tap & LEFT_INPUT))
+   else if ((input & LEFT_INPUT))
    {
       Tetris_CheckMove(data, -1, 0);
    }
-   if (Input_Tap & A_INPUT)
+   if (input & A_INPUT)
    {
       Tetris_RotateRight(data);
       if (!Tetris_CheckMove(data, 0, 0))
@@ -315,7 +337,7 @@ void Tetris_Drop(appData *data, int drop)
          Tetris_RotateLeft(data);
       }
    }
-   else if (Input_Tap & B_INPUT)
+   else if (input & B_INPUT)
    {
       Tetris_RotateLeft(data);
       if (!Tetris_CheckMove(data, 0, 0))
@@ -328,8 +350,6 @@ void Tetris_Drop(appData *data, int drop)
    {
       data->state |= SPAWN_NEW_BLOCK | PLACE_BLOCK;
    }
-
-   Input_Tap &= ~(RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
 
    for (x = 0; x < data->block.width; x++)
    {
@@ -375,24 +395,45 @@ void Tetris_Drop(appData *data, int drop)
 
 void App_Tetris_Tick(void)
 {
-   int frameAt = 15;
+   int P1FrameAt = 15, P2FrameAt = 15;
 
    if (Input_Status & DOWN_INPUT)
    {
-      frameAt = 3;
+      P1FrameAt = 3;
    }
 
-   if (Tetris_Data->frame >= frameAt)
+   if (Tetris_Data->Player1.frame >= P1FrameAt)
    {
-      Tetris_Drop(Tetris_Data, 1);
-      Tetris_Data->frame = 0;
+      Tetris_Drop(&(Tetris_Data->Player1), 1, Input_Tap);
+      Tetris_Data->Player1.frame = 0;
+	  Input_Tap &= ~(RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
    }
-   else if (Tetris_Data->frame % 3)
+   else if (Tetris_Data->Player1.frame % 3, Input_Tap)
    {
-      Tetris_Drop(Tetris_Data, 0);
+      Tetris_Drop(&(Tetris_Data->Player1), 0, Input_Tap);
+	  Input_Tap &= ~(RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
    }
 
-   Tetris_Data->frame += 1;
+   Tetris_Data->Player1.frame += 1;
+
+   if (User2_Input_Status & DOWN_INPUT)
+   {
+	   P2FrameAt = 3;
+   }
+
+   if (Tetris_Data->Player2.frame >= P2FrameAt)
+   {
+	   Tetris_Drop(&(Tetris_Data->Player2), 1, User2_Input_Tap);
+	   Tetris_Data->Player2.frame = 0;
+	   User2_Input_Tap &= ~(RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
+   }
+   else if (Tetris_Data->Player2.frame % 3, User2_Input_Tap)
+   {
+	   Tetris_Drop(&(Tetris_Data->Player2), 0, User2_Input_Tap);
+	   User2_Input_Tap &= ~(RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
+   }
+
+   Tetris_Data->Player2.frame += 1;
 }
 
 

@@ -86,7 +86,7 @@ void Input_Poll(void)
    {
       Input_Status &= ~START_INPUT;
    }
-   if (check_Char('J'))
+   if (check_Char('N'))
    {
       Input_Status |= SELECT_INPUT;
    }
@@ -97,6 +97,76 @@ void Input_Poll(void)
 
    // Raise Tap for keys with a state change that ends with it being pressed
    Input_Tap |= (prev ^ Input_Status) & Input_Status;
+
+   prev = User2_Input_Status;
+
+   if (check_Char('I'))
+   {
+	   User2_Input_Status |= UP_INPUT;
+   }
+   else
+   {
+	   User2_Input_Status &= ~UP_INPUT;
+   }
+   if (check_Char('K'))
+   {
+	   User2_Input_Status |= DOWN_INPUT;
+   }
+   else
+   {
+	   User2_Input_Status &= ~DOWN_INPUT;
+   }
+   if (check_Char('J'))
+   {
+	   User2_Input_Status |= LEFT_INPUT;
+   }
+   else
+   {
+	   User2_Input_Status &= ~LEFT_INPUT;
+   }
+   if (check_Char('L'))
+   {
+	   User2_Input_Status |= RIGHT_INPUT;
+   }
+   else
+   {
+	   User2_Input_Status &= ~RIGHT_INPUT;
+   }
+   if (check_Char('U'))
+   {
+	   User2_Input_Status |= A_INPUT;
+   }
+   else
+   {
+	   User2_Input_Status &= ~A_INPUT;
+   }
+   if (check_Char('O'))
+   {
+	   User2_Input_Status |= B_INPUT;
+   }
+   else
+   {
+	   User2_Input_Status &= ~B_INPUT;
+   }
+   if (check_Char('Y'))
+   {
+	   User2_Input_Status |= START_INPUT;
+   }
+   else
+   {
+	   User2_Input_Status &= ~START_INPUT;
+   }
+   if (check_Char('U'))
+   {
+	   User2_Input_Status |= SELECT_INPUT;
+   }
+   else
+   {
+	   User2_Input_Status &= ~SELECT_INPUT;
+   }
+
+   // Raise Tap for keys with a state change that ends with it being pressed
+   User2_Input_Tap |= (prev ^ User2_Input_Status) & User2_Input_Status;
 }
 
 
