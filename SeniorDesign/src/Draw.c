@@ -471,11 +471,7 @@ void toStringInvert(char string[], int bottomtop, Pixel color) //0 1 for bottom 
       printTextOffsetInvert(string[i], i * 6, bottomtop * 8, color);
       drawLine(i*6-1,0, i*6-1, 16, color);
    }
-      drawLine(0,7, 31, 7, color);
-      drawLine(0,15, 31, 15, color);
-      drawLine(29,0, 29, 15, color);
-      drawLine(30,0, 30, 15, color);
-      drawLine(31,0, 31, 15, color);
+
 }
 
 
