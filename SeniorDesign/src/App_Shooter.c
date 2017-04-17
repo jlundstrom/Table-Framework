@@ -64,7 +64,7 @@ void Demo_Shoot_Tick(void)
 {
     int i,k;
     Pixel pixel;
-    for(k=1;k<3;k++)
+    for(k=0;k<2;k++)
     {
         for (i=0;i<16;i++)
         {
@@ -74,97 +74,97 @@ void Demo_Shoot_Tick(void)
                 pixel.R=0;
                 pixel.G=0;
                 pixel.B=0;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 2:
                 pixel.R=255;
                 pixel.G=255;
                 pixel.B=255;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 3:
                 pixel.R=255;
                 pixel.G=0;
                 pixel.B=0;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 4:
                 pixel.R=0;
                 pixel.G=255;
                 pixel.B=0;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 5:
                 pixel.R=0;
                 pixel.G=0;
                 pixel.B=255;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 6:
                 pixel.R=255;
                 pixel.G=255;
                 pixel.B=0;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 7:
                 pixel.R=0;
                 pixel.G=255;
                 pixel.B=255;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 8:
                 pixel.R=255;
                 pixel.G=0;
                 pixel.B=255;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 9:
                 pixel.R=192;
                 pixel.G=192;
                 pixel.B=192;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 10:
                 pixel.R=128;
                 pixel.G=128;
                 pixel.B=128;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 11:
                 pixel.R=128;
                 pixel.G=0;
                 pixel.B=0;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 12:
                 pixel.R=128;
                 pixel.G=128;
                 pixel.B=0;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 13:
                 pixel.R=0;
                 pixel.G=128;
                 pixel.B=0;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 14:
                 pixel.R=128;
                 pixel.G=0;
                 pixel.B=128;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 15:
                 pixel.R=0;
                 pixel.G=128;
                 pixel.B=128;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             case 16:
                 pixel.R=0;
                 pixel.G=0;
                 pixel.B=128;
-                drawLine(i*k,0, i*k, 15,pixel);
+                drawLine(i+k*16,0, i+k*16, 15,pixel);
                 break;
             default:
                 break;
@@ -184,6 +184,10 @@ void Demo_Shoot_Tick(void)
     drawLine(29,0, 29, 15, pixel);
     drawLine(30,0, 30, 15, pixel);
     drawLine(31,0, 31, 15, pixel);
+    drawLine(5,0, 5, 16, pixel);
+    drawLine(11,0, 11, 16, pixel);
+    drawLine(17,0, 17, 16, pixel);
+    drawLine(23,0, 23, 16, pixel);
 }
 
 
