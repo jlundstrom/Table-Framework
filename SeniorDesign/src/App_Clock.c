@@ -21,11 +21,10 @@ void Demo_Clock_Deinit(void);
 void App_Clock_Init(void);
 void App_Clock_Tick(void);
 void App_Clock_Deinit(void);
-void App_Clock_New(App *app);
 
 void Demo_Clock_Init(void)
 {
-   appClock_Data        = &AppStorage;
+   appClock_Data        = AppStorage;
    appClock_Data->frame = 0;
    appClock_Data->flag  = 0;
 }
@@ -58,7 +57,7 @@ void Demo_Clock_Deinit(void)
 
 void App_Clock_Init(void)
 {
-   appClock_Data              = &AppStorage;
+   appClock_Data              = AppStorage;
    appClock_Data->frame       = 240;
    appClock_Data->flag        = 0;
    appClock_Data->fadeoutFlag = 250;
@@ -90,7 +89,7 @@ void App_Clock_Deinit(void)
 
    for (i = 0; i < sizeof(appData); i++)
    {
-      AppStorage[i] = 0;
+       _AppStorage[i] = 0;
    }
 
    appClock_Data = 0;

@@ -101,9 +101,9 @@ void Demo_Conway_Init(void)
 {
 	int rand = getRandom() % 4, x, y;
 
-	Conway_Data = &AppStorage;
+	Conway_Data = AppStorage;
 	App_Conway_Deinit();      // Clean Struct
-	Conway_Data = &AppStorage;
+	Conway_Data = AppStorage;
 	Conway_Data->frame = 0;
 	Conway_Data->generation = 0;
 	Conway_Data->active = Conway_Data->cells1;
@@ -200,9 +200,9 @@ void App_Conway_Init(void)
 {
 	int rand = getRandom() % 4, x = getRandom() % WIDTH, y = getRandom() % HEIGHT;
 
-	Conway_Data = &AppStorage;
+	Conway_Data = AppStorage;
 	App_Conway_Deinit();      // Clean Struct
-	Conway_Data = &AppStorage;
+	Conway_Data = AppStorage;
 	Conway_Data->frame = 0;
 	Conway_Data->generation = 0;
 	Conway_Data->active = Conway_Data->cells1;
@@ -310,7 +310,7 @@ void App_Conway_Deinit(void)
 
    for (i = 0; i < sizeof(appData); i++)
    {
-      AppStorage[i] = 0;
+       _AppStorage[i] = 0;
    }
 
    Conway_Data = 0;

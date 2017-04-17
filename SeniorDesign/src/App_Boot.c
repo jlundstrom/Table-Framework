@@ -34,7 +34,7 @@ Pixel pixelText;
 
 void Demo_Boot_Init(void)
 {
-   appBoot_Data        = &AppStorage;
+   appBoot_Data        = AppStorage;
    appBoot_Data->frame = 0;
    appBoot_Data->flag  = 0;
 }
@@ -67,7 +67,7 @@ void Demo_Boot_Deinit(void)
 
 void App_Boot_Init(void)
 {
-   appBoot_Data              = &AppStorage;
+   appBoot_Data              = AppStorage;
    appBoot_Data->frame       = 240;
    appBoot_Data->flag        = 0;
    appBoot_Data->frame2       = 0;
@@ -129,7 +129,7 @@ void App_Boot_Deinit(void)
 
    for (i = 0; i < sizeof(appData); i++)
    {
-      AppStorage[i] = 0;
+       _AppStorage[i] = 0;
    }
 
    appBoot_Data = 0;

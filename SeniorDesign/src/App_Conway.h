@@ -1,4 +1,4 @@
-#ifndef __APP_MENU__
+#ifndef __APP_CONWAY__
 #define __APP_CONWAY__
 #include "App.h"
 

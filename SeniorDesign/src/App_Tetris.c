@@ -46,6 +46,7 @@ appData *Tetris_Data;
 void App_Tetris_Init(void);
 void App_Tetris_Deinit(void);
 void Tetris_GenerateBlock(playerData *);
+int Tetris_CheckMove(playerData*, char, char);
 
 void Demo_Tetris_Init(void)
 {
@@ -76,7 +77,7 @@ void Demo_Tetris_Deinit(void)
 
 void App_Tetris_Init(void)
 {
-   Tetris_Data           = &AppStorage;
+   Tetris_Data           = AppStorage;
    Tetris_Data->Player1.top      = 0;
    Tetris_Data->Player1.left     = 1;
    Tetris_Data->Player1.rotation = 0;
@@ -213,7 +214,7 @@ unsigned char Tetris_SetCell(playerData *data, char x, char y, unsigned char val
 }
 
 
-unsigned char Tetris_RotateLeft(playerData *data)
+void Tetris_RotateLeft(playerData *data)
 {
    int           x, y;
    unsigned char tmp[MAX_BLOCKSIZE];
@@ -235,7 +236,7 @@ unsigned char Tetris_RotateLeft(playerData *data)
 }
 
 
-unsigned char Tetris_RotateRight(playerData *data)
+void Tetris_RotateRight(playerData *data)
 {
    int           x, y;
    unsigned char tmp[MAX_BLOCKSIZE];
@@ -418,7 +419,7 @@ void App_Tetris_Tick(void)
       Tetris_Data->Player1.frame = 0;
 	  Input_Tap &= ~(RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
    }
-   else if (Tetris_Data->Player1.frame % 3, Input_Tap)
+   else
    {
       Tetris_Drop(&(Tetris_Data->Player1), 0, Input_Tap);
 	  Input_Tap &= ~(RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
@@ -437,7 +438,7 @@ void App_Tetris_Tick(void)
 	   Tetris_Data->Player2.frame = 0;
 	   User2_Input_Tap &= ~(RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
    }
-   else if (Tetris_Data->Player2.frame % 3, User2_Input_Tap)
+   else
    {
 	   Tetris_Drop(&(Tetris_Data->Player2), 0, User2_Input_Tap);
 	   User2_Input_Tap &= ~(RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
@@ -453,7 +454,7 @@ void App_Tetris_Deinit(void)
 
    for (i = 0; i < sizeof(appData); i++)
    {
-      AppStorage[i] = 0;
+       _AppStorage[i] = 0;
    }
 
    Tetris_Data = 0;

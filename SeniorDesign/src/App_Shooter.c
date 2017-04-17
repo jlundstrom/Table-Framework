@@ -55,7 +55,7 @@ const char    tomoship[7][5][3] = { {{246, 255, 0} ,{0, 252, 255} ,{246, 255, 0}
 
 void Demo_Shoot_Init(void)
 {
-   appShoot_Data        = &AppStorage;
+   appShoot_Data        = AppStorage;
    appShoot_Data->mode=0;
 }
 
@@ -200,7 +200,7 @@ void Demo_Shoot_Deinit(void)
 
 void App_Shoot_Init(void)
 {
-    appShoot_Data        = &AppStorage;
+    appShoot_Data        = AppStorage;
     appShoot_Data->frame=0;
     appShoot_Data->ripple=0;
     appShoot_Data->flag=0;
@@ -270,7 +270,7 @@ void App_Shoot_Deinit(void)
 
    for (i = 0; i < sizeof(appData); i++)
    {
-      AppStorage[i] = 0;
+       _AppStorage[i] = 0;
    }
 
    appShoot_Data = 0;

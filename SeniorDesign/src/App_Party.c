@@ -32,7 +32,7 @@ const char  parrot9[22][16][3] = { { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0,
 
 void Demo_Party_Init(void)
 {
-   appParty_Data        = &AppStorage;
+   appParty_Data        = AppStorage;
    appParty_Data->frame = 0;
 }
 
@@ -71,7 +71,7 @@ void Demo_Party_Deinit(void)
 
 void App_Party_Init(void)
 {
-   appParty_Data        = &AppStorage;
+   appParty_Data        = AppStorage;
    appParty_Data->frame = 0;
 }
 
@@ -100,7 +100,7 @@ void App_Party_Deinit(void)
 
    for (i = 0; i < sizeof(appData); i++)
    {
-      AppStorage[i] = 0;
+       _AppStorage[i] = 0;
    }
 
    appParty_Data = 0;

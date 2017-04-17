@@ -59,7 +59,7 @@ void Demo_Snake_Deinit(void)
 
 void App_Snake_Init(void)
 {
-   Snake_Data          = &AppStorage;
+   Snake_Data          = AppStorage;
    Snake_Data->headX   = getRandomLow() % WIDTH;
    Snake_Data->headY   = getRandomLow() % HEIGHT;
    Snake_Data->headIdx = 0;
@@ -287,7 +287,7 @@ void App_Snake_Deinit(void)
 
    for (i = 0; i < sizeof(appData); i++)
    {
-      AppStorage[i] = 0;
+       _AppStorage[i] = 0;
    }
 
    Snake_Data = 0;

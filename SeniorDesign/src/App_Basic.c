@@ -13,7 +13,7 @@ appBasic_Data *Basic_Data;
 
 void Demo_Init(void)
 {
-   Basic_Data        = &AppStorage;
+   Basic_Data        = AppStorage;
    Basic_Data->x     = 2;
    Basic_Data->y     = 0;
    Basic_Data->frame = 0;
@@ -56,7 +56,7 @@ void Demo_Deinit(void)
 
 void App_Init(void)
 {
-   Basic_Data        = &AppStorage;
+   Basic_Data        = AppStorage;
    Basic_Data->x     = 2;
    Basic_Data->y     = 0;
    Basic_Data->frame = 0;
@@ -118,7 +118,7 @@ void App_Deinit(void)
 
    for (i = 0; i < sizeof(appBasic_Data); i++)
    {
-      AppStorage[i] = 0;
+      _AppStorage[i] = 0;
    }
 
    Basic_Data = 0;

@@ -44,7 +44,7 @@ void rotateUp(int player, int LR);
 
 void Demo_Tron_Init(void)
 {
-   appTron_Data        = &AppStorage;
+   appTron_Data        = AppStorage;
    appTron_Data->frame = 0;
    appTron_Data->flag  = 0;
 }
@@ -88,7 +88,7 @@ void Demo_Tron_Deinit(void)
 
 void App_Tron_Init(void)
 {
-   appTron_Data = &AppStorage;
+   appTron_Data = AppStorage;
    Pixel pixel;
    pixel.R = 0;
    pixel.G = 0;
@@ -363,7 +363,7 @@ void App_Tron_Deinit(void)
 
    for (i = 0; i < sizeof(appData); i++)
    {
-      AppStorage[i] = 0;
+       _AppStorage[i] = 0;
    }
 
    appTron_Data = 0;

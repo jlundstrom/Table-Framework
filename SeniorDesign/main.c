@@ -20,8 +20,10 @@
 #include "src/App_Tron.h"
 #include "src/App_Shooter.h"
 #include "src/App_Cloud.h"
+#include "src/App_Clock.h"
+#include "src/App_Tetris.h"
 
-int main()
+void main()
 {
    // Initializes platform specifics components
    // Display_init should set system clocks if needed
@@ -74,6 +76,4 @@ int main()
       }
 #endif
    }
-
-   return 0;
 }

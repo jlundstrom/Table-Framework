@@ -16,7 +16,8 @@ struct App {
 }typedef App;
 
 // Shared data for applications
-extern unsigned char AppStorage[];
+extern unsigned char _AppStorage[];
+extern void* AppStorage;
 
 // Array of applications for menu
 extern App apps[];

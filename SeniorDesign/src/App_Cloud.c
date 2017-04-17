@@ -35,7 +35,7 @@ void errorCheck();
 
 void Demo_Cloud_Init(void)
 {
-   appCloud_Data        = &AppStorage;
+   appCloud_Data        = AppStorage;
    appCloud_Data->frame = 0;
    appCloud_Data->flag  = 0;
 }
@@ -67,7 +67,7 @@ void Demo_Cloud_Deinit(void)
 
 void App_Cloud_Init(void)
 {
-   appCloud_Data              = &AppStorage;
+   appCloud_Data              = AppStorage;
    appCloud_Data->frame       = 0;
    appCloud_Data->flag        = 0;
    appCloud_Data->hue       = 0;
@@ -148,7 +148,7 @@ void App_Cloud_Deinit(void)
 
     for (i = 0; i < sizeof(appData); i++)
     {
-       AppStorage[i] = 0;
+        _AppStorage[i] = 0;
     }
 
     appCloud_Data = 0;

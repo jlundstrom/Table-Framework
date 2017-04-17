@@ -85,6 +85,7 @@ void App_Menu_New(App *app)
    app->App_Init    = &App_Menu_Init;
    app->App_Tick    = &App_Menu_Tick;
    app->App_Deinit  = &App_Menu_Deinit;
+   AppStorage = &_AppStorage;
 }
 
 
