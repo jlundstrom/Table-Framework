@@ -25,6 +25,7 @@
 
 void main()
 {
+	App boot;
    // Initializes platform specifics components
    // Display_init should set system clocks if needed
    Display_init();
@@ -36,12 +37,31 @@ void main()
    App_Snake_New(&apps[1]);
    App_Conway_New(&apps[2]);
    App_Tetris_New(&apps[3]);
-   App_Boot_New(&apps[4]);
-   App_Party_New(&apps[5]);
-   App_Tron_New(&apps[6]);
-   App_Clock_New(&apps[7]);
-   App_Shoot_New(&apps[8]);
-   App_Cloud_New(&apps[9]);
+   App_Party_New(&apps[4]);
+   App_Tron_New(&apps[5]);
+   App_Clock_New(&apps[6]);
+   App_Shoot_New(&apps[7]);
+   App_Cloud_New(&apps[8]);
+
+   // Boot Animation
+   App_Boot_New(&boot);
+   boot.App_Init();
+   while (!Input_Tap)
+   {
+	   if (DRAWN == 1)
+	   {
+		   boot.App_Tick();
+		   DRAWN = 0;
+	   }
+
+	   // Trigger a frame redraw. Currently only used by WinDisplay
+	   Draw();
+	   // Check for new input
+	   Input_Poll();
+   }
+   boot.App_Deinit();
+   Input_Tap = 0;
+
    // Initialize the Menu
    currentApp = &homeApp;
    currentApp->App_Init();
