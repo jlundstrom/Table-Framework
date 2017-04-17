@@ -7,6 +7,8 @@ struct appBasic_Data
    int x;
    int y;
    int frame;
+   Pixel color;
+   Pixel prevColor;
 }
 typedef   appBasic_Data;
 appBasic_Data *Basic_Data;
@@ -17,7 +19,7 @@ void Demo_Init(void)
    Basic_Data->x     = 2;
    Basic_Data->y     = 0;
    Basic_Data->frame = 0;
-
+   Basic_Data->color = PIXEL_CYAN;
 
 }
 
@@ -60,6 +62,7 @@ void App_Init(void)
    Basic_Data->x     = 2;
    Basic_Data->y     = 0;
    Basic_Data->frame = 0;
+   Basic_Data->color = PIXEL_CYAN;
 }
 
 
@@ -70,7 +73,11 @@ void App_Tick(void)
       Basic_Data->frame = 0;
       if (Input_Status)
       {
-         setPixel(Basic_Data->x, Basic_Data->y, PIXEL_BLACK);
+		  if (!(Input_Status & A_INPUT))
+		  {
+			  setPixel(Basic_Data->x, Basic_Data->y, Basic_Data->prevColor);
+		 }
+         
          if (Input_Status & UP_INPUT)
          {
             Basic_Data->y--;
@@ -87,12 +94,47 @@ void App_Tick(void)
          {
             Basic_Data->x++;
          }
-         if (Input_Status & A_INPUT)
+         if (Input_Tap & B_INPUT)
          {
+			 if (comparePixel(Basic_Data->color, PIXEL_BLACK))
+			 {
+				 Basic_Data->color = PIXEL_CYAN;
+			 }
+			 else if (comparePixel(Basic_Data->color, PIXEL_CYAN))
+			 {
+				 Basic_Data->color = PIXEL_RED;
+			 }
+			 else if (comparePixel(Basic_Data->color, PIXEL_RED))
+			 {
+				 Basic_Data->color = PIXEL_GREEN;
+			 }
+			 else if (comparePixel(Basic_Data->color, PIXEL_GREEN))
+			 {
+				 Basic_Data->color = PIXEL_BLUE;
+			 }
+			 else if (comparePixel(Basic_Data->color, PIXEL_BLUE))
+			 {
+				 Basic_Data->color = PIXEL_YELLOW;
+			 }
+			 else if (comparePixel(Basic_Data->color, PIXEL_YELLOW))
+			 {
+				 Basic_Data->color = PIXEL_ORANGE;
+			 }
+			 else if (comparePixel(Basic_Data->color, PIXEL_ORANGE))
+			 {
+				 Basic_Data->color = PIXEL_PURPLE;
+			 }
+			 else if (comparePixel(Basic_Data->color, PIXEL_PURPLE))
+			 {
+				 Basic_Data->color = PIXEL_WHITE;
+			 }
+			 else if (comparePixel(Basic_Data->color, PIXEL_WHITE))
+			 {
+				 Basic_Data->color = PIXEL_BLACK;
+			 }
          }
-         if (Input_Status & B_INPUT)
-         {
-         }
+
+		 Input_Tap &= ~(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT | B_INPUT);
 
          if (Basic_Data->x < 0)
          {
@@ -105,7 +147,8 @@ void App_Tick(void)
          }
          Basic_Data->x = Basic_Data->x % WIDTH;
          Basic_Data->y = Basic_Data->y % HEIGHT;
-         setPixel(Basic_Data->x, Basic_Data->y, PIXEL_CYAN);
+		 Basic_Data->prevColor = getPixel(Basic_Data->x, Basic_Data->y);
+         setPixel(Basic_Data->x, Basic_Data->y, Basic_Data->color);
       }
    }
    Basic_Data->frame++;
