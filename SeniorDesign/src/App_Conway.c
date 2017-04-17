@@ -3,6 +3,9 @@
 #include "Input.h"
 #include "Random.h"
 
+#define STATE_BUILDING 0x01
+#define STATE_RUNNING 0x02
+
 struct appData
 {
    int           frame;
@@ -11,6 +14,9 @@ struct appData
    unsigned char cells1[WIDTH * HEIGHT];
    unsigned char cells2[WIDTH * HEIGHT];
    unsigned char generation;
+   unsigned char state;
+   int x;
+   int y;
 }
 typedef   appData;
 appData *Conway_Data;
@@ -108,6 +114,7 @@ void Demo_Conway_Init(void)
 	Conway_Data->generation = 0;
 	Conway_Data->active = Conway_Data->cells1;
 	Conway_Data->temp = Conway_Data->cells2;
+	Conway_Data->state = STATE_RUNNING;
 	WinColor = getRandomPixel();
 
 	Pixel pixel;
@@ -207,6 +214,8 @@ void App_Conway_Init(void)
 	Conway_Data->generation = 0;
 	Conway_Data->active = Conway_Data->cells1;
 	Conway_Data->temp = Conway_Data->cells2;
+	Conway_Data->state = STATE_BUILDING;
+	WinColor = getRandomPixel();
 
 	if (rand == 0)
 	{
@@ -268,39 +277,104 @@ void App_Conway_Tick(void)
    int           x, y, neighbors;
    unsigned char *temp;
 
-   for (x = 0; x < WIDTH; x++)
+   if ((Input_Tap & B_INPUT))
    {
-      for (y = 0; y < HEIGHT; y++)
-      {
-         neighbors = getNeighbours(Conway_Data->active, x, y);
-         if (getCell(Conway_Data->active, x, y))
-         {
-            if (neighbors < 2)
-            {
-               setCell(Conway_Data->temp, x, y, 0);
-            }
-            else if (neighbors < 4)
-            {
-               setCell(Conway_Data->temp, x, y, 1);
-            }
-            else
-            {
-               setCell(Conway_Data->temp, x, y, 0);
-            }
-         }
-         else if (neighbors == 3)
-         {
-            setCell(Conway_Data->temp, x, y, 1);
-         }
-         else
-         {
-            setCell(Conway_Data->temp, x, y, 0);
-         }
-      }
+	   if (Conway_Data->state & STATE_BUILDING)
+	   {
+		   Conway_Data->state = STATE_RUNNING;
+	   }
+	   else
+	   {
+		   Conway_Data->state = STATE_BUILDING;
+	   }
+
    }
-   temp = Conway_Data->active;
-   Conway_Data->active = Conway_Data->temp;
-   Conway_Data->temp   = temp;
+
+   if (Conway_Data->state & STATE_BUILDING) {
+	   if (getCell(Conway_Data->active, Conway_Data->x, Conway_Data->y))
+	   {
+		   setPixel(Conway_Data->x, Conway_Data->y, WinColor);
+	   }
+	   else {
+		   setPixel(Conway_Data->x, Conway_Data->y, PIXEL_BLACK);
+	   }
+	   if (Input_Status & UP_INPUT)
+	   {
+		   Conway_Data->y--;
+	   }
+	   if (Input_Status & DOWN_INPUT)
+	   {
+		   Conway_Data->y++;
+	   }
+	   if (Input_Status & LEFT_INPUT)
+	   {
+		   Conway_Data->x--;
+	   }
+	   if (Input_Status & RIGHT_INPUT)
+	   {
+		   Conway_Data->x++;
+	   }
+
+	   if (Conway_Data->x < 0)
+	   {
+		   Conway_Data->x = WIDTH - 1;
+	   }
+
+	   if (Conway_Data->y < 0)
+	   {
+		   Conway_Data->y = HEIGHT - 1;
+	   }
+	   setPixel(Conway_Data->x, Conway_Data->y, PIXEL_WHITE);
+	   if ((Input_Tap & A_INPUT))
+	   {
+		   if (getCell(Conway_Data->active, Conway_Data->x, Conway_Data->y))
+		   {
+			   setCell(Conway_Data->active, Conway_Data->x, Conway_Data->y, 0);
+		   }
+		   else {
+			   setCell(Conway_Data->active, Conway_Data->x, Conway_Data->y, 1);
+		   }
+		   
+	   }
+   }else if (Conway_Data->state & STATE_RUNNING)
+   {
+	   WinColor = getRandomPixel();
+		for (x = 0; x < WIDTH; x++)
+		{
+			for (y = 0; y < HEIGHT; y++)
+			{
+				neighbors = getNeighbours(Conway_Data->active, x, y);
+				if (getCell(Conway_Data->active, x, y))
+				{
+				if (neighbors < 2)
+				{
+					setCell(Conway_Data->temp, x, y, 0);
+				}
+				else if (neighbors < 4)
+				{
+					setCell(Conway_Data->temp, x, y, 1);
+				}
+				else
+				{
+					setCell(Conway_Data->temp, x, y, 0);
+				}
+				}
+				else if (neighbors == 3)
+				{
+				setCell(Conway_Data->temp, x, y, 1);
+				}
+				else
+				{
+				setCell(Conway_Data->temp, x, y, 0);
+				}
+			}
+		}
+		temp = Conway_Data->active;
+		Conway_Data->active = Conway_Data->temp;
+		Conway_Data->temp   = temp;
+   }
+
+   Input_Tap &= ~(UP_INPUT | DOWN_INPUT | LEFT_INPUT | RIGHT_INPUT | A_INPUT | B_INPUT);
 }
 
 
