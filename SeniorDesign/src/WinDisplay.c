@@ -175,7 +175,7 @@ void Draw(void)
    }
    else
    {
-      if ((CLOCKS_PER_SEC / 31) < (clock() - LastRun))
+      if ((CLOCKS_PER_SEC / 36) < (clock() - LastRun))
       {
          LastRun = clock();
          display();
