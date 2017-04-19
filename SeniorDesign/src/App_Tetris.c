@@ -30,6 +30,7 @@ struct playerData
    unsigned char  state;
    Pixel          BG;
    Block          block;
+   Block          nextBlock;
    unsigned char  board[BOARD_WIDTH * BOARD_HEIGHT];
 }
 typedef   playerData;
@@ -45,7 +46,8 @@ appData *Tetris_Data;
 
 void App_Tetris_Init(void);
 void App_Tetris_Deinit(void);
-void Tetris_GenerateBlock(playerData *);
+void Tetris_GenerateBlock(Block*);
+void Tetris_GenerateBlocks(playerData *);
 int Tetris_CheckMove(playerData*, char, char);
 
 void Demo_Tetris_Init(void)
@@ -89,8 +91,11 @@ void App_Tetris_Init(void)
    Tetris_Data->Player2.frame = 0;
    Tetris_Data->Player2.BG = PIXEL_BLACK;
 
-   Tetris_GenerateBlock(&(Tetris_Data->Player1));
-   Tetris_GenerateBlock(&(Tetris_Data->Player2));
+   Tetris_GenerateBlock(&Tetris_Data->Player1.nextBlock);
+   Tetris_GenerateBlock(&Tetris_Data->Player2.nextBlock);
+
+   Tetris_GenerateBlocks(&(Tetris_Data->Player1));
+   Tetris_GenerateBlocks(&(Tetris_Data->Player2));
    
    drawRect(Tetris_Data->Player1.left - 1, Tetris_Data->Player1.top - 1, Tetris_Data->Player1.left + BOARD_WIDTH + 1, Tetris_Data->Player1.top + BOARD_HEIGHT + 1, PIXEL_WHITE);
    drawRect(Tetris_Data->Player2.left - 1, Tetris_Data->Player2.top - 1, Tetris_Data->Player2.left + BOARD_WIDTH + 1, Tetris_Data->Player2.top + BOARD_HEIGHT + 1, PIXEL_RED);
@@ -98,90 +103,109 @@ void App_Tetris_Init(void)
    drawRect(Tetris_Data->Player2.left, Tetris_Data->Player2.top, Tetris_Data->Player2.left + BOARD_WIDTH, Tetris_Data->Player2.top + BOARD_HEIGHT, Tetris_Data->Player2.BG);
 }
 
-
-void Tetris_GenerateBlock(playerData *data)
+void Tetris_GenerateBlock(Block* blk)
 {
-   int block = getRandom() % 7, i;
+	int block = getRandom() % 7, i;
 
-   for (i = 0; i < MAX_BLOCKSIZE; i++)
-   {
-	   data->block.pixels[i] = 0;
-   }
-   switch (block)
-   {
-   case 0:
-      data->block.color     = PIXEL_CYAN;
-      data->block.width     = 4;
-      data->block.height    = 1;
-      data->block.pixels[0] = 1;
-      data->block.pixels[1] = 1;
-      data->block.pixels[2] = 1;
-      data->block.pixels[3] = 1;
-      break;
+	for (i = 0; i < MAX_BLOCKSIZE; i++)
+	{
+		blk->pixels[i] = 0;
+	}
+	switch (block)
+	{
+	case 0:
+		blk->color = PIXEL_CYAN;
+		blk->width = 4;
+		blk->height = 1;
+		blk->pixels[0] = 1;
+		blk->pixels[1] = 1;
+		blk->pixels[2] = 1;
+		blk->pixels[3] = 1;
+		break;
 
-   case 1:
-      data->block.color     = PIXEL_BLUE;
-      data->block.width     = 3;
-      data->block.height    = 2;
-      data->block.pixels[0] = 1;
-      data->block.pixels[1] = 1;
-      data->block.pixels[2] = 1;
-      data->block.pixels[6] = 1;
-      break;
+	case 1:
+		blk->color = PIXEL_BLUE;
+		blk->width = 3;
+		blk->height = 2;
+		blk->pixels[0] = 1;
+		blk->pixels[1] = 1;
+		blk->pixels[2] = 1;
+		blk->pixels[6] = 1;
+		break;
 
-   case 2:
-      data->block.color     = PIXEL_ORANGE;
-      data->block.width     = 3;
-      data->block.height    = 2;
-      data->block.pixels[0] = 1;
-      data->block.pixels[1] = 1;
-      data->block.pixels[2] = 1;
-      data->block.pixels[4] = 1;
-      break;
+	case 2:
+		blk->color = PIXEL_ORANGE;
+		blk->width = 3;
+		blk->height = 2;
+		blk->pixels[0] = 1;
+		blk->pixels[1] = 1;
+		blk->pixels[2] = 1;
+		blk->pixels[4] = 1;
+		break;
 
-   case 3:
-      data->block.color     = PIXEL_YELLOW;
-      data->block.width     = 2;
-      data->block.height    = 2;
-      data->block.pixels[0] = 1;
-      data->block.pixels[1] = 1;
-      data->block.pixels[4] = 1;
-      data->block.pixels[5] = 1;
-      break;
+	case 3:
+		blk->color = PIXEL_YELLOW;
+		blk->width = 2;
+		blk->height = 2;
+		blk->pixels[0] = 1;
+		blk->pixels[1] = 1;
+		blk->pixels[4] = 1;
+		blk->pixels[5] = 1;
+		break;
 
-   case 4:
-      data->block.color     = PIXEL_GREEN;
-      data->block.width     = 3;
-      data->block.height    = 2;
-      data->block.pixels[1] = 1;
-      data->block.pixels[2] = 1;
-      data->block.pixels[4] = 1;
-      data->block.pixels[5] = 1;
-      break;
+	case 4:
+		blk->color = PIXEL_GREEN;
+		blk->width = 3;
+		blk->height = 2;
+		blk->pixels[1] = 1;
+		blk->pixels[2] = 1;
+		blk->pixels[4] = 1;
+		blk->pixels[5] = 1;
+		break;
 
-   case 5:
-      data->block.color     = PIXEL_PURPLE;
-      data->block.width     = 3;
-      data->block.height    = 2;
-      data->block.pixels[0] = 1;
-      data->block.pixels[1] = 1;
-      data->block.pixels[2] = 1;
-      data->block.pixels[5] = 1;
-      break;
+	case 5:
+		blk->color = PIXEL_PURPLE;
+		blk->width = 3;
+		blk->height = 2;
+		blk->pixels[0] = 1;
+		blk->pixels[1] = 1;
+		blk->pixels[2] = 1;
+		blk->pixels[5] = 1;
+		break;
 
-   case 6:
-      data->block.color     = PIXEL_RED;
-      data->block.width     = 3;
-      data->block.height    = 2;
-      data->block.pixels[0] = 1;
-      data->block.pixels[1] = 1;
-      data->block.pixels[5] = 1;
-      data->block.pixels[6] = 1;
-      break;
-   }
+	case 6:
+		blk->color = PIXEL_RED;
+		blk->width = 3;
+		blk->height = 2;
+		blk->pixels[0] = 1;
+		blk->pixels[1] = 1;
+		blk->pixels[5] = 1;
+		blk->pixels[6] = 1;
+		break;
+	}
 
-   data->block.y = 0;
-   data->block.x = (BOARD_WIDTH / 2) - (data->block.width / 2);
+	blk->y = 0;
+	blk->x = (BOARD_WIDTH / 2) - (blk->width / 2);
+}
+
+void Tetris_GenerateBlocks(playerData *data)
+{
+	int x, y;
+	
+	data->block = data->nextBlock;
+	Tetris_GenerateBlock(&data->nextBlock);
+
+	drawRect(Tetris_GetPixelX(data, BOARD_WIDTH + 1), Tetris_GetPixelY(data, 1), Tetris_GetPixelX(data, BOARD_WIDTH + 5), Tetris_GetPixelY(data, 5), PIXEL_BLACK);
+	for (x = 0; x < data->nextBlock.width; x++)
+	{
+		for (y = 0; y < data->nextBlock.height; y++)
+		{
+			if (data->nextBlock.pixels[x + (y * 4)])
+			{
+				setPixel(Tetris_GetPixelX(data, BOARD_WIDTH + 1 + x), Tetris_GetPixelY(data, 1 + y), data->nextBlock.color);
+			}
+		}
+	}
 
    if (!Tetris_CheckMove(data, 0, 0))
    {
@@ -398,7 +422,7 @@ void Tetris_Drop(playerData *data, int drop, unsigned char input)
    }
    if (data->state & SPAWN_NEW_BLOCK)
    {
-      Tetris_GenerateBlock(data);
+      Tetris_GenerateBlocks(data);
       data->state &= ~SPAWN_NEW_BLOCK;
    }
 }
