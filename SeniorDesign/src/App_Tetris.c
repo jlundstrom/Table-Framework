@@ -84,11 +84,13 @@ void App_Tetris_Init(void)
    Tetris_Data->Player1.left     = 1;
    Tetris_Data->Player1.rotation = 0;
    Tetris_Data->Player1.frame    = 0;
+   Tetris_Data->Player1.state = 0;
    Tetris_Data->Player1.BG       = PIXEL_BLACK;
    Tetris_Data->Player2.top = 0;
    Tetris_Data->Player2.left = 17;
    Tetris_Data->Player2.rotation = 0;
    Tetris_Data->Player2.frame = 0;
+   Tetris_Data->Player2.state = 0;
    Tetris_Data->Player2.BG = PIXEL_BLACK;
 
    Tetris_GenerateBlock(&Tetris_Data->Player1.nextBlock);
@@ -195,14 +197,14 @@ void Tetris_GenerateBlocks(playerData *data)
 	data->block = data->nextBlock;
 	Tetris_GenerateBlock(&data->nextBlock);
 
-	drawRect(Tetris_GetPixelX(data, BOARD_WIDTH + 1), Tetris_GetPixelY(data, 1), Tetris_GetPixelX(data, BOARD_WIDTH + 5), Tetris_GetPixelY(data, 5), PIXEL_BLACK);
+	drawRect(Tetris_GetPixelX(data, BOARD_WIDTH + 1), Tetris_GetPixelY(data, 1), Tetris_GetPixelX(data, BOARD_WIDTH + 6), Tetris_GetPixelY(data, 5), PIXEL_BLACK);
 	for (x = 0; x < data->nextBlock.width; x++)
 	{
 		for (y = 0; y < data->nextBlock.height; y++)
 		{
 			if (data->nextBlock.pixels[x + (y * 4)])
 			{
-				setPixel(Tetris_GetPixelX(data, BOARD_WIDTH + 1 + x), Tetris_GetPixelY(data, 1 + y), data->nextBlock.color);
+				setPixel(Tetris_GetPixelX(data, BOARD_WIDTH + 2 + x), Tetris_GetPixelY(data, 1 + y), data->nextBlock.color);
 			}
 		}
 	}
@@ -341,9 +343,62 @@ void Tetris_RemoveRow(playerData *data, char row)
 }
 
 
+void App_Tetris_GameOver_Tick(playerData *data, unsigned char input)
+{
+	int x, y;
+	Pixel p;
+	for (y = 0; y < BOARD_HEIGHT; y++)
+	{
+		for (x = 0; x < BOARD_WIDTH; x++)
+		{
+			p = getPixel(Tetris_GetPixelX(data, x), Tetris_GetPixelY(data, y));
+			if (!(comparePixel(p, PIXEL_BLACK) || comparePixel(p, PIXEL_RED)))
+			{
+				setPixel(Tetris_GetPixelX(data, x), Tetris_GetPixelY(data, y), PIXEL_RED);
+				return;
+			}
+		}
+	}
+	for (y = BOARD_HEIGHT - 1; y >= 0; y--)
+	{
+		for (x = 0; x < BOARD_WIDTH; x++)
+		{
+			p = getPixel(Tetris_GetPixelX(data, x), Tetris_GetPixelY(data, y));
+			setPixel(Tetris_GetPixelX(data, x), Tetris_GetPixelY(data, y), PIXEL_BLACK);
+			if (!comparePixel(p, PIXEL_BLACK) && y + 1 < BOARD_HEIGHT)
+			{
+				setPixel(Tetris_GetPixelX(data, x), Tetris_GetPixelY(data, y + 1), p);
+				return;
+			}
+		}
+	}
+
+	if (input & A_INPUT)
+	{
+		data->frame = 0;
+		data->state = 0;
+		data->BG = PIXEL_BLACK;
+		for (x = 0; x < BOARD_WIDTH * BOARD_HEIGHT; x++)
+		{
+			data->board[x] = 0;
+		}
+
+		Tetris_GenerateBlock(&data->nextBlock);
+
+		Tetris_GenerateBlocks(data);
+	}
+}
+
+
 void Tetris_Drop(playerData *data, int drop, unsigned char input)
 {
    int x, y;
+
+   if (data->state & GAME_OVER)
+   {
+	   App_Tetris_GameOver_Tick(data, input);
+	   return;
+   }
 
    for (x = 0; x < data->block.width; x++)
    {
