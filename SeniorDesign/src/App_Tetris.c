@@ -28,6 +28,7 @@ struct playerData
    unsigned short rotation;
    char           frame;
    unsigned char  state;
+   unsigned int   score;
    Pixel          BG;
    Block          block;
    Block          nextBlock;
@@ -41,8 +42,10 @@ struct appData
 	playerData Player2;
 }
 typedef   appData;
-appData *Tetris_Data;
 
+appData *Tetris_Data;
+const uint16_t Numbers[] = { 0b110101101101011, 0b010110010010010, 0b111001011100111, 0b111001010001111, 0b101101111001001, 
+0b111100110001110, 0b011100111101011, 0b111001010100100, 0b111101111101111, 0b011101111001110 };
 
 void App_Tetris_Init(void);
 void App_Tetris_Deinit(void);
@@ -84,20 +87,20 @@ void App_Tetris_Init(void)
    Tetris_Data->Player1.left     = 1;
    Tetris_Data->Player1.rotation = 0;
    Tetris_Data->Player1.frame    = 0;
-   Tetris_Data->Player1.state = 0;
+   Tetris_Data->Player1.state = GAME_OVER;
    Tetris_Data->Player1.BG       = PIXEL_BLACK;
    Tetris_Data->Player2.top = 0;
    Tetris_Data->Player2.left = 17;
    Tetris_Data->Player2.rotation = 0;
    Tetris_Data->Player2.frame = 0;
-   Tetris_Data->Player2.state = 0;
+   Tetris_Data->Player2.state = GAME_OVER;
    Tetris_Data->Player2.BG = PIXEL_BLACK;
 
    Tetris_GenerateBlock(&Tetris_Data->Player1.nextBlock);
    Tetris_GenerateBlock(&Tetris_Data->Player2.nextBlock);
 
-   Tetris_GenerateBlocks(&(Tetris_Data->Player1));
-   Tetris_GenerateBlocks(&(Tetris_Data->Player2));
+   /*Tetris_GenerateBlocks(&(Tetris_Data->Player1));
+   Tetris_GenerateBlocks(&(Tetris_Data->Player2));*/
    
    drawRect(Tetris_Data->Player1.left - 1, Tetris_Data->Player1.top - 1, Tetris_Data->Player1.left + BOARD_WIDTH + 1, Tetris_Data->Player1.top + BOARD_HEIGHT + 1, PIXEL_WHITE);
    drawRect(Tetris_Data->Player2.left - 1, Tetris_Data->Player2.top - 1, Tetris_Data->Player2.left + BOARD_WIDTH + 1, Tetris_Data->Player2.top + BOARD_HEIGHT + 1, PIXEL_RED);
@@ -343,6 +346,36 @@ void Tetris_RemoveRow(playerData *data, char row)
 }
 
 
+void Tetris_DrawScore(playerData *data)
+{
+	int x, y, score;
+	char seg, i;
+	uint16_t mask;
+	drawRect(Tetris_GetPixelX(data, BOARD_WIDTH + 1), Tetris_GetPixelY(data, 4), Tetris_GetPixelX(data, BOARD_WIDTH + 6), Tetris_GetPixelY(data, BOARD_HEIGHT), PIXEL_BLACK);
+	score = data->score;
+	
+
+	for (i = 1; i < 4; i++)
+	{
+		seg = score % 10;
+		score = score / 10;
+		mask = 0x1;
+
+		for (x = 0; x < 5; x++)
+		{
+			for (y = 2; y >= 0; y--)
+			{
+				if (Numbers[seg] & mask)
+				{
+					setPixel(Tetris_GetPixelX(data, BOARD_WIDTH + 1 + x), Tetris_GetPixelY(data, BOARD_HEIGHT - (i * 4) + y), PIXEL_LIGHT_GREEN);
+				}
+				mask = mask << 1;
+			}
+		}
+
+	}
+}
+
 void App_Tetris_GameOver_Tick(playerData *data, unsigned char input)
 {
 	int x, y;
@@ -375,9 +408,12 @@ void App_Tetris_GameOver_Tick(playerData *data, unsigned char input)
 
 	if (input & A_INPUT)
 	{
+
+		drawRect(Tetris_GetPixelX(data, 0), Tetris_GetPixelY(data, 0), Tetris_GetPixelX(data, BOARD_WIDTH), Tetris_GetPixelY(data, BOARD_HEIGHT), data->BG);
 		data->frame = 0;
 		data->state = 0;
 		data->BG = PIXEL_BLACK;
+		data->score = 0;
 		for (x = 0; x < BOARD_WIDTH * BOARD_HEIGHT; x++)
 		{
 			data->board[x] = 0;
@@ -468,8 +504,9 @@ void Tetris_Drop(playerData *data, int drop, unsigned char input)
             }
             if (x == BOARD_WIDTH - 1)
             {
-               Tetris_RemoveRow(data, y + data->block.y);
-               data->block.y++;
+				data->score += 1;
+				Tetris_RemoveRow(data, y + data->block.y);
+				data->block.y++;
             }
          }
       }
@@ -480,6 +517,8 @@ void Tetris_Drop(playerData *data, int drop, unsigned char input)
       Tetris_GenerateBlocks(data);
       data->state &= ~SPAWN_NEW_BLOCK;
    }
+
+   Tetris_DrawScore(data);
 }
 
 

@@ -24,6 +24,7 @@ static Pixel PIXEL_BLACK = { 0, 0, 0 };
 static Pixel PIXEL_CYAN = { 128, 0, 128 };
 static Pixel PIXEL_RED = { 0, 128, 0 };
 static Pixel PIXEL_GREEN = { 128, 0, 0 };
+static Pixel PIXEL_LIGHT_GREEN = { 255, 173, 0 };
 static Pixel PIXEL_BLUE = { 0, 0, 128 };
 static Pixel PIXEL_YELLOW = { 255, 255, 0 };
 static Pixel PIXEL_ORANGE = { 165, 255, 0 };
