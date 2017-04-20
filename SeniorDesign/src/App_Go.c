@@ -81,13 +81,17 @@ void App_Go_Init(void)
 	Go_Data->player1.input = &Input_Status;
 	Go_Data->player1.long_Hold = &P1_Long_Hold;
 	Go_Data->player1.selMask = P1CELL;
+	Go_Data->player1.x = (Go_Data->size / 2);
+	Go_Data->player1.y = (Go_Data->size / 2);
 	Go_Data->player2.color = PIXEL_BLUE;
 	Go_Data->player2.tap = &User2_Input_Tap;
 	Go_Data->player2.input = &User2_Input_Status;
 	Go_Data->player2.long_Hold = &P2_Long_Hold;
 	Go_Data->player2.selMask = P2CELL;
+	Go_Data->player2.x = (Go_Data->size / 2);
+	Go_Data->player2.y = (Go_Data->size / 2);
 
-	Go_Data->currentPlayer = &Go_Data->player2;
+	Go_Data->currentPlayer = &Go_Data->player1;
 }
 
 unsigned char Go_getCell(int x, int y)
