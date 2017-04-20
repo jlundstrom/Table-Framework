@@ -16,6 +16,7 @@ struct playerData
 {
 	char x;
 	char y;
+	unsigned char selMask;
 	int frame;
 	unsigned char* tap;
 	unsigned char* input;
@@ -79,12 +80,14 @@ void App_Go_Init(void)
 	Go_Data->player1.tap = &Input_Tap;
 	Go_Data->player1.input = &Input_Status;
 	Go_Data->player1.long_Hold = &P1_Long_Hold;
+	Go_Data->player1.selMask = P1CELL;
 	Go_Data->player2.color = PIXEL_BLUE;
 	Go_Data->player2.tap = &User2_Input_Tap;
 	Go_Data->player2.input = &User2_Input_Status;
 	Go_Data->player2.long_Hold = &P2_Long_Hold;
+	Go_Data->player2.selMask = P2CELL;
 
-	Go_Data->currentPlayer = &Go_Data->player1;
+	Go_Data->currentPlayer = &Go_Data->player2;
 }
 
 unsigned char Go_getCell(int x, int y)
@@ -127,9 +130,21 @@ void Draw_Board(void)
 	}
 }
 
+void Go_ProcessSelection(struct playerData* player)
+{
+	if (*player->tap & A_INPUT)
+	{
+		if (!(Go_getCell(player->x, player->y) & 0x0f))
+		{
+			Go_setCell(player->x, player->y, player->selMask);
+			Go_Data->currentPlayer = ((player == &Go_Data->player1) ? &Go_Data->player2 : &Go_Data->player1);
+		}
+	}
+}
+
 void Go_ProcessMove(struct playerData* player)
 {
-	if (*player->tap)
+	if (*player->tap & NORMAL_INPUT)
 	{
 		Go_setCell(player->x, player->y, Go_getCell(player->x, player->y) & ~SELCELL);
 		if (*player->tap & UP_INPUT)
@@ -219,17 +234,11 @@ void App_Go_Tick(void)
 	printTextOffset('2', 26, 5, Go_Data->player2.color);
 	
 	Go_ProcessMove(Go_Data->currentPlayer);
+	Go_ProcessSelection(Go_Data->currentPlayer);
 	Draw_Board();
-	// Draw active user board
-	// Draw a Red 1 and a Blue 2 to represent players
-	// Use a pulsating purple to player color as selector
-	// A to place Flash Red base board for invalid?
 
-	//Tetris_Drop(&(Tetris_Data->Player1), 0, Input_Tap);
-	//TODO: add user tick handler
-
-	Input_Tap &= ~(UP_INPUT | DOWN_INPUT | RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
-	User2_Input_Tap &= ~(UP_INPUT | DOWN_INPUT | RIGHT_INPUT | LEFT_INPUT | A_INPUT | B_INPUT);
+	Input_Tap &= ~NORMAL_INPUT;
+	User2_Input_Tap &= ~NORMAL_INPUT;
 }
 
 

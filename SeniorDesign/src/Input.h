@@ -2,7 +2,7 @@
 #define __INPUT__
 
 // Bits representing each key
-
+#define NORMAL_INPUT 0x3F
 #define UP_INPUT 0x01
 #define DOWN_INPUT 0x02
 #define LEFT_INPUT 0x04
