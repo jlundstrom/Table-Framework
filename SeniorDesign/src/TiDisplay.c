@@ -46,7 +46,7 @@ unsigned char *rawPixels = (unsigned char *)Pixels;
 unsigned char *endPixel  = (unsigned char *)&Pixels[WIDTH * HEIGHT];
 unsigned char mask       = 0x80;
 unsigned char DRAWN      = 0;
-const uint8_t PROGMEM gamma8[] = {
+const unsigned char gamma8[] = {
 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,
 	1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,

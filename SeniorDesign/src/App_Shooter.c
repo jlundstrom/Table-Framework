@@ -19,6 +19,8 @@ struct appData
    int           inputb;
    int           mode;
    int           character;
+   int           xShip;
+   int           yShip;
 }
 typedef   appData;
 appData *appShoot_Data;
@@ -34,6 +36,8 @@ void checkInput();
 void resetInput();
 void screenRipple(int x);
 void drawCharacter(int choice);
+void screenWipe(int x);
+void drawShip();
 int colors[16]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
 int charSelect[3]={0,1,2};
 int locData[WIDTH][HEIGHT];
@@ -57,6 +61,7 @@ void Demo_Shoot_Init(void)
 {
    appShoot_Data        = AppStorage;
    appShoot_Data->mode=0;
+   appShoot_Data->frame=0;
 }
 
 
@@ -171,8 +176,18 @@ void Demo_Shoot_Tick(void)
             }
         }
     }
-    leftRotatebyOne(colors, 16);
-    char string[5]  = { 'S', 'H', 'O', 'O', 'T' };
+    appShoot_Data->frame++;
+
+    if(appShoot_Data->frame%4==0)
+    {
+        leftRotatebyOne(colors, 16);
+    }
+    if(appShoot_Data->frame>5000)
+    {
+        appShoot_Data->temp=0;
+    }
+
+    char string[5]  = { 'S', 'P', 'A', 'C', 'E' };
     char string2[5] = { 'I', 'N', 'V', 'D', 'E' };
     pixel.R = 0;
     pixel.G = 0;
@@ -210,6 +225,8 @@ void App_Shoot_Init(void)
     appShoot_Data->right=0;
     appShoot_Data->inputa=0;
     appShoot_Data->inputb=0;
+    appShoot_Data->xShip=5;
+    appShoot_Data->yShip=5;
     appShoot_Data->mode=0;
     appShoot_Data->temp=1;
     appShoot_Data->character=1;
@@ -221,13 +238,16 @@ void App_Shoot_Init(void)
 void App_Shoot_Tick(void)
 {
     int storage=0;
-    if(appShoot_Data->mode==0)
+    Pixel pixel;
+    switch(appShoot_Data->mode)
     {
+    case 0:
         if(appShoot_Data->inputa==1)
         {
             appShoot_Data->character=charSelect[0];
             appShoot_Data->flag=1;
             appShoot_Data->mode=1;
+            appShoot_Data->ripple=60;
         }
         if(!appShoot_Data->flag)
         {
@@ -241,7 +261,7 @@ void App_Shoot_Tick(void)
             }
         }
         storage=appShoot_Data->temp + charSelect[0]*3;
-        if(appShoot_Data->frame % 6)
+        if(appShoot_Data->frame % 10==0)
         {
             appShoot_Data->temp++;
         }
@@ -250,7 +270,37 @@ void App_Shoot_Tick(void)
             appShoot_Data->temp=1;
         }
         drawCharacter(storage);
+        break;
+    case 1:
+        storage=appShoot_Data->temp + charSelect[0]*3;
+        drawCharacter(storage);
+        screenWipe(appShoot_Data->ripple);
+        appShoot_Data->ripple--;
+        if(appShoot_Data->ripple<0)
+        {
+            appShoot_Data->mode=2;
+        }
+        break;
+    case 2:
+        pixel.R = 0;
+        pixel.G = 0;
+        pixel.B = 0;
+        drawBackground(pixel);
+        drawShip();
+        break;
+
+
+    default:
+        break;
+
     }
+
+
+
+
+
+
+
 
    appShoot_Data->frame++;
    if(appShoot_Data->frame>5000)
@@ -296,23 +346,65 @@ void leftRotatebyOne(int arr[], int n)
   arr[i] = temp;
 }
 
+void drawShip()
+{
+
+    int x,y;
+    Pixel pixel;
+    for(x=0;x<7;x++)
+    {
+        for(y=0;y<5;y++)
+        {
+            if(appShoot_Data->character==0)
+            {
+                pixel.R =saoriship[x][y][0];
+                pixel.G =saoriship[x][y][1];
+                pixel.B =saoriship[x][y][2];
+                if(0==comparePixel(PIXEL_WHITE,pixel))
+                {
+                    setPixel(appShoot_Data->xShip + 4 + x,appShoot_Data->yShip + 3 + y,pixel);
+                }
+            }
+            if(appShoot_Data->character==1)
+            {
+                pixel.R =tomoship[x][y][0];
+                pixel.G =tomoship[x][y][1];
+                pixel.B =tomoship[x][y][2];
+                if(0==comparePixel(PIXEL_WHITE,pixel))
+                {
+                    setPixel(appShoot_Data->xShip + 4 + x,appShoot_Data->yShip + 3 + y,pixel);
+                }
+            }
+            if(appShoot_Data->character==2)
+            {
+                pixel.R =saraship[x][y][0];
+                pixel.G =saraship[x][y][1];
+                pixel.B =saraship[x][y][2];
+                if(0==comparePixel(PIXEL_WHITE,pixel))
+                {
+                    setPixel(appShoot_Data->xShip + 4 + x,appShoot_Data->yShip + 3 + y,pixel);
+                }
+            }
+        }
+    }
+}
 void checkInput()
 {
     if (Input_Tap)
           {
-              if (Input_Tap & UP_INPUT)
+              if (Input_Tap & UP_INPUT || Input_Status & UP_INPUT )
                {
                   appShoot_Data->up = 1;
                }
-               else if (Input_Tap & DOWN_INPUT)
+               else if (Input_Tap & DOWN_INPUT || Input_Status & DOWN_INPUT)
                {
                    appShoot_Data->down = 1;
                }
-               else if (Input_Tap & LEFT_INPUT)
+               else if (Input_Tap & LEFT_INPUT || Input_Status & LEFT_INPUT)
                {
                    appShoot_Data->left = 1;
                }
-               else if (Input_Tap & RIGHT_INPUT)
+               else if (Input_Tap & RIGHT_INPUT || Input_Status & RIGHT_INPUT)
                {
                    appShoot_Data->right = 1;
                }
@@ -327,19 +419,19 @@ void checkInput()
           }
           if (User2_Input_Tap)
           {
-              if (User2_Input_Tap & UP_INPUT)
+              if (User2_Input_Tap & UP_INPUT || Input_Status & UP_INPUT )
                {
                   appShoot_Data->up = 1;
                }
-               else if (User2_Input_Tap & DOWN_INPUT)
+               else if (User2_Input_Tap & DOWN_INPUT || Input_Status & DOWN_INPUT)
                {
                    appShoot_Data->down = 1;
                }
-               else if (User2_Input_Tap & LEFT_INPUT)
+               else if (User2_Input_Tap & LEFT_INPUT || Input_Status & LEFT_INPUT)
                {
                    appShoot_Data->left = 1;
                }
-               else if (User2_Input_Tap & RIGHT_INPUT)
+               else if (User2_Input_Tap & RIGHT_INPUT || Input_Status & RIGHT_INPUT)
                {
                    appShoot_Data->right = 1;
                }
@@ -366,6 +458,23 @@ void resetInput()
     appShoot_Data->inputb = 0;
 }
 
+void screenWipe(int x) //50 frames
+{
+    screenRipple(x-5);
+    screenRipple(x-17);
+    if(x<32)
+    {
+        Pixel pixel;
+        pixel.R=255;
+        pixel.G=255;
+        pixel.B=255;
+        int i=0;
+        for(i=x;i<32;i++)
+        {
+            drawLine(i,0, i,16,pixel);
+        }
+    }
+}
 void screenRipple(int x)
 {
    Pixel pixel;
