@@ -413,8 +413,12 @@ void drawShipEngine()
 
 void drawPixelBack()
 {
-    int temp = getRandomLow() % HEIGHT;
-    appShoot_Data->backData[31][temp] = 1;
+    int temp;
+    if(appShoot_Data->%3==0)
+    {
+        temp = getRandomLow() % HEIGHT;
+        appShoot_Data->backData[31][temp] = 1;
+    }
     int x,y;
     Pixel pixel;
         for(x=0;x<WIDTH;x++)
@@ -425,15 +429,15 @@ void drawPixelBack()
                 {
                     pixel.R=10;
                     pixel.G=10;
-                    pixel.B=150;
+                    pixel.B=100;
                     setPixel(x,y,pixel);
                     pixel.R=10;
                     pixel.G=10;
-                    pixel.B=1000;
-                    setPixel(x-1,y,pixel);
-                    pixel.R=10;
-                    pixel.G=10;
                     pixel.B=50;
+                    setPixel(x-1,y,pixel);
+                    pixel.R=00;
+                    pixel.G=00;
+                    pixel.B=20;
                     setPixel(x-2,y,pixel);
                     appShoot_Data->backData[x][y]=0;
                     if((x-2)>0)
