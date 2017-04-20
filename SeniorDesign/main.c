@@ -42,7 +42,7 @@ void main()
    App_Clock_New(&apps[6]);
    App_Shoot_New(&apps[7]);
    App_Cloud_New(&apps[8]);
-
+   App_Boot_New(&apps[9]);
    // Boot Animation
    App_Boot_New(&boot);
    boot.App_Init();
