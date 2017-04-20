@@ -384,7 +384,7 @@ void drawBullet()
 {
         int x,y;
         Pixel pixel;
-            for(x=0;x<WIDTH;x++)
+            for(x=WIDTH;x>0;x--)
             {
                 for(y=0;y<HEIGHT;y++)
                 {
@@ -401,7 +401,7 @@ void drawBullet()
                         appShoot_Data->bulletData[x][y]=0;
                         if((x+1)<31)
                         {
-                            appShoot_Data->backData[x+1][y]=1;
+                            appShoot_Data->bulletData[x+1][y]=1;
                         }
                     }
                 }
