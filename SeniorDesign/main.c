@@ -22,6 +22,7 @@
 #include "src/App_Cloud.h"
 #include "src/App_Clock.h"
 #include "src/App_Tetris.h"
+#include "src/App_Go.h"
 
 void main()
 {
@@ -42,7 +43,9 @@ void main()
    App_Clock_New(&apps[6]);
    App_Shoot_New(&apps[7]);
    App_Cloud_New(&apps[8]);
-   App_Boot_New(&apps[9]);
+   App_Go_New(&apps[9]);
+   App_Boot_New(&apps[10]);
+
    // Boot Animation
    App_Boot_New(&boot);
    boot.App_Init();
