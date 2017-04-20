@@ -38,6 +38,7 @@ void screenRipple(int x);
 void drawCharacter(int choice);
 void screenWipe(int x);
 void drawShip();
+void updateShip();
 int colors[16]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
 int charSelect[3]={0,1,2};
 int locData[WIDTH][HEIGHT];
@@ -285,6 +286,7 @@ void App_Shoot_Tick(void)
         pixel.R = 0;
         pixel.G = 0;
         pixel.B = 0;
+        updateShip();
         drawBackground(pixel);
         drawShip();
         break;
@@ -362,7 +364,7 @@ void drawShip()
                 pixel.B =saoriship[x][y][2];
                 if(0==comparePixel(PIXEL_WHITE,pixel))
                 {
-                    setPixel(appShoot_Data->xShip + 4 + x,appShoot_Data->yShip + 3 + y,pixel);
+                    setPixel(appShoot_Data->xShip+ x,appShoot_Data->yShip + y,pixel);
                 }
             }
             if(appShoot_Data->character==1)
@@ -372,7 +374,7 @@ void drawShip()
                 pixel.B =tomoship[x][y][2];
                 if(0==comparePixel(PIXEL_WHITE,pixel))
                 {
-                    setPixel(appShoot_Data->xShip + 4 + x,appShoot_Data->yShip + 3 + y,pixel);
+                    setPixel(appShoot_Data->xShip + x,appShoot_Data->yShip+ y,pixel);
                 }
             }
             if(appShoot_Data->character==2)
@@ -382,29 +384,62 @@ void drawShip()
                 pixel.B =saraship[x][y][2];
                 if(0==comparePixel(PIXEL_WHITE,pixel))
                 {
-                    setPixel(appShoot_Data->xShip + 4 + x,appShoot_Data->yShip + 3 + y,pixel);
+                    setPixel(appShoot_Data->xShip + x,appShoot_Data->yShip + y,pixel);
                 }
             }
         }
     }
 }
+
+void updateShip()
+{
+    if(appShoot_Data->up==1)
+    {
+        if(inBounds(appShoot_Data->xShip+4,appShoot_Data->yShip+4)&&appShoot_Data->xShip<6)
+        {
+            appShoot_Data->xShip++;
+        }
+    }
+    if(appShoot_Data->down==1)
+    {
+        if(inBounds(appShoot_Data->xShip+2,appShoot_Data->yShip+4)&&appShoot_Data->xShip>0)
+        {
+            appShoot_Data->xShip--;
+        }
+    }
+    if(appShoot_Data->left==1)
+    {
+        if(inBounds(appShoot_Data->xShip+3,appShoot_Data->yShip+3)&&appShoot_Data->yShip>0)
+        {
+            appShoot_Data->yShip--;
+        }
+    }
+    if(appShoot_Data->right==1)
+    {
+        if(inBounds(appShoot_Data->xShip+3,appShoot_Data->yShip+5)&&appShoot_Data->yShip<11)
+        {
+            appShoot_Data->yShip++;
+        }
+    }
+
+}
 void checkInput()
 {
     if (Input_Tap)
           {
-              if (Input_Tap & UP_INPUT || Input_Status & UP_INPUT )
+              if (Input_Tap & UP_INPUT)
                {
                   appShoot_Data->up = 1;
                }
-               else if (Input_Tap & DOWN_INPUT || Input_Status & DOWN_INPUT)
+               else if (Input_Tap & DOWN_INPUT)
                {
                    appShoot_Data->down = 1;
                }
-               else if (Input_Tap & LEFT_INPUT || Input_Status & LEFT_INPUT)
+               else if (Input_Tap & LEFT_INPUT)
                {
                    appShoot_Data->left = 1;
                }
-               else if (Input_Tap & RIGHT_INPUT || Input_Status & RIGHT_INPUT)
+               else if (Input_Tap & RIGHT_INPUT)
                {
                    appShoot_Data->right = 1;
                }
@@ -419,19 +454,19 @@ void checkInput()
           }
           if (User2_Input_Tap)
           {
-              if (User2_Input_Tap & UP_INPUT || Input_Status & UP_INPUT )
+              if (User2_Input_Tap & UP_INPUT)
                {
                   appShoot_Data->up = 1;
                }
-               else if (User2_Input_Tap & DOWN_INPUT || Input_Status & DOWN_INPUT)
+               else if (User2_Input_Tap & DOWN_INPUT)
                {
                    appShoot_Data->down = 1;
                }
-               else if (User2_Input_Tap & LEFT_INPUT || Input_Status & LEFT_INPUT)
+               else if (User2_Input_Tap & LEFT_INPUT)
                {
                    appShoot_Data->left = 1;
                }
-               else if (User2_Input_Tap & RIGHT_INPUT || Input_Status & RIGHT_INPUT)
+               else if (User2_Input_Tap & RIGHT_INPUT)
                {
                    appShoot_Data->right = 1;
                }
@@ -450,10 +485,13 @@ void checkInput()
 
 void resetInput()
 {
-    appShoot_Data->up = 0;
-    appShoot_Data->down = 0;
-    appShoot_Data->left = 0;
-    appShoot_Data->right = 0;
+    if(appShoot_Data->mode==0 || !(Input_Status||User2_Input_Status))
+    {
+        appShoot_Data->up = 0;
+        appShoot_Data->down = 0;
+        appShoot_Data->left = 0;
+        appShoot_Data->right = 0;
+    }
     appShoot_Data->inputa = 0;
     appShoot_Data->inputb = 0;
 }
