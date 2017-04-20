@@ -52,6 +52,8 @@ void App_Tetris_Deinit(void);
 void Tetris_GenerateBlock(Block*);
 void Tetris_GenerateBlocks(playerData *);
 int Tetris_CheckMove(playerData*, char, char);
+int Tetris_GetPixelX(playerData*, char);
+int Tetris_GetPixelY(playerData*, char);
 
 void Demo_Tetris_Init(void)
 {
