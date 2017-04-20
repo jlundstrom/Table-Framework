@@ -11,6 +11,7 @@
 #define MAXBOARDSIDE 16
 #define MAXBOARDSIZE MAXBOARDSIDE * MAXBOARDSIDE
 
+typedef int Long_Hold(unsigned char, int);
 struct playerData
 {
 	char x;
@@ -18,6 +19,7 @@ struct playerData
 	int frame;
 	unsigned char* tap;
 	unsigned char* input;
+	Long_Hold* long_Hold;
 	Pixel color;
 };
 
@@ -76,9 +78,11 @@ void App_Go_Init(void)
 	Go_Data->player1.color = PIXEL_RED;
 	Go_Data->player1.tap = &Input_Tap;
 	Go_Data->player1.input = &Input_Status;
+	Go_Data->player1.long_Hold = &P1_Long_Hold;
 	Go_Data->player2.color = PIXEL_BLUE;
 	Go_Data->player2.tap = &User2_Input_Tap;
 	Go_Data->player2.input = &User2_Input_Status;
+	Go_Data->player2.long_Hold = &P2_Long_Hold;
 
 	Go_Data->currentPlayer = &Go_Data->player1;
 }
@@ -144,30 +148,52 @@ void Go_ProcessMove(struct playerData* player)
 		{
 			player->x++;
 		}
+		if (player->x < 0)
+		{
+			player->x = Go_Data->size - 1;
+		}
+
+		if (player->y < 0)
+		{
+			player->y = Go_Data->size - 1;
+		}
+		player->x = player->x % Go_Data->size;
+		player->y = player->y % Go_Data->size;
 		player->frame = 0;
 		Go_setCell(player->x, player->y, Go_getCell(player->x, player->y) | SELCELL);
 	}
 	if (player->frame == 5)
 	{
-		if (player->input)
+		if (*player->input)
 		{
 			Go_setCell(player->x, player->y, Go_getCell(player->x, player->y) & ~SELCELL);
-			if (P1_Long_Hold(UP_INPUT, 4))
+			if (player->long_Hold(UP_INPUT, 8))
 			{
 				player->y--;
 			}
-			if (P1_Long_Hold(DOWN_INPUT, 4))
+			if (player->long_Hold(DOWN_INPUT, 8))
 			{
 				player->y++;
 			}
-			if (P1_Long_Hold(LEFT_INPUT, 4))
+			if (player->long_Hold(LEFT_INPUT, 8))
 			{
 				player->x--;
 			}
-			if (P1_Long_Hold(RIGHT_INPUT, 4))
+			if (player->long_Hold(RIGHT_INPUT, 8))
 			{
 				player->x++;
 			}
+			if (player->x < 0)
+			{
+				player->x = Go_Data->size - 1;
+			}
+
+			if (player->y < 0)
+			{
+				player->y = Go_Data->size - 1;
+			}
+			player->x = player->x % Go_Data->size;
+			player->y = player->y % Go_Data->size;
 		}
 		Go_setCell(player->x, player->y, Go_getCell(player->x, player->y) ^ SELCELL);
 		player->frame = 0;
