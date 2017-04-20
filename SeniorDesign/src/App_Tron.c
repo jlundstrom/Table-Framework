@@ -186,7 +186,7 @@ void App_Tron_Tick(void)
       Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT | UP_INPUT | DOWN_INPUT | A_INPUT | B_INPUT);
       User2_Input_Tap &= ~(LEFT_INPUT | RIGHT_INPUT | UP_INPUT | DOWN_INPUT | A_INPUT | B_INPUT);
       appTron_Data->frame++;
-      if (appTron_Data->frame % 4 == 0)
+      if (appTron_Data->frame % 6 == 0)
       {
          updatePlayerPos(1);
          updatePlayerPos(2);

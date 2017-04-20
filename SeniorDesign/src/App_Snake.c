@@ -129,7 +129,7 @@ void App_Snake_Place_Food()
       Snake_Data->foodX = getRandomLow() % WIDTH;
       Snake_Data->foodY = getRandomLow() % HEIGHT;
       tmp = getPixel(Snake_Data->foodX, Snake_Data->foodY);
-      if (tmp.R == tmp.G == tmp.B == 0)
+      if (comparePixel(tmp, PIXEL_BLACK))
       {
          break;
       }
@@ -162,7 +162,7 @@ void App_Snake_Tick(void)
    {
       App_Snake_Game_Over_Tick();
    }
-   else if (Snake_Data->frame == 3)
+   else if (Snake_Data->frame == 5)
    {
       Snake_Data->frame = 0;
 
