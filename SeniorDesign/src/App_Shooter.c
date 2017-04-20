@@ -21,6 +21,7 @@ struct appData
    int           character;
    int           xShip;
    int           yShip;
+   int           lives;
 }
 typedef   appData;
 appData *appShoot_Data;
@@ -39,6 +40,7 @@ void drawCharacter(int choice);
 void screenWipe(int x);
 void drawShip();
 void updateShip();
+void drawLives();
 int colors[16]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
 int charSelect[3]={0,1,2};
 int locData[WIDTH][HEIGHT];
@@ -231,6 +233,7 @@ void App_Shoot_Init(void)
     appShoot_Data->mode=0;
     appShoot_Data->temp=1;
     appShoot_Data->character=1;
+    appShoot_Data->lives=9;
     generateNoise();
     resetInput();
 }
@@ -289,8 +292,18 @@ void App_Shoot_Tick(void)
         updateShip();
         drawBackground(pixel);
         drawShip();
+        drawLives();
+        //setPixel(appShoot_Data->xShip+6,appShoot_Data->yShip+2,PIXEL_WHITE);
+
+        if(appShoot_Data->lives ==0)
+        {
+            appShoot_Data->mode = 30;
+        }
         break;
 
+    case 30://game over, update with stats
+
+        break;
 
     default:
         break;
@@ -346,6 +359,44 @@ void leftRotatebyOne(int arr[], int n)
   for (i = 0; i < n-1; i++)
      arr[i] = arr[i+1];
   arr[i] = temp;
+}
+
+void drawLives()
+{
+    Pixel pixel = {100,100,150};
+    switch(appShoot_Data->lives)
+    {
+    case 9:
+        printTextOffset('9', 0, 10,pixel);
+        break;
+    case 8:
+        printTextOffset('8', 0, 10,pixel);
+        break;
+    case 7:
+        printTextOffset('7', 0, 10,pixel);
+        break;
+    case 6:
+        printTextOffset('6', 0, 10,pixel);
+        break;
+    case 5:
+        printTextOffset('5', 0, 10,pixel);
+        break;
+    case 4:
+        printTextOffset('4', 0, 10,pixel);
+        break;
+    case 3:
+        printTextOffset('3', 0, 10,pixel);
+        break;
+    case 2:
+        printTextOffset('2', 0, 10,pixel);
+        break;
+    case 1:
+        printTextOffset('1', 0, 10,pixel);
+        break;
+    default:
+        printTextOffset('9', 0, 10,pixel);
+        break;
+    }
 }
 
 void drawShip()

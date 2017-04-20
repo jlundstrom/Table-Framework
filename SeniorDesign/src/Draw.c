@@ -626,6 +626,36 @@ int textConvert(char text, int x, int y) //return true false 1,0 if point exists
    case ':':
       return colon[x] & mask;
 
+    case 0:
+        return num0[x] & mask;
+
+    case 1:
+        return num1[x] & mask;
+
+    case 2:
+        return num2[x] & mask;
+
+    case 3:
+        return num3[x] & mask;
+
+    case 4:
+        return num4[x] & mask;
+
+    case 5:
+        return num5[x] & mask;
+
+    case 6:
+        return num6[x] & mask;
+
+    case 7:
+        return num7[x] & mask;
+
+    case 8:
+        return num8[x] & mask;
+
+    case 9:
+        return num9[x] & mask;
+
    default:
       return 0;
    }
