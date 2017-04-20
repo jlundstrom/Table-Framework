@@ -175,6 +175,7 @@
     <ClCompile Include="..\..\SeniorDesign\src\App_Tetris.c" />
     <ClCompile Include="..\..\SeniorDesign\src\App_Tron.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Draw.c" />
+    <ClCompile Include="..\..\SeniorDesign\src\input.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Noise.c" />
     <ClCompile Include="..\..\SeniorDesign\src\Random.c" />
     <ClCompile Include="..\..\SeniorDesign\src\TiDisplay.c" />

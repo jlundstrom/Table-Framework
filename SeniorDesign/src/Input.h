@@ -28,4 +28,9 @@ extern char time[6];
 // prototypes for input init and polling functions
 extern void Input_init(void);
 extern void Input_Poll(void);
+
+// prototype for detecting long inputs
+extern void Input_Draw_Tick(void);
+extern int P1_Long_Hold(unsigned char, int);
+extern int P2_Long_Hold(unsigned char, int);
 #endif

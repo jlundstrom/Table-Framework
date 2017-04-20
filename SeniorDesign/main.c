@@ -80,6 +80,7 @@ void main()
       // Clearing the flag if it's been used
       if (DRAWN == 1)
       {
+		 Input_Draw_Tick();
          currentApp->App_Tick();
          DRAWN = 0;
       }
