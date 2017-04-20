@@ -381,21 +381,21 @@ void drawShipEngine()
     Pixel pixel;
     switch(engineSelect[0])
     {
-    case 1:
+    case 0:
         pixel.R=255;
         pixel.G=255;
         pixel.B=255;
         setPixel(appShoot_Data->xShip-1,appShoot_Data->yShip+1,pixel);
         setPixel(appShoot_Data->xShip-1,appShoot_Data->yShip+3,pixel);
         break;
-    case 2:
+    case 1:
         pixel.R=100;
         pixel.G=100;
         pixel.B=200;
         setPixel(appShoot_Data->xShip-1,appShoot_Data->yShip+1,pixel);
         setPixel(appShoot_Data->xShip-1,appShoot_Data->yShip+3,pixel);
         break;
-    case 3:
+    case 2:
         pixel.R=51;
         pixel.G=255;
         pixel.B=255;
@@ -414,7 +414,7 @@ void drawShipEngine()
 void drawPixelBack()
 {
     int temp;
-    if(appShoot_Data->%3==0)
+    if(appShoot_Data->frame%3==0)
     {
         temp = getRandomLow() % HEIGHT;
         appShoot_Data->backData[31][temp] = 1;
@@ -427,17 +427,17 @@ void drawPixelBack()
             {
                 if(appShoot_Data->backData[x][y]==1)
                 {
-                    pixel.R=10;
-                    pixel.G=10;
-                    pixel.B=100;
+                    pixel.R=50;
+                    pixel.G=50;
+                    pixel.B=150;
                     setPixel(x,y,pixel);
+                    pixel.R=20;
+                    pixel.G=20;
+                    pixel.B=100;
+                    setPixel(x-1,y,pixel);
                     pixel.R=10;
                     pixel.G=10;
                     pixel.B=50;
-                    setPixel(x-1,y,pixel);
-                    pixel.R=00;
-                    pixel.G=00;
-                    pixel.B=20;
                     setPixel(x-2,y,pixel);
                     appShoot_Data->backData[x][y]=0;
                     if((x-2)>0)
