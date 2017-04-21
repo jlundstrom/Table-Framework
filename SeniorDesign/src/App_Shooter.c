@@ -852,7 +852,7 @@ void updateShip()
     if(appShoot_Data->inputb==1&&appShoot_Data->lasercooldown==0)
     {
         appShoot_Data->magictick=60;
-        appShoot_Data->lasercooldown=240;
+        appShoot_Data->lasercooldown=300;
     }
 }
 void checkInput()
