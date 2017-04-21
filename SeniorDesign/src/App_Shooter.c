@@ -395,23 +395,24 @@ void drawMagic()
     {
         return;
     }
-    if(appShoot_Data->character<3)
+    if(appShoot_Data->character==0 || appShoot_Data->character==1 )
     {
         drawLaser(appShoot_Data->character);
     }
     else
     {
+        generateNoise();
         drawParticle();
     }
-    appShoot_Data->lasertick++;
-    if(appShoot_Data->lasertick%2==0)
+    if(appShoot_Data->frame%2==0)
     {
+        appShoot_Data->lasertick++;
         if(appShoot_Data->lasertick>3)
         {
             appShoot_Data->lasertick=0;
         }
     }
-    appShoot_Data->lasertick--;
+    appShoot_Data->magictick--;
 }
 
 void drawLaser(int x)
