@@ -114,24 +114,6 @@ void drawRect(int x, int y, int x2, int y2, Pixel pixel)
 
 void drawEmptyRect(int x, int y, int x2, int y2, Pixel pixel)
 {
-	int y1;
-
-	/*if (x2 > WIDTH)
-	{
-		x2 = WIDTH;
-	}
-	if (y2 > HEIGHT)
-	{
-		y2 = HEIGHT;
-	}
-	if (x < 0)
-	{
-		x = 0;
-	}
-	if (y < 0)
-	{
-		y = 0;
-	}*/
 	drawLine(x, y, x2, y, pixel);
 	drawLine(x2, y, x2, y2, pixel);
 	drawLine(x2, y2, x, y2, pixel);
