@@ -22,7 +22,8 @@ struct appData
    int           xShip;
    int           yShip;
    int           lives;
-   char lasertick;
+   int           magictick;
+   char          lasertick;
    char          backData[WIDTH][HEIGHT];
    char          bulletData[WIDTH][HEIGHT];
 }
@@ -245,6 +246,7 @@ void App_Shoot_Init(void)
     appShoot_Data->character=1;
     appShoot_Data->lives=9;
     appShoot_Data->lasertick=0;
+    appShoot_Data->magictick=0;
     generateNoise();
     resetInput();
     int x,y;
@@ -317,10 +319,8 @@ void App_Shoot_Tick(void)
         drawShip();
         drawShipEngine();
         drawBullet();
-        if(appShoot_Data->inputb==1)
-        {
-            drawMagic();
-        }
+        drawMagic();
+
         //setPixel(appShoot_Data->xShip+6,appShoot_Data->yShip+2,PIXEL_WHITE);
 
         if(appShoot_Data->lives ==0)
@@ -391,14 +391,9 @@ void leftRotatebyOne(int arr[], int n)
 
 void drawMagic()
 {
-
-    if(appShoot_Data->lasertick%2==0)
+    if(appShoot_Data->magictick<=0)
     {
-        appShoot_Data->lasertick++;
-        if(appShoot_Data->lasertick>3)
-        {
-            appShoot_Data->lasertick=0;
-        }
+        return;
     }
     if(appShoot_Data->character<3)
     {
@@ -408,6 +403,15 @@ void drawMagic()
     {
         drawParticle();
     }
+    appShoot_Data->lasertick++;
+    if(appShoot_Data->lasertick%2==0)
+    {
+        if(appShoot_Data->lasertick>3)
+        {
+            appShoot_Data->lasertick=0;
+        }
+    }
+    appShoot_Data->lasertick--;
 }
 
 void drawLaser(int x)
@@ -695,6 +699,10 @@ void updateShip()
     if(appShoot_Data->inputa==1)
     {
         appShoot_Data->bulletData[appShoot_Data->xShip+7][appShoot_Data->yShip+2]=1;
+    }
+    if(appShoot_Data->inputb==1)
+    {
+        appShoot_Data->magictick=60;
     }
 }
 void checkInput()
