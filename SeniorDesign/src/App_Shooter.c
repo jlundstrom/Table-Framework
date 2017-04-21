@@ -22,6 +22,7 @@ struct appData
    int           xShip;
    int           yShip;
    int           lives;
+   char lasertick;
    char          backData[WIDTH][HEIGHT];
    char          bulletData[WIDTH][HEIGHT];
 }
@@ -46,6 +47,9 @@ void drawLives();
 void drawPixelBack();
 void drawShipEngine();
 void drawBullet();
+void drawLaser(int x);
+void drawMagic();
+void drawParticle();
 int colors[16]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
 int charSelect[3]={0,1,2};
 int engineSelect[3]={0,1,2};
@@ -240,6 +244,7 @@ void App_Shoot_Init(void)
     appShoot_Data->temp=1;
     appShoot_Data->character=1;
     appShoot_Data->lives=9;
+    appShoot_Data->lasertick=0;
     generateNoise();
     resetInput();
     int x,y;
@@ -312,6 +317,10 @@ void App_Shoot_Tick(void)
         drawShip();
         drawShipEngine();
         drawBullet();
+        if(appShoot_Data->inputb==1)
+        {
+            drawMagic();
+        }
         //setPixel(appShoot_Data->xShip+6,appShoot_Data->yShip+2,PIXEL_WHITE);
 
         if(appShoot_Data->lives ==0)
@@ -379,6 +388,97 @@ void leftRotatebyOne(int arr[], int n)
      arr[i] = arr[i+1];
   arr[i] = temp;
 }
+
+void drawMagic()
+{
+
+    if(appShoot_Data->lasertick%2==0)
+    {
+        appShoot_Data->lasertick++;
+        if(appShoot_Data->lasertick>3)
+        {
+            appShoot_Data->lasertick=0;
+        }
+    }
+    if(appShoot_Data->character<3)
+    {
+        drawLaser(appShoot_Data->character);
+    }
+    else
+    {
+        drawParticle();
+    }
+}
+
+void drawLaser(int x)
+{
+   Pixel pixel;
+   Pixel pixel2;
+   if(x==0)
+   {
+        pixel.R = 255;
+        pixel.G = 0;
+        pixel.B = 127;
+        pixel2.R = 255;
+        pixel2.G = 0;
+        pixel2.B = 0;
+   }
+   else
+   {
+       pixel.R = 155;
+       pixel.G = 155;
+       pixel.B = 255;
+       pixel2.R = 200;
+       pixel2.G = 110;
+       pixel2.B = 110;
+   }
+   drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip-1, 31, appShoot_Data->yShip-1,pixel);
+   drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip, 31, appShoot_Data->yShip,pixel);
+   drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip+1, 31, appShoot_Data->yShip+1,pixel);
+   drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip+2, 31, appShoot_Data->yShip+2,pixel);
+   drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip+3, 31, appShoot_Data->yShip+3,pixel);
+   drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip+4, 31, appShoot_Data->yShip+4,pixel);
+   drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip+5, 31, appShoot_Data->yShip+5,pixel);
+   switch(appShoot_Data->lasertick)
+   {
+       case 1:
+           drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip+5, 31, appShoot_Data->yShip+5,pixel2);
+           drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip-1, 31, appShoot_Data->yShip-1,pixel2);
+           break;
+       case 2:
+           drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip+4, 31, appShoot_Data->yShip+4,pixel2);
+           drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip, 31, appShoot_Data->yShip,pixel2);
+           break;
+       case 3:
+           drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip+3, 31, appShoot_Data->yShip+3,pixel2);
+           drawLine(appShoot_Data->xShip+7,appShoot_Data->yShip+1, 31, appShoot_Data->yShip+1,pixel2);
+           break;
+   }
+
+
+
+}
+
+void drawParticle()
+{
+   int   x;
+   int   y;
+   char  color;
+   Pixel pixel;
+   pixel.R = 0;
+   pixel.G = 0;
+   pixel.B = 0;
+   for (x = appShoot_Data->xShip+7; x < WIDTH; x++)
+   {
+      for (y = -1; y < 6; y++)
+      {
+        color = 5 + (char)turbulence(x, y, 3);
+        pixel.B = color;
+        setPixel(x, y+appShoot_Data->yShip, pixel);
+      }
+   }
+}
+
 
 void drawBullet()
 {
