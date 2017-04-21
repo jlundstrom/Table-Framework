@@ -23,9 +23,7 @@ void App_Menu_Tick(void)
    if (frame == 2)
    {
       frame = 0;
-      if (Input_Tap)
-      {
-         if (Input_Tap & UP_INPUT)
+         if (Input_Tap & UP_INPUT || P1_Long_Hold(UP_INPUT, 8))
          {
             setPixel(0, idx, PIXEL_BLACK);
             apps[idx].Demo_Deinit();
@@ -34,8 +32,10 @@ void App_Menu_Tick(void)
             {
                idx = 0;
             }
+			drawRect(0, 0, WIDTH, HEIGHT, PIXEL_BLACK);
+			apps[idx].Demo_Init();
          }
-         else if (Input_Tap & DOWN_INPUT)
+         else if (Input_Tap & DOWN_INPUT || P1_Long_Hold(DOWN_INPUT, 8))
          {
             setPixel(0, idx, PIXEL_BLACK);
             apps[idx].Demo_Deinit();
@@ -44,11 +44,8 @@ void App_Menu_Tick(void)
             {
                idx = APP_COUNT - 1;
             }
-         }
-         if (Input_Tap & (UP_INPUT | DOWN_INPUT))
-         {
-            drawRect(0, 0, WIDTH, HEIGHT, PIXEL_BLACK);
-            apps[idx].Demo_Init();
+			drawRect(0, 0, WIDTH, HEIGHT, PIXEL_BLACK);
+			apps[idx].Demo_Init();
          }
          if (Input_Tap & A_INPUT)
          {
@@ -60,7 +57,6 @@ void App_Menu_Tick(void)
          }
 
          Input_Tap &= ~(UP_INPUT | DOWN_INPUT | A_INPUT);
-      }
    }
    if (idx != -1)
    {

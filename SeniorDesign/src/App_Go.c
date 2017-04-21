@@ -191,11 +191,22 @@ int Go_hasLiberties(int xo, int yo, struct playerData* player)
 				Go_Data->stackMax[pointer].y = y - 1;
 				pointer++;
 			}
-			if (Go_inBounds(x, y + 1) && (Go_getCell(x, y + 1) & player->selMask) && Go_Data->refArray[x][y + 1] == 0)
+
+			if (Go_inBounds(x, y - 1) && (Go_getCell(x, y) & player->selMask) && Go_getCell(x, y - 1) == 0)
+			{
+				liberties += 1;
+			}
+
+			if (Go_inBounds(x, y + 1) && Go_Data->refArray[x][y + 1] == 0)
 			{
 				Go_Data->stackMax[pointer].x = x;
 				Go_Data->stackMax[pointer].y = y + 1;
 				pointer++;
+			}
+
+			if (Go_inBounds(x, y + 1) && Go_getCell(x, y + 1) == 0)
+			{
+				liberties += 1;
 			}
 		}
 
@@ -240,7 +251,14 @@ void Go_ProcessSelection(struct playerData* player)
 		if (!(Go_getCell(player->x, player->y) & 0x0f))
 		{
 			Go_setCell(player->x, player->y, player->selMask);
-			Go_Data->currentPlayer = ((player == &Go_Data->player1) ? &Go_Data->player2 : &Go_Data->player1);
+			if (!Go_hasLiberties(player->x, player->y, player))
+			{
+				Go_setCell(player->x, player->y, 0);
+			}
+			else
+			{
+				Go_Data->currentPlayer = ((player == &Go_Data->player1) ? &Go_Data->player2 : &Go_Data->player1);
+			}
 		}
 	}
 }
