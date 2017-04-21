@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,15 +11,49 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.remote.btcontroller.ControllerActivity">
 
+    <Button
+        android:id="@+id/btn_a"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:background="@drawable/pink_button"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="A"
+        android:textColor="#fff"
+        android:layout_alignBottom="@+id/btn_left"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/btn_b"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:background="@drawable/blue_button"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="B"
+        android:textColor="#fff"
+        android:layout_marginEnd="56dp"
+        android:layout_marginTop="6dp"
+        android:layout_below="@+id/btn_up"
+        android:layout_alignParentEnd="true" />
+
+    <ToggleButton
+        android:id="@+id/btn_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="Clock"
+        android:textOff="Clock Off"
+        android:textOn="Clock On"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:weightSum="3"
         android:gravity="center"
+        android:id="@+id/linearLayout"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout2">
+        android:layout_alignParentStart="true">
 
         <Button
             android:id="@+id/btn_start"
@@ -36,70 +71,61 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_up"
-        android:layout_width="@dimen/box_size"
-        android:layout_height="@dimen/box_size"
-        android:text="Up"
-        android:textSize="14sp"
-        android:layout_above="@+id/btn_left"
-        android:layout_toEndOf="@+id/btn_left" />
-
-    <Button
         android:id="@+id/btn_down"
-        android:layout_width="@dimen/box_size"
-        android:layout_height="@dimen/box_size"
-        android:layout_marginBottom="62dp"
-        android:text="Down"
-        android:textSize="14sp"
-        android:layout_above="@+id/linearLayout2"
-        android:layout_toEndOf="@+id/btn_left" />
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:adjustViewBounds="true"
+        android:background="@color/colorPrimary"
+        android:clickable="true"
+        android:rotation="45"
+        android:visibility="visible"
+        android:layout_marginBottom="60dp"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignStart="@+id/btn_up">
+    </Button>
 
     <Button
-        android:id="@+id/btn_a"
-        android:layout_width="@dimen/box_size"
-        android:layout_height="@dimen/box_size"
-        android:text="A"
-        android:textSize="14sp"
-        android:layout_alignTop="@+id/btn_right"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="6dp" />
-
-    <Button
-        android:id="@+id/btn_b"
-        android:layout_width="@dimen/box_size"
-        android:layout_height="@dimen/box_size"
-        android:text="B"
-        android:textSize="14sp"
-        android:layout_below="@+id/btn_right"
-        android:layout_toStartOf="@+id/btn_a" />
-
-    <Button
-        android:id="@+id/btn_left"
-        android:layout_width="@dimen/box_size"
-        android:layout_height="@dimen/box_size"
-        android:text="Left"
-        android:textSize="14sp"
+        android:id="@+id/btn_up"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:adjustViewBounds="true"
+        android:background="@color/colorPrimary"
+        android:clickable="true"
+        android:rotation="45"
+        android:visibility="visible"
+        android:layout_marginBottom="34dp"
         android:layout_above="@+id/btn_down"
-        android:layout_alignParentStart="true" />
+        android:layout_alignStart="@+id/btn_right"
+        android:layout_marginStart="52dp">
+    </Button>
 
     <Button
         android:id="@+id/btn_right"
-        android:layout_width="@dimen/box_size"
-        android:layout_height="@dimen/box_size"
-        android:text="Right"
-        android:textSize="14sp"
-        android:layout_below="@+id/btn_up"
-        android:layout_toEndOf="@+id/btn_down" />
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:adjustViewBounds="true"
+        android:background="@color/colorAccent"
+        android:clickable="true"
+        android:rotation="45"
+        android:visibility="visible"
+        android:layout_marginStart="15dp"
+        android:layout_alignBottom="@+id/btn_down"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="52dp">
+    </Button>
 
-    <ToggleButton
-        android:id="@+id/btn_clock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:checked="false"
-        android:text="Clock"
-        android:textOff="Clock Off"
-        android:textOn="Clock On" />
+    <Button
+        android:id="@+id/btn_left"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="34dp"
+        android:adjustViewBounds="true"
+        android:background="@color/colorAccent"
+        android:clickable="true"
+        android:rotation="45"
+        android:visibility="visible"
+        android:layout_alignBottom="@+id/btn_right"
+        android:layout_toEndOf="@+id/btn_right">
+    </Button>
 
 </RelativeLayout>
