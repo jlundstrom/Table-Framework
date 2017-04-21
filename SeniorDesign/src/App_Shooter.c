@@ -9,20 +9,22 @@ struct appData
 {
    int           frame;
    int           ripple;
-   int           temp;
+   char          temp;
    unsigned char flag;
-   int           up;
-   int           down;
-   int           left;
-   int           right;
-   int           inputa;
-   int           inputb;
-   int           mode;
-   int           character;
+   unsigned char up;
+   unsigned char down;
+   unsigned char left;
+   unsigned char right;
+   unsigned char inputa;
+   unsigned char inputb;
+   unsigned char mode;
+   unsigned char character;
+   unsigned char lasercooldown;
    int           xShip;
    int           yShip;
    int           lives;
-   int           magictick;
+   int           killcount;
+   char          magictick;
    char          lasertick;
    char          backData[WIDTH][HEIGHT];
    char          bulletData[WIDTH][HEIGHT];
@@ -51,6 +53,10 @@ void drawBullet();
 void drawLaser(int x);
 void drawMagic();
 void drawParticle();
+void spawnMobs();
+void updateMobs();
+void drawMobs();
+int checkmisc(int x);
 int colors[16]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
 int charSelect[3]={0,1,2};
 int engineSelect[3]={0,1,2};
@@ -247,6 +253,8 @@ void App_Shoot_Init(void)
     appShoot_Data->lives=9;
     appShoot_Data->lasertick=0;
     appShoot_Data->magictick=0;
+    appShoot_Data->lasercooldown=0;
+    appShoot_Data->killcount=0;
     generateNoise();
     resetInput();
     int x,y;
@@ -265,6 +273,9 @@ void App_Shoot_Init(void)
 void App_Shoot_Tick(void)
 {
     int storage=0;
+    int temp;
+    char score[5];
+    char score1[5]  = { 'S', 'C', 'O', 'R', 'E' };
     Pixel pixel;
     switch(appShoot_Data->mode)
     {
@@ -319,11 +330,35 @@ void App_Shoot_Tick(void)
         drawShip();
         drawShipEngine();
         drawBullet();
+        drawMobs();
         drawMagic();
 
-        //setPixel(appShoot_Data->xShip+6,appShoot_Data->yShip+2,PIXEL_WHITE);
+        if(appShoot_Data->frame%90==0)
+        {
+            spawnMobs();
+        }
+        if(appShoot_Data->frame%45==0)
+        {
+            updateMobs();
+        }
 
-        if(appShoot_Data->lives ==0)
+        if(appShoot_Data->lasercooldown==0)
+        {
+            if(appShoot_Data->frame%2==0)
+            {
+                setPixel(appShoot_Data->xShip+6,appShoot_Data->yShip+2,PIXEL_ORANGE);
+            }
+            else
+            {
+                setPixel(appShoot_Data->xShip+6,appShoot_Data->yShip+2,PIXEL_PURPLE);
+            }
+        }
+        if(appShoot_Data->lasercooldown>0)
+        {
+            appShoot_Data->lasercooldown--;
+        }
+
+        if(appShoot_Data->lives <=0)
         {
             appShoot_Data->mode = 30;
         }
@@ -331,6 +366,19 @@ void App_Shoot_Tick(void)
 
     case 30://game over, update with stats
 
+
+        temp=appShoot_Data->killcount%10;
+        score[4]=checkmisc(temp);
+        temp=appShoot_Data->killcount%100;
+        score[3]=checkmisc(temp);
+        temp=appShoot_Data->killcount%1000;
+        score[2]=checkmisc(temp);
+        temp=appShoot_Data->killcount%10000;
+        score[1]=checkmisc(temp);
+        temp=appShoot_Data->killcount%100000;
+        score[0]=checkmisc(temp);
+        toString(score1,0,PIXEL_CYAN);
+        toString(score,1,PIXEL_CYAN);
         break;
 
     default:
@@ -354,6 +402,13 @@ void App_Shoot_Tick(void)
    checkInput();//should be last
 
 
+}
+int checkmisc(int x)
+{
+    if(x>0)
+        return x;
+    else
+        return 0;
 }
 
 
@@ -389,6 +444,68 @@ void leftRotatebyOne(int arr[], int n)
   arr[i] = temp;
 }
 
+void spawnMobs()
+{
+
+    int i;
+    for(i=0;i<HEIGHT;i++)
+    {
+        if(appShoot_Data->bulletData[31][i]==1)
+        {
+            appShoot_Data->killcount++;
+        }
+        else
+        {
+            appShoot_Data->bulletData[31][i]=4;
+        }
+    }
+}
+
+void updateMobs()
+{
+
+    int x,y;
+    for(x=0;x<WIDTH;x++)
+    {
+        for(y=0;y<HEIGHT;y++)
+        {
+            if(appShoot_Data->bulletData[x][y]==4)
+            {
+                appShoot_Data->bulletData[x][y]=0;
+                if(x-2>5)
+                {
+                   appShoot_Data->bulletData[x-2][y]=4;
+                }
+                else
+                {
+                    appShoot_Data->lives--;
+                }
+
+            }
+        }
+    }
+}
+
+void drawMobs()
+{
+    Pixel pixel;
+    pixel.R=255;
+    pixel.G=0;
+    pixel.B=0;
+    int x,y;
+    for(x=0;x<WIDTH;x++)
+    {
+        for(y=0;y<HEIGHT;y++)
+        {
+            if(appShoot_Data->bulletData[x][y]==4)
+            {
+                    setPixel(x,y,pixel);
+            }
+        }
+    }
+}
+
+
 void drawMagic()
 {
     if(appShoot_Data->magictick<=0)
@@ -413,6 +530,28 @@ void drawMagic()
         }
     }
     appShoot_Data->magictick--;
+    Pixel pixel;
+    pixel.R=255;
+    pixel.G=0;
+    pixel.B=0;
+    Pixel pixel2;
+    int x,y;
+        for(x=0;x<WIDTH;x++)
+        {
+            for(y=0;y<HEIGHT;y++)
+            {
+                if(appShoot_Data->bulletData[x][y]==4)
+                {
+                        pixel2=getPixel(x,y);
+                        if(comparePixel(pixel,pixel2)==0)
+                        {
+                            appShoot_Data->bulletData[x][y]=0;
+                            appShoot_Data->killcount++;
+                        }
+                }
+            }
+        }
+
 }
 
 void drawLaser(int x)
@@ -421,10 +560,10 @@ void drawLaser(int x)
    Pixel pixel2;
    if(x==0)
    {
-        pixel.R = 255;
+        pixel.R = 250;
         pixel.G = 0;
         pixel.B = 127;
-        pixel2.R = 255;
+        pixel2.R = 250;
         pixel2.G = 0;
         pixel2.B = 0;
    }
@@ -506,9 +645,18 @@ void drawBullet()
                         appShoot_Data->bulletData[x][y]=0;
                         if((x+1)<31)
                         {
-                            appShoot_Data->bulletData[x+1][y]=1;
+                            if( appShoot_Data->bulletData[x+1][y]==4)
+                            {
+                                appShoot_Data->killcount++;
+                                appShoot_Data->bulletData[x+1][y]=0;
+                            }
+                            else
+                            {
+                                appShoot_Data->bulletData[x+1][y]=1;
+                            }
                         }
                     }
+
                 }
             }
 }
@@ -671,28 +819,28 @@ void updateShip()
 {
     if(appShoot_Data->up==1)
     {
-        if(inBounds(appShoot_Data->xShip+4,appShoot_Data->yShip+4)&&appShoot_Data->xShip<6)
+        if(appShoot_Data->xShip<6)
         {
             appShoot_Data->xShip++;
         }
     }
     if(appShoot_Data->down==1)
     {
-        if(inBounds(appShoot_Data->xShip+2,appShoot_Data->yShip+4)&&appShoot_Data->xShip>0)
+        if(appShoot_Data->xShip>0)
         {
             appShoot_Data->xShip--;
         }
     }
     if(appShoot_Data->left==1)
     {
-        if(inBounds(appShoot_Data->xShip+3,appShoot_Data->yShip+3)&&appShoot_Data->yShip>0)
+        if(appShoot_Data->yShip>-2)
         {
             appShoot_Data->yShip--;
         }
     }
     if(appShoot_Data->right==1)
     {
-        if(inBounds(appShoot_Data->xShip+3,appShoot_Data->yShip+5)&&appShoot_Data->yShip<11)
+        if(appShoot_Data->yShip<13)
         {
             appShoot_Data->yShip++;
         }
@@ -701,9 +849,10 @@ void updateShip()
     {
         appShoot_Data->bulletData[appShoot_Data->xShip+7][appShoot_Data->yShip+2]=1;
     }
-    if(appShoot_Data->inputb==1)
+    if(appShoot_Data->inputb==1&&appShoot_Data->lasercooldown==0)
     {
         appShoot_Data->magictick=60;
+        appShoot_Data->lasercooldown=240;
     }
 }
 void checkInput()
