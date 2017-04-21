@@ -34,10 +34,14 @@ struct appData
 	struct playerData player2;
 	struct playerData* currentPlayer;
 	unsigned char board[MAXBOARDSIZE];
+	unsigned char refArray[MAXBOARDSIDE][MAXBOARDSIDE];
+	Point stackMax[MAXBOARDSIDE * MAXBOARDSIDE];
 }
 typedef appData;
 
 appData *Go_Data;
+const int_fast8_t  Go_xMove[] = { 1, 0, -1, 0 };
+const int_fast8_t  Go_yMove[] = { 0, 1, 0, -1 };
 
 void Demo_Go_Init(void);
 void Demo_Go_Tick(void);
@@ -102,6 +106,101 @@ unsigned char Go_getCell(int x, int y)
 void Go_setCell(int x, int y, unsigned char val)
 {
 	Go_Data->board[x + (y*Go_Data->size)] = val;
+}
+
+void Go_scanWall(Pixel pixel) //sets ref array to 1 if wall
+{
+	int u, i;
+
+	for (u = 0; u < Go_Data->size; u++)
+	{
+		for (i = 0; i < Go_Data->size; i++)
+		{
+			if (comparePixel(pixel, getPixel(u, i)) == 1)
+			{
+				Go_Data->refArray[u][i] = 1;
+			}
+			else
+			{
+				Go_Data->refArray[u][i] = 0;
+			}
+		}
+	}
+}
+
+
+int Go_inBounds(int x, int y)
+{
+	if ((x < Go_Data->size) && (x >= 0) && (y < Go_Data->size) && (y >= 0))
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int Go_hasLiberties(int xo, int yo, struct playerData* player)
+{
+	int liberties = 0;
+	int i, x, y, flag = 0, pointer = 0;
+	int w, e;
+
+	for (x = 0; x < Go_Data->size; x++)
+	{
+		for (y = 0; y < Go_Data->size; y++)
+		{
+			Go_Data->refArray[x][y] = 0;
+		}
+	}
+
+	Go_Data->stackMax[0].x = xo;
+	Go_Data->stackMax[0].y = yo;
+	pointer++;
+	while (pointer > 0)
+	{
+		pointer--;
+		x = Go_Data->stackMax[pointer].x;
+		y = Go_Data->stackMax[pointer].y;
+		w = e = x;
+		do 
+		{
+			w++;
+			if (Go_inBounds(w, y) && Go_getCell(w, y) == 0)
+			{
+				liberties += 1;
+			}
+		}while (Go_inBounds(w, y) && (Go_getCell(w, y) & player->selMask) && Go_Data->refArray[w][y] == 0);
+		do
+		{
+			e--;
+			if (Go_inBounds(e, y) && Go_getCell(e, y) == 0)
+			{
+				liberties += 1;
+			}
+		} while (Go_inBounds(e, y) && (Go_getCell(e, y) & player->selMask) && Go_Data->refArray[e][y] == 0);
+
+		for (x = e + 1; x < w; x++)
+		{
+			//Go_setCell(x, y, Go_getCell(x, y) | SELCELL);
+			Go_Data->refArray[x][y] = 1;
+			if (Go_inBounds(x, y - 1) && (Go_getCell(x, y - 1) & player->selMask) && Go_Data->refArray[x][y - 1] == 0)
+			{
+				Go_Data->stackMax[pointer].x = x;
+				Go_Data->stackMax[pointer].y = y - 1;
+				pointer++;
+			}
+			if (Go_inBounds(x, y + 1) && (Go_getCell(x, y + 1) & player->selMask) && Go_Data->refArray[x][y + 1] == 0)
+			{
+				Go_Data->stackMax[pointer].x = x;
+				Go_Data->stackMax[pointer].y = y + 1;
+				pointer++;
+			}
+		}
+
+	}
+	return liberties > 0;
 }
 
 Pixel Go_CellColor(int x, int y)
@@ -234,7 +333,9 @@ void App_Go_Tick(void)
 	drawEmptyRect(Go_Data->x - 2, Go_Data->y - 1, Go_Data->x + Go_Data->size + 1, Go_Data->y + Go_Data->size, Go_Data->currentPlayer->color);
 	drawEmptyRect(Go_Data->x - 1, Go_Data->y - 1, Go_Data->x + Go_Data->size, Go_Data->y + Go_Data->size, PIXEL_BROWN);
 
-	printTextOffset('1', 1, 5, Go_Data->player1.color);
+
+	drawRect(0, 0, 8, HEIGHT, PIXEL_BLACK);
+	printTextOffset(0x30 + Go_hasLiberties(Go_Data->currentPlayer->x, Go_Data->currentPlayer->y, Go_Data->currentPlayer), 1, 5, Go_Data->player1.color);
 	printTextOffset('2', 26, 5, Go_Data->player2.color);
 	
 	Go_ProcessMove(Go_Data->currentPlayer);
