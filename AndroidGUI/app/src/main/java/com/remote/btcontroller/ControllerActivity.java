@@ -63,8 +63,8 @@ public class ControllerActivity extends AppCompatActivity implements OnTouchList
         // Call the buttons
         btn_up     = (Button)findViewById(R.id.btn_up);
         btn_down   = (Button)findViewById(R.id.btn_down);
-        btn_left   = (Button)findViewById(R.id.btn_left);
-        btn_right  = (Button)findViewById(R.id.btn_right);
+        btn_left   = (Button)findViewById(R.id.btn_right);
+        btn_right  = (Button)findViewById(R.id.btn_left);
         btn_a      = (Button)findViewById(R.id.btn_a);
         btn_b      = (Button)findViewById(R.id.btn_b);
         btn_start  = (Button)findViewById(R.id.btn_start);

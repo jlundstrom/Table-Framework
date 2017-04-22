@@ -19,7 +19,7 @@
         android:gravity="center_vertical|center_horizontal"
         android:text="A"
         android:textColor="#fff"
-        android:layout_alignBottom="@+id/btn_left"
+        android:layout_alignBottom="@+id/btn_right"
         android:layout_alignParentEnd="true" />
 
     <Button
@@ -55,17 +55,17 @@
         android:layout_alignParentStart="true">
 
         <Button
-            android:id="@+id/btn_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start"
-            android:textSize="14sp" />
-
-        <Button
             android:id="@+id/btn_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start"
             android:textSize="14sp" />
     </LinearLayout>
 
@@ -95,11 +95,11 @@
         android:layout_marginBottom="33dp"
         android:layout_marginStart="54dp"
         android:layout_above="@+id/btn_down"
-        android:layout_alignStart="@+id/btn_right">
+        android:layout_alignStart="@+id/btn_left">
     </Button>
 
     <Button
-        android:id="@+id/btn_right"
+        android:id="@+id/btn_left"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:adjustViewBounds="true"
@@ -114,7 +114,7 @@
     </Button>
 
     <Button
-        android:id="@+id/btn_left"
+        android:id="@+id/btn_right"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:adjustViewBounds="true"
@@ -123,8 +123,8 @@
         android:rotation="45"
         android:visibility="visible"
         android:layout_marginStart="33dp"
-        android:layout_alignBottom="@+id/btn_right"
-        android:layout_toEndOf="@+id/btn_right">
+        android:layout_alignBottom="@+id/btn_left"
+        android:layout_toEndOf="@+id/btn_left">
     </Button>
 
 </RelativeLayout>
