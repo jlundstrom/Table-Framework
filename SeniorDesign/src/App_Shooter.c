@@ -3,8 +3,8 @@
 #include "Noise.h"
 #include "Input.h"
 #include "Random.h"
-
-
+//This is a supreme prototype app, mostly a proof of concept of various ideas
+//Dont try and put together how it all ties together, its not worth it
 struct appData
 {
    int           frame;

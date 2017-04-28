@@ -2,6 +2,7 @@
 #include "Draw.h"
 #include "Input.h"
 #include "Random.h"
+//This is the party parrot app, first proof of concept of embedding animations
 struct appData
 {
    int frame;

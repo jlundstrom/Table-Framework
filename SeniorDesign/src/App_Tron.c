@@ -2,7 +2,8 @@
 #include "Draw.h"
 #include "Noise.h"
 #include "Input.h"
-
+//can ignore the defines, this is a basic implementation of Tron lightcycle racing
+//it is not bug-free, some minor issues with detection, was a quick implementation and early in app development
 #define LEFT_INPUT     0x04
 #define RIGHT_INPUT    0x08
 

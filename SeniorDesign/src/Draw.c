@@ -7,7 +7,7 @@ int_fast8_t  xMove[] = { 1, 0, -1, 0 };
 int_fast8_t  yMove[] = { 0, 1, 0, -1 };
 uint_fast8_t refArray [WIDTH][HEIGHT];
 Point        stackMax[WIDTH * HEIGHT];
-
+//Theres alot semi overlapping functions, most functions are useful and easy to reuse though
 // Pixels are stored to be optimal for sending to ws2812b leds from the microprocess
 
 //prototypes

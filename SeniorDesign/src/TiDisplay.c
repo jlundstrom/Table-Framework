@@ -3,7 +3,9 @@
 #include "F2837xD_GlobalPrototypes.h"
 #include "Display.h"
 #include "Draw.h"
-
+//theres some fun stuff going on here
+//the basic design of this is to initialize the registers for the PWM data line (to control the LEDs)
+//theres a lookup table to do gamma correction on the LEDs, is 100% needed to make color reproduction semi accurate vs the emulator
 #ifndef __cplusplus
 #ifdef __TI_COMPILER_VERSION__
 #if __TI_COMPILER_VERSION__ >= 15009000

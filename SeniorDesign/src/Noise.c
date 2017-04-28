@@ -1,7 +1,7 @@
 #include "Random.h"
 #include "Draw.h"
 #include "Noise.h"
-
+//Not much to say here, its a wonky noise generation setup
 
 double noise[noiseHeight][noiseWidth];
 

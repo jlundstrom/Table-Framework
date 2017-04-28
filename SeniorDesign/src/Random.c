@@ -1,6 +1,8 @@
 #include "Random.h"
 #include <stdlib.h>
-
+//shhhh the RNG is generated using the linear-feedback shift register technique
+//its reseed-ed for max random with another unrelated rng function
+//there was "randomness" issues with using one or the other, so they got mixed to save time
 void getRandomSeeder();
 
 #define MULT    31821 // only X-X-Even-2-1 allowed

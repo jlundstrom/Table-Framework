@@ -2,7 +2,7 @@
 #include "Draw.h"
 #include "Noise.h"
 #include "Input.h"
-
+//this is a boot splash, starts with NiHao then fades out to the cloud func
 struct appData
 {
    int           frame;

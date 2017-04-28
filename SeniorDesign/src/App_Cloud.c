@@ -2,7 +2,7 @@
 #include "Draw.h"
 #include "Noise.h"
 #include "Input.h"
-
+//this is literally just the noise.h cloud function, user defined, also ignore the defines
 #define LEFT_INPUT     0x04
 #define RIGHT_INPUT    0x08
 
