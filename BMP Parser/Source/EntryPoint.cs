@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Drawing;
 using System.IO;
-
+//Quick note, this is a quick and dirty parser of bitmaps, so they can be hardcoded into a char array
 namespace BMPtoArray
 {
     class EntryPoint
